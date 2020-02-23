@@ -10,7 +10,9 @@
 		<module>happyride-passenger-service-api</module>
     <module>happyride-address-service</module>
     <module>happyride-postgres-common</module>
-  </modules>
+    <module>happyride-driver-service</module>
+		<module>happyride-driver-service-api</module>
+	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
