@@ -11,5 +11,11 @@
 
   <artifactId>happyride-driver-service-api</artifactId>
 
+  <dependencies>
+    <dependency>
+      <artifactId>lombok</artifactId>
+      <groupId>org.projectlombok</groupId>
+    </dependency>
+  </dependencies>
 
 </project>

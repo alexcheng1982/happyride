@@ -19,7 +19,7 @@ public class Vehicle extends BaseEntityWithGeneratedId {
 
   private String mode;
 
-  private Long year;
+  private Integer year;
 
   private String registration;
 }

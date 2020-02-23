@@ -29,7 +29,9 @@ public class PassengerService {
     passenger.setName(request.getName());
     passenger.setEmail(request.getEmail());
     passenger.setMobilePhoneNumber(request.getMobilePhoneNumber());
-    Set<UserAddress> userAddresses = createUserAddresses(request.getUserAddresses());
+    Set<UserAddress> userAddresses = Optional.ofNullable(request.getUserAddresses()).map(requests ->
+        requests.stream().map(this::createUserAddress).collect(Collectors.toSet())
+    ).orElse(new HashSet<>());
     passenger.setUserAddresses(userAddresses);
     passengerRepository.save(passenger);
     return passenger;
@@ -42,15 +44,6 @@ public class PassengerService {
     passenger.getUserAddresses().add(userAddress);
     passengerRepository.save(passenger);
     return passenger;
-  }
-
-  private Set<UserAddress> createUserAddresses(Set<CreateUserAddressRequest> requests) {
-    if (requests == null) {
-      return new HashSet<>();
-    }
-    return requests.stream()
-        .map(this::createUserAddress)
-        .collect(Collectors.toSet());
   }
 
   private UserAddress createUserAddress(CreateUserAddressRequest request) {

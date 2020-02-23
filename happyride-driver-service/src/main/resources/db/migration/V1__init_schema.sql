@@ -9,6 +9,8 @@ CREATE TABLE drivers(
 
 CREATE TABLE vehicles(
   id varchar(36) NOT NULL PRIMARY KEY,
+  created_at bigint NOT NULL,
+  updated_at bigint NOT NULL,
   driver_id varchar(36) NOT NULL,
   make varchar(32) NOT NULL,
   mode varchar(32) NOT NULL,
