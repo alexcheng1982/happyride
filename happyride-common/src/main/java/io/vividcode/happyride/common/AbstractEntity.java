@@ -1,5 +1,6 @@
 package io.vividcode.happyride.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -13,6 +14,7 @@ public abstract class AbstractEntity<ID> implements Persistable<ID> {
   private boolean isNew = true;
 
   @Override
+  @JsonIgnore
   public boolean isNew() {
     return isNew;
   }

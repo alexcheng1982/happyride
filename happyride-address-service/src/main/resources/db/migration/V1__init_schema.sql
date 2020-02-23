@@ -1,6 +1,5 @@
 CREATE SEQUENCE hibernate_sequence START 1;
 
-DROP TABLE IF EXISTS area;
 CREATE TABLE area (
   id SERIAL PRIMARY KEY,
   level int NOT NULL,
@@ -16,15 +15,13 @@ CREATE TABLE area (
   lat decimal(10,6) NOT NULL DEFAULT '0.000000'
 );
 
-DROP TABLE IF EXISTS address;
 CREATE TABLE address(
-  id varchar(36) NOT NULL,
+  id varchar(36) NOT NULL PRIMARY KEY,
   created_at bigint NOT NULL,
   updated_at bigint NOT NULL,
   area_id int NOT NULL,
   address_line varchar(256) NOT NULL,
   lng decimal(10,6) NOT NULL DEFAULT '0.000000',
   lat decimal(10,6) NOT NULL DEFAULT '0.000000',
-  PRIMARY KEY (id),
   FOREIGN KEY (area_id) REFERENCES area(id)
 );
