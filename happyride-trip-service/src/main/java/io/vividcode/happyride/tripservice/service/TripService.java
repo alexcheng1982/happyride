@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class TripService {
   @Autowired
-  private TripRepository tripRepository;
+  TripRepository tripRepository;
 
   @Autowired
-  private TripDomainEventPublisher rideAggregateEventPublisher;
+  TripDomainEventPublisher rideAggregateEventPublisher;
 
   public Trip createTrip(String passengerId, Position startPos, Position endPos) {
     ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
