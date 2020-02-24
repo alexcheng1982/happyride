@@ -17,7 +17,7 @@ spring:
 
 eventuate:
   database:
-    schema: none
+    schema: eventuate
 eventuatelocal:
   kafka:
     bootstrap:

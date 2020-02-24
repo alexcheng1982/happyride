@@ -1,5 +1,6 @@
 package io.vividcode.happyride.tripservice;
 
+import io.eventuate.jdbckafka.TramJdbcKafkaConfiguration;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.events.publisher.TramEventsPublisherConfiguration;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableJpaRepositories
 @EnableTransactionManagement
-@Import(TramEventsPublisherConfiguration.class)
+@Import({TramEventsPublisherConfiguration.class, TramJdbcKafkaConfiguration.class})
 public class ApplicationConfig {
 
   @Bean

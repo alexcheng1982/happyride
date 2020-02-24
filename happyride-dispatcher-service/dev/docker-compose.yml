@@ -1,0 +1,7 @@
+version: '3'
+services:
+  axon:
+    image: axoniq/axonserver:4.3
+    ports:
+    - 8024:8024
+    - 8124:8124

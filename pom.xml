@@ -12,7 +12,9 @@
     <module>happyride-postgres-common</module>
     <module>happyride-driver-service</module>
 		<module>happyride-driver-service-api</module>
-	</modules>
+    <module>happyride-driver-simulator</module>
+    <module>happyride-dispatcher-service</module>
+  </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -32,6 +34,7 @@
 		<lombok.version>1.18.10</lombok.version>
 		<testcontainers.version>1.40</testcontainers.version>
 		<guava.version>28.2-jre</guava.version>
+		<axon.version>4.3</axon.version>
 	</properties>
 
 	<dependencyManagement>
@@ -45,6 +48,11 @@
 				<groupId>io.eventuate.tram.core</groupId>
 				<artifactId>eventuate-tram-events</artifactId>
 				<version>${eventuate-tram.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.axonframework</groupId>
+				<artifactId>axon-spring-boot-starter</artifactId>
+				<version>${axon.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.playtika.testcontainers</groupId>

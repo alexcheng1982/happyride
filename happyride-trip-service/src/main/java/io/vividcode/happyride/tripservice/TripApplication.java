@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
-@Import(TramJdbcKafkaConfiguration.class)
 public class TripApplication {
 
   public static void main(String[] args) {
