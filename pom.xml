@@ -14,6 +14,7 @@
 		<module>happyride-driver-service-api</module>
     <module>happyride-driver-simulator</module>
     <module>happyride-dispatcher-service</module>
+    <module>happyride-dispatcher-service-api</module>
   </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

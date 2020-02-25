@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -35,4 +37,8 @@ public class Driver extends BaseEntityWithGeneratedId {
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "driver_id", referencedColumnName = "id", nullable = false)
   private Set<Vehicle> vehicles = new HashSet<>();
+
+  @Column(name = "state")
+  @Enumerated(EnumType.STRING)
+  private DriverState state = DriverState.OFFLINE;
 }

@@ -1,0 +1,5 @@
+axon:
+  axonserver:
+    servers: ${DOCKER_HOST_IP:localhost}:8124
+  serializer:
+    events: jackson

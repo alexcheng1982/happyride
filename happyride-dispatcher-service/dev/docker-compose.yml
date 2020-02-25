@@ -5,3 +5,7 @@ services:
     ports:
     - 8024:8024
     - 8124:8124
+  redis:
+    image: redis:5-alpine
+    ports:
+    - 6379:6379

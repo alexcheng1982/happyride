@@ -4,7 +4,8 @@ CREATE TABLE drivers(
   updated_at bigint NOT NULL,
   name varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
-  mobile_phone_number varchar(255) NOT NULL
+  mobile_phone_number varchar(255) NOT NULL,
+  state varchar(30) NOT NULL
 );
 
 CREATE TABLE vehicles(
