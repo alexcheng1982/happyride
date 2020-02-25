@@ -1,0 +1,3 @@
+spring:
+  redis:
+    url: redis://user:${embedded.redis.password}@${embedded.redis.host}:${embedded.redis.port}

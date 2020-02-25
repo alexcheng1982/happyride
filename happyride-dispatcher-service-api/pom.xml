@@ -13,6 +13,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>happyride-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <artifactId>lombok</artifactId>
       <groupId>org.projectlombok</groupId>
     </dependency>

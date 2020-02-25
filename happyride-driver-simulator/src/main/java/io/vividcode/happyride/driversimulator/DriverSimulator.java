@@ -1,8 +1,7 @@
 package io.vividcode.happyride.driversimulator;
 
-import io.vividcode.happyride.dispatcherservice.api.events.DriverLocationUpdatedEvent;
 import io.vividcode.happyride.dispatcherservice.api.events.DriverLocation;
-import java.math.BigDecimal;
+import io.vividcode.happyride.dispatcherservice.api.events.DriverLocationUpdatedEvent;
 import java.time.Duration;
 import java.util.concurrent.ThreadLocalRandom;
 import org.axonframework.eventhandling.gateway.EventGateway;
@@ -49,7 +48,7 @@ public class DriverSimulator {
   private void sendLocation() {
     DriverLocationUpdatedEvent event = new DriverLocationUpdatedEvent();
     event.setTimestamp(System.currentTimeMillis());
-    event.setDriverLocation(currentLocation);
+    event.setLocation(currentLocation);
     eventGateway.publish(event);
   }
 
@@ -67,6 +66,6 @@ public class DriverSimulator {
     int speed = random.nextInt(1,4);
     double latDelta = deltas[direction][0] * 0.000001 * speed;
     double lngDelta = deltas[direction][1] * 0.000001 * speed;
-    currentLocation = currentLocation.moveTo(BigDecimal.valueOf(latDelta), BigDecimal.valueOf(lngDelta));
+    currentLocation = currentLocation.moveTo(lngDelta, latDelta);
   }
 }

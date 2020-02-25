@@ -1,23 +1,27 @@
 package io.vividcode.happyride.dispatcherservice.api.events;
 
-import java.math.BigDecimal;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
+@NoArgsConstructor
 public class DriverLocation {
   @NonNull
   private String driverId;
 
   @NonNull
-  private BigDecimal lat;
+  private String vehicleId;
 
   @NonNull
-  private BigDecimal lng;
+  private double lng;
 
-  public DriverLocation moveTo(BigDecimal latDelta, BigDecimal lngDelta) {
-    return new DriverLocation(driverId, lat.add(latDelta), lng.add(lngDelta));
+  @NonNull
+  private double lat;
+
+  public DriverLocation moveTo(double lngDelta, double latDelta) {
+     return new DriverLocation(driverId, vehicleId, lng + lngDelta, lat + latDelta);
   }
 }

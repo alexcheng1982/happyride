@@ -1,4 +1,4 @@
-package io.vividcode.happyride.driverservice.model;
+package io.vividcode.happyride.common;
 
 public enum DriverState {
   OFFLINE,

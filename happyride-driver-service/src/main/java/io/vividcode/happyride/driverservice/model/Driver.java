@@ -1,6 +1,7 @@
 package io.vividcode.happyride.driverservice.model;
 
 import io.vividcode.happyride.common.BaseEntityWithGeneratedId;
+import io.vividcode.happyride.common.DriverState;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
