@@ -18,14 +18,14 @@ public class TripService {
   TripRepository tripRepository;
 
   @Autowired
-  TripDomainEventPublisher rideAggregateEventPublisher;
+  TripDomainEventPublisher tripAggregateEventPublisher;
 
   public Trip createTrip(String passengerId, Position startPos, Position endPos) {
     ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
         .createTrip(passengerId, startPos, endPos);
     Trip trip = tripAndEvents.result;
     tripRepository.save(trip);
-    rideAggregateEventPublisher.publish(trip, tripAndEvents.events);
+    tripAggregateEventPublisher.publish(trip, tripAndEvents.events);
     return trip;
   }
 

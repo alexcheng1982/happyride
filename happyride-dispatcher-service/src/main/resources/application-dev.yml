@@ -1,3 +1,19 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: happyride
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:8433/happyride-dispatcher
+    username: happyride-dispatcher-user
+    password: happyride-dispatcher-password
+  flyway:
+    schemas:
+      - happyride
 axon:
   axonserver:
     servers: ${DOCKER_HOST_IP:localhost}:8124
@@ -6,7 +22,7 @@ axon:
 eventuatelocal:
   kafka:
     bootstrap:
-      servers: ${DOCKER_HOST_IP:localhost}:9092
+      servers: ${DOCKER_HOST_IP:localhost}:29092
   zookeeper:
     connection:
       string: ${DOCKER_HOST_IP:localhost}:2181

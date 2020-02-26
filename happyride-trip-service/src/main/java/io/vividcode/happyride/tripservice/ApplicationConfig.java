@@ -1,6 +1,6 @@
 package io.vividcode.happyride.tripservice;
 
-import io.eventuate.jdbckafka.TramJdbcKafkaConfiguration;
+import io.eventuate.tram.jdbckafka.TramJdbcKafkaConfiguration;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.events.publisher.TramEventsPublisherConfiguration;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;

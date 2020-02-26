@@ -39,7 +39,6 @@
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
       <artifactId>eventuate-tram-jdbc-kafka</artifactId>
-      <version>${eventuate-tram.version}</version>
     </dependency>
     <dependency>
       <groupId>org.flywaydb</groupId>

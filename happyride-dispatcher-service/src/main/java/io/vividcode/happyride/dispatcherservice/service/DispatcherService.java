@@ -1,5 +1,6 @@
 package io.vividcode.happyride.dispatcherservice.service;
 
+import io.eventuate.tram.messaging.producer.MessageProducer;
 import io.vividcode.happyride.dispatcherservice.api.events.DriverLocation;
 import java.util.Collections;
 import java.util.List;
@@ -21,11 +22,14 @@ public class DispatcherService {
   @Autowired
   RedisTemplate<String, String> redisTemplate;
 
+  @Autowired
+  MessageProducer messageProducer;
+
   private static final String key = "available_drivers";
 
   public void addAvailableDriver(DriverLocation location) {
       redisTemplate.opsForGeo()
-          .add(key, new Point(location.getLng(), location.getLat()),
+          .add(key, new Point(location.getLng().doubleValue(), location.getLat().doubleValue()),
               location.getDriverId());
   }
 
@@ -43,6 +47,10 @@ public class DispatcherService {
           .collect(Collectors.toList());
     }
     return Collections.emptyList();
+  }
+
+  public void dispatchTrip() {
+
   }
 
   private double distanceInMeters(Distance distance) {

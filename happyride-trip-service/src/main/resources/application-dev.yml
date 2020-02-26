@@ -1,3 +1,5 @@
+server:
+  port: 8501
 spring:
   jpa:
     hibernate:
@@ -8,9 +10,9 @@ spring:
         default_schema: happyride
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:5432/eventuate
-    username: eventuate
-    password: eventuate
+    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:8432/happyride-trip
+    username: happyride-trip-user
+    password: happyride-trip-password
   flyway:
     schemas:
       - happyride
@@ -21,7 +23,7 @@ eventuate:
 eventuatelocal:
   kafka:
     bootstrap:
-      servers: ${DOCKER_HOST_IP:localhost}:9092
+      servers: ${DOCKER_HOST_IP:localhost}:29092
   zookeeper:
     connection:
       string: ${DOCKER_HOST_IP:localhost}:2181

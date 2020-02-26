@@ -1,6 +1,7 @@
 package io.vividcode.happyride.driversimulator;
 
 import io.vividcode.happyride.dispatcherservice.api.events.DriverLocation;
+import java.math.BigDecimal;
 import org.axonframework.eventhandling.gateway.EventGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,6 @@ public class DriverSimulatorFactory {
 
   public DriverSimulator create(String driverId, String vehicleId) {
     return new DriverSimulator(eventGateway,
-        new DriverLocation(driverId, vehicleId, 0.0, 0.0));
+        new DriverLocation(driverId, vehicleId, BigDecimal.ZERO, BigDecimal.ZERO));
   }
 }

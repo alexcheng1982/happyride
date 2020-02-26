@@ -26,12 +26,12 @@
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0.0-SNAPSHOT</version>
-	<name>parent</name>
+	<name>happyride</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>1.8</java.version>
-		<eventuate-tram.version>0.21.3.RELEASE</eventuate-tram.version>
+		<eventuate-tram.version>0.22.0.RC8</eventuate-tram.version>
 		<lombok.version>1.18.10</lombok.version>
 		<testcontainers.version>1.40</testcontainers.version>
 		<guava.version>28.2-jre</guava.version>
@@ -48,6 +48,21 @@
 			<dependency>
 				<groupId>io.eventuate.tram.core</groupId>
 				<artifactId>eventuate-tram-events</artifactId>
+				<version>${eventuate-tram.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.eventuate.tram.core</groupId>
+				<artifactId>eventuate-tram-aggregate-domain-events</artifactId>
+				<version>${eventuate-tram.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.eventuate.tram.core</groupId>
+				<artifactId>eventuate-tram-jdbc-kafka</artifactId>
+				<version>${eventuate-tram.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.eventuate.tram.core</groupId>
+				<artifactId>eventuate-tram-consumer-kafka</artifactId>
 				<version>${eventuate-tram.version}</version>
 			</dependency>
 			<dependency>

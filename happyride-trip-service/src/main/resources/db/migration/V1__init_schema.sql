@@ -1,4 +1,4 @@
---CREATE SCHEMA happyride;
+CREATE SCHEMA IF NOT EXISTS happyride;
 
 CREATE TABLE happyride.trips(
   id varchar(36) NOT NULL PRIMARY KEY,

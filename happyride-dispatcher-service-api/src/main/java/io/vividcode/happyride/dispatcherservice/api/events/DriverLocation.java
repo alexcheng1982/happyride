@@ -1,5 +1,6 @@
 package io.vividcode.happyride.dispatcherservice.api.events;
 
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -16,12 +17,12 @@ public class DriverLocation {
   private String vehicleId;
 
   @NonNull
-  private double lng;
+  private BigDecimal lng;
 
   @NonNull
-  private double lat;
+  private BigDecimal lat;
 
-  public DriverLocation moveTo(double lngDelta, double latDelta) {
-     return new DriverLocation(driverId, vehicleId, lng + lngDelta, lat + latDelta);
+  public DriverLocation moveTo(BigDecimal lngDelta, BigDecimal latDelta) {
+     return new DriverLocation(driverId, vehicleId, lng.add(lngDelta), lat.add(latDelta));
   }
 }

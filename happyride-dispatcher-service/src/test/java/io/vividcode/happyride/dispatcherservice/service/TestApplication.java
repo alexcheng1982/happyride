@@ -1,4 +1,4 @@
-package io.vividcode.happyride.dispatcherservice;
+package io.vividcode.happyride.dispatcherservice.service;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
