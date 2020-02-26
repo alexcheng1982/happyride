@@ -1,5 +1,6 @@
 package io.vividcode.happyride.tripservice.web;
 
+import io.vividcode.happyride.tripservice.api.web.AcceptTripRequest;
 import io.vividcode.happyride.tripservice.api.web.CreateTripRequest;
 import io.vividcode.happyride.tripservice.domain.Trip;
 import io.vividcode.happyride.tripservice.service.TripService;
@@ -27,5 +28,11 @@ public class TripController {
   @GetMapping("{id}")
   public ResponseEntity<Trip> getRide(@PathVariable("id") String id) {
     return tripService.getRide(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+  }
+
+  @PostMapping("/accept")
+  public ResponseEntity<Void> acceptTrip(@RequestBody AcceptTripRequest request) {
+    tripService.acceptTrip(request.getTripId(), request.getDriverId());
+    return ResponseEntity.noContent().build();
   }
 }

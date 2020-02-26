@@ -11,5 +11,5 @@ public class AvailableDriver {
   private String driverId;
 
   @NonNull
-  private double distance;
+  private Double distance;
 }
