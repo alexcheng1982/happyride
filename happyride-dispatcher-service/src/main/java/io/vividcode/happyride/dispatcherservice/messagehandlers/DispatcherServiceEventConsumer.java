@@ -3,15 +3,10 @@ package io.vividcode.happyride.dispatcherservice.messagehandlers;
 import io.eventuate.tram.events.subscriber.DomainEventEnvelope;
 import io.eventuate.tram.events.subscriber.DomainEventHandlers;
 import io.eventuate.tram.events.subscriber.DomainEventHandlersBuilder;
-import io.vividcode.happyride.common.Position;
-import io.vividcode.happyride.dispatcherservice.service.AvailableDriver;
 import io.vividcode.happyride.dispatcherservice.service.DispatcherService;
 import io.vividcode.happyride.tripservice.api.events.AcceptTripEvent;
 import io.vividcode.happyride.tripservice.api.events.TripCreatedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DispatcherServiceEventConsumer {
@@ -28,13 +23,7 @@ public class DispatcherServiceEventConsumer {
 
   private void onTripCreated(DomainEventEnvelope<TripCreatedEvent> envelope) {
     TripDetails tripDetails = envelope.getEvent().getTripDetails();
-    Position startPos = tripDetails.getStartPos();
-    List<AvailableDriver> availableDrivers = dispatcherService
-        .findAvailableDrivers(startPos.getLng().doubleValue(), startPos.getLat().doubleValue()
-        );
-    Set<String> drivers = availableDrivers.stream().map(AvailableDriver::getDriverId).collect(
-        Collectors.toSet());
-    dispatcherService.dispatchTrip(envelope.getAggregateId(), tripDetails, drivers);
+    dispatcherService.dispatchTrip(envelope.getAggregateId(), tripDetails);
   }
 
   private void onAcceptTrip(DomainEventEnvelope<AcceptTripEvent> envelope) {

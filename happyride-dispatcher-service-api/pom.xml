@@ -18,6 +18,15 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>happyride-trip-service-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.eventuate.tram.core</groupId>
+      <artifactId>eventuate-tram-events</artifactId>
+    </dependency>
+    <dependency>
       <artifactId>lombok</artifactId>
       <groupId>org.projectlombok</groupId>
     </dependency>

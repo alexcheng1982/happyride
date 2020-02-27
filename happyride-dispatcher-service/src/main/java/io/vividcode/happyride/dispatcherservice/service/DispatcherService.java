@@ -1,14 +1,21 @@
 package io.vividcode.happyride.dispatcherservice.service;
 
 import io.eventuate.common.json.mapper.JSonMapper;
+import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.eventuate.tram.messaging.common.Message;
 import io.eventuate.tram.messaging.producer.MessageBuilder;
 import io.eventuate.tram.messaging.producer.MessageProducer;
+import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.dispatcherservice.api.events.DispatchDomainEvent;
 import io.vividcode.happyride.dispatcherservice.api.events.DriverLocation;
 import io.vividcode.happyride.dispatcherservice.api.events.MessageDestination;
+import io.vividcode.happyride.dispatcherservice.dataaccess.DispatchRepository;
+import io.vividcode.happyride.dispatcherservice.domain.Dispatch;
+import io.vividcode.happyride.dispatcherservice.domain.DispatchDomainEventPublisher;
 import io.vividcode.happyride.tripservice.api.events.AcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDispatchedEvent;
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -17,6 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Distance;
@@ -41,6 +50,12 @@ public class DispatcherService {
   @Autowired
   TaskScheduler taskScheduler;
 
+  @Autowired
+  DispatchRepository dispatchRepository;
+
+  @Autowired
+  DispatchDomainEventPublisher eventPublisher;
+
   private final Distance searchRadius = new Distance(10, DistanceUnit.KILOMETERS);
   private final String key = "available_drivers";
   private final String passenger = "__passenger";
@@ -55,28 +70,31 @@ public class DispatcherService {
     redisTemplate.opsForGeo().remove(key, driverId);
   }
 
-  public List<AvailableDriver> findAvailableDrivers(double lng, double lat) {
+  public Set<AvailableDriver> findAvailableDrivers(double lng, double lat) {
     GeoResults<GeoLocation<String>> results = redisTemplate.opsForGeo()
-        .radius(key, new Circle(new Point(lng, lat), searchRadius),
-            GeoRadiusCommandArgs.newGeoRadiusArgs().includeDistance());
+        .radius(key, new Circle(new Point(lng, lat), searchRadius));
     if (results != null) {
       return results.getContent().stream().filter(Objects::nonNull)
-          .map(result -> new AvailableDriver(result.getContent().getName(),
-              distanceInMeters(result.getDistance())))
-          .collect(Collectors.toList());
+          .map(result -> {
+            GeoLocation<String> content = result.getContent();
+            Point point = content.getPoint();
+            return new AvailableDriver(content.getName(),
+                BigDecimal.valueOf(point.getX()), BigDecimal.valueOf(point.getY()));
+          })
+          .collect(Collectors.toSet());
     }
-    return Collections.emptyList();
+    return Collections.emptySet();
   }
 
-  public void dispatchTrip(String tripId, TripDetails tripDetails, Set<String> drivers) {
-    TripDispatchedEvent event = new TripDispatchedEvent(tripId, tripDetails, drivers);
-    Message message = MessageBuilder.withPayload(JSonMapper.toJson(event)).build();
-    messageProducer.send(MessageDestination.TRIP_DISPATCHED, message);
-    redisTemplate.opsForValue().set(keyForTripState(tripId), "");
-  }
-
-  private double distanceInMeters(Distance distance) {
-    return distance.in(DistanceUnit.METERS).getValue();
+  @Transactional
+  public void dispatchTrip(String tripId, TripDetails tripDetails) {
+    Position startPos = tripDetails.getStartPos();
+    Set<AvailableDriver> availableDrivers = findAvailableDrivers(startPos.getLng().doubleValue(), startPos.getLat().doubleValue()
+        );
+    ResultWithDomainEvents<Dispatch, DispatchDomainEvent> resultWithDomainEvents = Dispatch
+        .createDispatch(tripId, tripDetails, availableDrivers);
+    Dispatch dispatch = dispatchRepository.save(resultWithDomainEvents.result);
+    eventPublisher.publish(dispatch, resultWithDomainEvents.events);
   }
 
   public void acceptTrip(AcceptTripDetails details) {

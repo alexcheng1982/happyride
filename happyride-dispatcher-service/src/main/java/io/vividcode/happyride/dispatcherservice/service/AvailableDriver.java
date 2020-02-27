@@ -1,5 +1,6 @@
 package io.vividcode.happyride.dispatcherservice.service;
 
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -11,5 +12,8 @@ public class AvailableDriver {
   private String driverId;
 
   @NonNull
-  private Double distance;
+  private BigDecimal lng;
+
+  @NonNull
+  private BigDecimal lat;
 }
