@@ -6,11 +6,13 @@ import io.vividcode.happyride.dispatcherservice.messagehandlers.DispatcherServic
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @Import({DispatcherServiceMessageHandlersConfiguration.class,
     TramEventsPublisherConfiguration.class,
     TramJdbcKafkaConfiguration.class})
+@EnableScheduling
 public class DispatcherServiceApplication {
 
   public static void main(String[] args) {

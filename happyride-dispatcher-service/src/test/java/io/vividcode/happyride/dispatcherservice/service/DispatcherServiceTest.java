@@ -26,7 +26,7 @@ public class DispatcherServiceTest {
   public void testFindAvailableDrivers() {
     dispatcherService.addAvailableDriver(new DriverLocation("driver1", "vehicle1", BigDecimal.ZERO, BigDecimal.ZERO));
     dispatcherService.addAvailableDriver(new DriverLocation("driver2", "vehicle2", BigDecimal.valueOf(0.01), BigDecimal.valueOf(0.02)));
-    List<AvailableDriver> drivers = dispatcherService.findAvailableDrivers(0.1, 0.1, 100000);
+    List<AvailableDriver> drivers = dispatcherService.findAvailableDrivers(0.1, 0.1);
     assertEquals(2, drivers.size());
     System.out.println(drivers);
   }

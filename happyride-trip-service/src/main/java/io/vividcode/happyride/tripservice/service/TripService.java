@@ -2,6 +2,7 @@ package io.vividcode.happyride.tripservice.service;
 
 import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
+import io.vividcode.happyride.tripservice.api.events.AcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.AcceptTripEvent;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
 import io.vividcode.happyride.common.Position;
@@ -9,6 +10,7 @@ import io.vividcode.happyride.tripservice.domain.Trip;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
 import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
 import io.vividcode.happyride.tripservice.domain.TripState;
+import java.math.BigDecimal;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +45,8 @@ public class TripService {
     });
   }
 
-  public void acceptTrip(String tripId, String driverId) {
+  public void acceptTrip(String tripId, String driverId, BigDecimal lng, BigDecimal lat) {
     tripRepository.findById(tripId).ifPresent(trip -> tripAggregateEventPublisher.publish(trip,
-        ImmutableList.of(new AcceptTripEvent(tripId, driverId))));
+        ImmutableList.of(new AcceptTripEvent(new AcceptTripDetails(tripId, driverId, lng, lat)))));
   }
 }

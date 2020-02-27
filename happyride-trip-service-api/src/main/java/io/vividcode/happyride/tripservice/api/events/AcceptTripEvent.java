@@ -10,8 +10,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AcceptTripEvent implements TripDomainEvent {
   @NonNull
-  private String tripId;
-
-  @NonNull
-  private String driverId;
+  private AcceptTripDetails acceptTripDetails;
 }
