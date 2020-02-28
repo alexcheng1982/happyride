@@ -5,17 +5,16 @@ import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.vividcode.happyride.common.EntityWithGeneratedId;
 import io.vividcode.happyride.common.Position;
 import io.vividcode.happyride.dispatcherservice.api.events.DispatchDomainEvent;
+import io.vividcode.happyride.dispatcherservice.api.events.TripAcceptanceAcceptedEvent;
+import io.vividcode.happyride.dispatcherservice.api.events.TripAcceptanceDeclinedEvent;
 import io.vividcode.happyride.dispatcherservice.api.events.TripDispatchFailedEvent;
 import io.vividcode.happyride.dispatcherservice.api.events.TripDispatchFailedReason;
 import io.vividcode.happyride.dispatcherservice.api.events.TripDispatchedEvent;
 import io.vividcode.happyride.dispatcherservice.service.AvailableDriver;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
-import io.vividcode.happyride.dispatcherservice.api.events.TripAcceptanceAcceptedEvent;
-import io.vividcode.happyride.dispatcherservice.api.events.TripAcceptanceDeclinedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -64,16 +63,16 @@ public class Dispatch extends EntityWithGeneratedId {
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinColumn(name = "dispatch_id", referencedColumnName = "id", nullable = false)
-  private Set<TripAcceptance> tripAcceptances = new HashSet<>();
+  private List<TripAcceptance> tripAcceptances = Lists.newArrayList();
 
   public static ResultWithDomainEvents<Dispatch, DispatchDomainEvent> createDispatch(String tripId,
       TripDetails tripDetails, Set<AvailableDriver> drivers) {
     Position startPos = tripDetails.getStartPos();
     Dispatch dispatch = new Dispatch(tripId, startPos.getLng(), startPos.getLat());
-    Set<TripAcceptance> tripAcceptances = drivers.stream()
+    List<TripAcceptance> tripAcceptances = drivers.stream()
         .map(driver -> new TripAcceptance(driver.getDriverId(), driver.getPosLng(),
             driver.getPosLat()))
-        .collect(Collectors.toSet());
+        .collect(Collectors.toList());
     dispatch.setTripAcceptances(tripAcceptances);
     Set<String> driversId = drivers.stream().map(AvailableDriver::getDriverId)
         .collect(Collectors.toSet());
@@ -107,7 +106,7 @@ public class Dispatch extends EntityWithGeneratedId {
     toDecline.forEach(acceptance -> acceptance.setState(TripAcceptanceState.DECLINED));
     List<DispatchDomainEvent> events = Lists.newArrayList();
     events.addAll(toAccept.stream()
-        .map(acceptance -> new TripAcceptanceAcceptedEvent(acceptance.getDriverId()))
+        .map(acceptance -> new TripAcceptanceAcceptedEvent(tripId, acceptance.getDriverId()))
         .collect(Collectors.toList()));
     events.addAll(toDecline.stream()
         .map(acceptance -> new TripAcceptanceDeclinedEvent(acceptance.getDriverId(), ""))

@@ -4,5 +4,6 @@ public enum TripState {
   PENDING_DISPATCH,
   DISPATCHED,
   ACCEPTED,
+  FAILED,
   CANCELLED
 }

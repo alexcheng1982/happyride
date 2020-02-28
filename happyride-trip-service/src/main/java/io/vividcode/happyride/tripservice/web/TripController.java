@@ -32,7 +32,7 @@ public class TripController {
 
   @PostMapping("{id}/accept")
   public ResponseEntity<Void> acceptTrip(@PathVariable("id") String id, @RequestBody AcceptTripRequest request) {
-    tripService.acceptTrip(id, request.getDriverId(), request.getPosLng(), request.getPosLat());
+    tripService.driverAcceptTrip(id, request.getDriverId(), request.getPosLng(), request.getPosLat());
     return ResponseEntity.noContent().build();
   }
 }

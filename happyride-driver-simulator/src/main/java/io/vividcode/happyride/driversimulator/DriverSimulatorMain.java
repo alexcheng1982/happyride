@@ -16,7 +16,9 @@ public class DriverSimulatorMain implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    DriverSimulator simulator = simulatorFactory.create("driver1", "vehicle1");
-    simulator.startSimulation();
+    for (int i = 0; i < 10; i++) {
+      DriverSimulator simulator = simulatorFactory.create("driver" + i, "vehicle" + i);
+      simulator.startSimulation();
+    }
   }
 }

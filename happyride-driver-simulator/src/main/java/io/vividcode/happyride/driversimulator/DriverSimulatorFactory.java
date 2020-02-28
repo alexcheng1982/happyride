@@ -12,7 +12,7 @@ public class DriverSimulatorFactory {
   EventGateway eventGateway;
 
   public DriverSimulator create(String driverId, String vehicleId) {
-    return new DriverSimulator(eventGateway,
+    return new DriverSimulator(driverId, vehicleId, eventGateway,
         new DriverLocation(driverId, vehicleId, BigDecimal.ZERO, BigDecimal.ZERO));
   }
 }

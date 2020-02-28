@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.concurrent.ThreadLocalRandom;
 import org.axonframework.eventhandling.gateway.EventGateway;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
 
@@ -23,13 +25,21 @@ public class DriverSimulator {
   private int direction = 0;
   private DriverLocation currentLocation;
   private EmitterProcessor<Boolean> stop;
+  private final String driverId;
+  private final String vehicleId;
 
-  public DriverSimulator(EventGateway eventGateway, DriverLocation initialLocation) {
+  private static final Logger LOGGER = LoggerFactory.getLogger(DriverSimulator.class);
+
+  public DriverSimulator(String driverId, String vehicleId, EventGateway eventGateway,
+      DriverLocation initialLocation) {
+    this.driverId = driverId;
+    this.vehicleId = vehicleId;
     currentLocation = initialLocation;
     this.eventGateway = eventGateway;
   }
 
   public void startSimulation() {
+    LOGGER.info("Start simulation for driver [{}] with vehicle [{}]", driverId, vehicleId);
     stop = EmitterProcessor.create();
     Flux.interval(Duration.ofSeconds(5))
         .takeUntilOther(stop)

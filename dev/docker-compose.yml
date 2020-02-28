@@ -67,7 +67,7 @@ services:
       EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEUSERNAME: happyride-trip-user
       EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEPASSWORD: happyride-trip-password
       EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
-      EVENTUATE_CDC_READER_POSTGRESREADER_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/1
+      EVENTUATE_CDC_READER_POSTGRESREADER_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/trip
   postgres-dispatcher:
     image: eventuateio/eventuate-postgres:0.9.0.RC2
     ports:
@@ -76,33 +76,33 @@ services:
       POSTGRES_DB: happyride-dispatcher
       POSTGRES_USER: happyride-dispatcher-user
       POSTGRES_PASSWORD: happyride-dispatcher-password
-#  cdc-service-dispatcher:
-#    image: eventuateio/eventuate-cdc-service:0.6.0.RC3
-#    ports:
-#      - "9091:8080"
-#    depends_on:
-#      - postgres-dispatcher
-#      - kafka
-#      - zookeeper
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-dispatcher/happyride-dispatcher
-#      SPRING_DATASOURCE_USERNAME: happyride-dispatcher-user
-#      SPRING_DATASOURCE_PASSWORD: happyride-dispatcher-password
-#      SPRING_DATASOURCE_TEST_ON_BORROW: "true"
-#      SPRING_DATASOURCE_VALIDATION_QUERY: SELECT 1
-#      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-#      SPRING_PROFILES_ACTIVE: EventuatePolling
-#
-#      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-#      EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
-#
-#      EVENTUATE_CDC_PIPELINE_PIPELINE1_TYPE: eventuate-tram
-#      EVENTUATE_CDC_PIPELINE_PIPELINE1_READER: PostgresReader
-#      EVENTUATE_CDC_PIPELINE_PIPELINE1_EVENTUATEDATABASESCHEMA: eventuate
-#
-#      EVENTUATE_CDC_READER_POSTGRESREADER_TYPE: polling
-#      EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEURL: jdbc:postgresql://postgres-dispatcher/happyride-dispatcher
-#      EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEUSERNAME: happyride-dispatcher-user
-#      EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEPASSWORD: happyride-dispatcher-password
-#      EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
-#      EVENTUATE_CDC_READER_POSTGRESREADER_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/1
+  cdc-service-dispatcher:
+    image: eventuateio/eventuate-cdc-service:0.6.0.RC3
+    ports:
+      - "9091:8080"
+    depends_on:
+      - postgres-dispatcher
+      - kafka
+      - zookeeper
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-dispatcher/happyride-dispatcher
+      SPRING_DATASOURCE_USERNAME: happyride-dispatcher-user
+      SPRING_DATASOURCE_PASSWORD: happyride-dispatcher-password
+      SPRING_DATASOURCE_TEST_ON_BORROW: "true"
+      SPRING_DATASOURCE_VALIDATION_QUERY: SELECT 1
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_PROFILES_ACTIVE: EventuatePolling
+
+      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+
+      EVENTUATE_CDC_PIPELINE_PIPELINE1_TYPE: eventuate-tram
+      EVENTUATE_CDC_PIPELINE_PIPELINE1_READER: PostgresReader
+      EVENTUATE_CDC_PIPELINE_PIPELINE1_EVENTUATEDATABASESCHEMA: eventuate
+
+      EVENTUATE_CDC_READER_POSTGRESREADER_TYPE: polling
+      EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEURL: jdbc:postgresql://postgres-dispatcher/happyride-dispatcher
+      EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEUSERNAME: happyride-dispatcher-user
+      EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEPASSWORD: happyride-dispatcher-password
+      EVENTUATE_CDC_READER_POSTGRESREADER_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
+      EVENTUATE_CDC_READER_POSTGRESREADER_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/dispatcher

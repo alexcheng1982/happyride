@@ -119,7 +119,7 @@ public class DispatcherService {
     if (optionalDispatch.isPresent()) {
       dispatchConsumer.accept(optionalDispatch.get());
     } else {
-      LOGGER.warn("No dispatch found for trip {}", tripId);
+      LOGGER.warn("No active dispatch found for trip {}", tripId);
       noDispatchAction.run();
     }
   }
@@ -191,7 +191,7 @@ public class DispatcherService {
     @Override
     public void run() {
       if (attempt > acceptanceCheckMaxTimes) {
-        LOGGER.warn("No acceptance for trip {}", tripId);
+        LOGGER.warn("No acceptance for trip {}, notify dispatch failed", tripId);
         notifyTripDispatchFailed(tripId, TripDispatchFailedReason.NO_DRIVERS);
         return;
       }

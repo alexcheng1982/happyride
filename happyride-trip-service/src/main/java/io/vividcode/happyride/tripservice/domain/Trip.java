@@ -27,7 +27,8 @@ import lombok.ToString;
 @ToString
 public class Trip extends BaseEntityWithGeneratedId {
 
-  public static ResultWithDomainEvents<Trip, TripDomainEvent> createTrip(String passengerId, Position startPos, Position endPos) {
+  public static ResultWithDomainEvents<Trip, TripDomainEvent> createTrip(String passengerId,
+      Position startPos, Position endPos) {
     Trip trip = new Trip(passengerId, startPos, endPos);
     TripCreatedEvent event = new TripCreatedEvent(new TripDetails(passengerId, startPos, endPos));
     return new ResultWithDomainEvents<>(trip, event);
@@ -64,5 +65,16 @@ public class Trip extends BaseEntityWithGeneratedId {
     this.startPos = startPos;
     this.endPos = endPos;
     this.state = TripState.PENDING_DISPATCH;
+  }
+
+  public ResultWithDomainEvents<Trip, TripDomainEvent> markAsDispatched() {
+    setState(TripState.DISPATCHED);
+    return new ResultWithDomainEvents<>(this);
+  }
+
+  public ResultWithDomainEvents<Trip, TripDomainEvent> acceptByDriver(String driverId) {
+    setDriverId(driverId);
+    setState(TripState.ACCEPTED);
+    return new ResultWithDomainEvents<>(this);
   }
 }
