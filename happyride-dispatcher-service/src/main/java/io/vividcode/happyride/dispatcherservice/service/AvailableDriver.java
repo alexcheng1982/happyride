@@ -12,8 +12,8 @@ public class AvailableDriver {
   private String driverId;
 
   @NonNull
-  private BigDecimal lng;
+  private BigDecimal posLng;
 
   @NonNull
-  private BigDecimal lat;
+  private BigDecimal posLat;
 }

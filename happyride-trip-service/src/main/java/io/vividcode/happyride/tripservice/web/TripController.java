@@ -26,13 +26,13 @@ public class TripController {
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<Trip> getRide(@PathVariable("id") String id) {
+  public ResponseEntity<Trip> getTrip(@PathVariable("id") String id) {
     return tripService.getRide(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
   }
 
-  @PostMapping("/accept")
-  public ResponseEntity<Void> acceptTrip(@RequestBody AcceptTripRequest request) {
-    tripService.acceptTrip(request.getTripId(), request.getDriverId(), request.getLng(), request.getLat());
+  @PostMapping("{id}/accept")
+  public ResponseEntity<Void> acceptTrip(@PathVariable("id") String id, @RequestBody AcceptTripRequest request) {
+    tripService.acceptTrip(id, request.getDriverId(), request.getPosLng(), request.getPosLat());
     return ResponseEntity.noContent().build();
   }
 }

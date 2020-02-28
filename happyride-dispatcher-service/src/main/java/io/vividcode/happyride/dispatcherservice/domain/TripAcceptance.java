@@ -1,6 +1,6 @@
 package io.vividcode.happyride.dispatcherservice.domain;
 
-import io.vividcode.happyride.common.BaseEntityWithGeneratedId;
+import io.vividcode.happyride.common.EntityWithGeneratedId;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @ToString
-public class TripAcceptance extends BaseEntityWithGeneratedId  {
+public class TripAcceptance extends EntityWithGeneratedId {
   @NonNull
   @Column(name = "driver_id")
   private String driverId;

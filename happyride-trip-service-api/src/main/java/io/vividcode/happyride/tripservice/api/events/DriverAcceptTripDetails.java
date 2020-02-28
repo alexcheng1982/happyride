@@ -9,16 +9,14 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class AcceptTripDetails {
-  @NonNull
-  private String tripId;
+public class DriverAcceptTripDetails {
 
   @NonNull
   private String driverId;
 
   @NonNull
-  private BigDecimal lng;
+  private BigDecimal posLng;
 
   @NonNull
-  private BigDecimal lat;
+  private BigDecimal posLat;
 }

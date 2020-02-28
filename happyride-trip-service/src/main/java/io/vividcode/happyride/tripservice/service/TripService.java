@@ -2,8 +2,8 @@ package io.vividcode.happyride.tripservice.service;
 
 import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
-import io.vividcode.happyride.tripservice.api.events.AcceptTripDetails;
-import io.vividcode.happyride.tripservice.api.events.AcceptTripEvent;
+import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
+import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
 import io.vividcode.happyride.common.Position;
 import io.vividcode.happyride.tripservice.domain.Trip;
@@ -45,8 +45,8 @@ public class TripService {
     });
   }
 
-  public void acceptTrip(String tripId, String driverId, BigDecimal lng, BigDecimal lat) {
+  public void acceptTrip(String tripId, String driverId, BigDecimal posLng, BigDecimal posLat) {
     tripRepository.findById(tripId).ifPresent(trip -> tripAggregateEventPublisher.publish(trip,
-        ImmutableList.of(new AcceptTripEvent(new AcceptTripDetails(tripId, driverId, lng, lat)))));
+        ImmutableList.of(new DriverAcceptTripEvent(new DriverAcceptTripDetails(driverId, posLng, posLat)))));
   }
 }

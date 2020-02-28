@@ -5,11 +5,10 @@ import lombok.Data;
 
 @Data
 public class AcceptTripRequest {
-  private String tripId;
 
   private String driverId;
 
-  private BigDecimal lng;
+  private BigDecimal posLng;
 
-  private BigDecimal lat;
+  private BigDecimal posLat;
 }
