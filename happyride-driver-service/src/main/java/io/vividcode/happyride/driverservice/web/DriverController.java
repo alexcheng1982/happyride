@@ -27,6 +27,5 @@ public class DriverController {
   public ResponseEntity<Driver> createDriver(@RequestBody CreateDriverRequest request) {
     Driver driver = driverService.createDriver(request);
     return ResponseEntity.created(URI.create("/" + driver.getId())).body(driver);
-
   }
 }

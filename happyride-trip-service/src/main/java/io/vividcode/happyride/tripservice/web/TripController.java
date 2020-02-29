@@ -27,12 +27,24 @@ public class TripController {
 
   @GetMapping("{id}")
   public ResponseEntity<Trip> getTrip(@PathVariable("id") String id) {
-    return tripService.getRide(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    return tripService.getTrip(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
   }
 
   @PostMapping("{id}/accept")
   public ResponseEntity<Void> acceptTrip(@PathVariable("id") String id, @RequestBody AcceptTripRequest request) {
     tripService.driverAcceptTrip(id, request.getDriverId(), request.getPosLng(), request.getPosLat());
+    return ResponseEntity.noContent().build();
+  }
+
+  @PostMapping("{id}/start")
+  public ResponseEntity<Void> startTrip(@PathVariable("id") String id) {
+    tripService.markTripAsStarted(id);
+    return ResponseEntity.noContent().build();
+  }
+
+  @PostMapping("{id}/finish")
+  public ResponseEntity<Void> finishTrip(@PathVariable("id") String id) {
+    tripService.markTripAsFinished(id);
     return ResponseEntity.noContent().build();
   }
 }

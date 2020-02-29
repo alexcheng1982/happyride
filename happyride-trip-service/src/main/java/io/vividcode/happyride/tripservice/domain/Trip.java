@@ -6,6 +6,9 @@ import io.vividcode.happyride.common.Position;
 import io.vividcode.happyride.tripservice.api.events.TripCreatedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
+import io.vividcode.happyride.tripservice.api.events.TripFinishedEvent;
+import io.vividcode.happyride.tripservice.api.events.TripStartedEvent;
+import io.vividcode.happyride.tripservice.service.IllegalTripStateException;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -68,6 +71,7 @@ public class Trip extends BaseEntityWithGeneratedId {
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> markAsDispatched() {
+    assertTripState(TripState.PENDING_DISPATCH);
     setState(TripState.DISPATCHED);
     return new ResultWithDomainEvents<>(this);
   }
@@ -76,5 +80,23 @@ public class Trip extends BaseEntityWithGeneratedId {
     setDriverId(driverId);
     setState(TripState.ACCEPTED);
     return new ResultWithDomainEvents<>(this);
+  }
+
+  public ResultWithDomainEvents<Trip, TripDomainEvent> startTrip() {
+    assertTripState(TripState.ACCEPTED);
+    setState(TripState.STARTED);
+    return new ResultWithDomainEvents<>(this, new TripStartedEvent(getId()));
+  }
+
+  public ResultWithDomainEvents<Trip, TripDomainEvent> finishTrip() {
+    assertTripState(TripState.STARTED);
+    setState(TripState.FINISHED);
+    return new ResultWithDomainEvents<>(this, new TripFinishedEvent(getId()));
+  }
+
+  private void assertTripState(TripState requiredState) {
+    if (state != requiredState) {
+      throw new IllegalTripStateException(requiredState);
+    }
   }
 }

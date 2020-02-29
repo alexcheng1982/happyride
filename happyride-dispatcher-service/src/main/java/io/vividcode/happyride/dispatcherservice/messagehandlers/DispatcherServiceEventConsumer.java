@@ -7,11 +7,15 @@ import io.vividcode.happyride.dispatcherservice.service.DispatcherService;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
 import io.vividcode.happyride.tripservice.api.events.TripCreatedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DispatcherServiceEventConsumer {
   @Autowired
   DispatcherService dispatcherService;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DispatcherServiceEventConsumer.class);
 
   public DomainEventHandlers domainEventHandlers() {
     return DomainEventHandlersBuilder
@@ -23,7 +27,11 @@ public class DispatcherServiceEventConsumer {
 
   private void onTripCreated(DomainEventEnvelope<TripCreatedEvent> envelope) {
     TripDetails tripDetails = envelope.getEvent().getTripDetails();
-    dispatcherService.dispatchTrip(envelope.getAggregateId(), tripDetails);
+    try {
+      dispatcherService.dispatchTrip(envelope.getAggregateId(), tripDetails);
+    } catch (Exception e) {
+      LOGGER.warn("Failed to dispatch trip {}", envelope.getAggregateId(), e);
+    }
   }
 
   private void onDriverAcceptTrip(DomainEventEnvelope<DriverAcceptTripEvent> envelope) {

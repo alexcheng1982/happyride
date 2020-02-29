@@ -35,7 +35,7 @@ public class TripService {
     return trip;
   }
 
-  public Optional<Trip> getRide(String id) {
+  public Optional<Trip> getTrip(String id) {
     return tripRepository.findById(id);
   }
 
@@ -52,6 +52,14 @@ public class TripService {
 
   public void markTripAsAccepted(String tripId, String driverId) {
     withTrip(tripId, trip -> saveAndPublishEvents(trip.acceptByDriver(driverId)));
+  }
+
+  public void markTripAsStarted(String tripId) {
+    withTrip(tripId, trip -> saveAndPublishEvents(trip.startTrip()));
+  }
+
+  public void markTripAsFinished(String tripId) {
+    withTrip(tripId, trip -> saveAndPublishEvents(trip.finishTrip()));
   }
 
   private void withTrip(String tripId, Consumer<Trip> consumer) {
