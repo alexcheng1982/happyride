@@ -11,6 +11,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 @Configuration
 public class EmbeddedPostgresConfiguration {
+
   @Value("${spring.datasource.driver-class-name}")
   private String driverClassName;
   @Value("${spring.datasource.url}")

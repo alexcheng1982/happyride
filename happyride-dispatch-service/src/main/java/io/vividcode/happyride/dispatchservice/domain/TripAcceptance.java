@@ -22,6 +22,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 public class TripAcceptance extends EntityWithGeneratedId {
+
   @NonNull
   @Column(name = "driver_id")
   private String driverId;

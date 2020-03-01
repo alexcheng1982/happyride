@@ -20,7 +20,8 @@ public class PassengerController {
 
   @GetMapping("{id}")
   public ResponseEntity<Passenger> getPassenger(@PathVariable("id") String passengerId) {
-    return passengerService.getPassenger(passengerId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    return passengerService.getPassenger(passengerId).map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
   }
 
   @PostMapping

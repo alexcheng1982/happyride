@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class CreateTripRequest {
+
   private String passengerId;
 
   private Position startPos;

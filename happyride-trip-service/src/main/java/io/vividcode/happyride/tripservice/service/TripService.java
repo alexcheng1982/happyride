@@ -81,7 +81,8 @@ public class TripService {
     updateTrip(tripId, Trip::confirmTrip);
   }
 
-  private void updateTrip(String tripId, Function<Trip, ResultWithDomainEvents<Trip, TripDomainEvent>> updater) {
+  private void updateTrip(String tripId,
+      Function<Trip, ResultWithDomainEvents<Trip, TripDomainEvent>> updater) {
     withTrip(tripId, updater::apply);
   }
 

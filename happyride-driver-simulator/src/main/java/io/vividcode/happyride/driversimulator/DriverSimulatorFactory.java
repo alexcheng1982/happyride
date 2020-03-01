@@ -8,10 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DriverSimulatorFactory {
+
   @Autowired
   EventGateway eventGateway;
 
-  public DriverSimulator create(String driverId, String vehicleId, BigDecimal posLng, BigDecimal posLat) {
+  public DriverSimulator create(String driverId, String vehicleId, BigDecimal posLng,
+      BigDecimal posLat) {
     return new DriverSimulator(driverId, vehicleId, eventGateway,
         new DriverLocation(driverId, vehicleId, posLng, posLat));
   }

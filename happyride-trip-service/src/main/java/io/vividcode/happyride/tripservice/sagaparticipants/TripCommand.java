@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode
 @Getter
 public abstract class TripCommand implements Command {
+
   @NonNull
   private String tripId;
 }

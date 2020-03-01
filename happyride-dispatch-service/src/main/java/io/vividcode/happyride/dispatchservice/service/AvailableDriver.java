@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class AvailableDriver {
+
   @NonNull
   private String driverId;
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class DriverSimulatorSnapshot {
+
   private String id;
   private String driverId;
   private String vehicleId;

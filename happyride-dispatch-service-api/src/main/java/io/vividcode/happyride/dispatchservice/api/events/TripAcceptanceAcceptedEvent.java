@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class TripAcceptanceAcceptedEvent implements DispatchDomainEvent {
+
   @NonNull
   private String tripId;
 

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class DriverLocation {
+
   @NonNull
   private String driverId;
 
@@ -27,6 +28,6 @@ public class DriverLocation {
   }
 
   public DriverLocation moveTo(BigDecimal lngDelta, BigDecimal latDelta) {
-     return new DriverLocation(driverId, vehicleId, lng.add(lngDelta), lat.add(latDelta));
+    return new DriverLocation(driverId, vehicleId, lng.add(lngDelta), lat.add(latDelta));
   }
 }

@@ -28,6 +28,7 @@ import org.springframework.test.context.TestPropertySource;
 })
 @DisplayName("Passenger service")
 public class PassengerServiceTest {
+
   @Autowired
   PassengerService passengerService;
 

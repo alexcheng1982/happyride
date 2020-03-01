@@ -15,6 +15,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Vehicle extends BaseEntityWithGeneratedId {
+
   private String make;
 
   private String mode;

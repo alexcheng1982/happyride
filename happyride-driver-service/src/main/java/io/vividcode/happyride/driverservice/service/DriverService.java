@@ -5,7 +5,6 @@ import io.vividcode.happyride.driverservice.api.web.CreateVehicleRequest;
 import io.vividcode.happyride.driverservice.dataaccess.DriverRepository;
 import io.vividcode.happyride.driverservice.model.Driver;
 import io.vividcode.happyride.driverservice.model.Vehicle;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;

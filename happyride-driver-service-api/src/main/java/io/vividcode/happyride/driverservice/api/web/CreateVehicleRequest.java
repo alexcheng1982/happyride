@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class CreateVehicleRequest {
+
   private String mode;
 
   private String make;

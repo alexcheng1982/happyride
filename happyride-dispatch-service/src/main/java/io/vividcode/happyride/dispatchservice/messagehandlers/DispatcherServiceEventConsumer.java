@@ -12,10 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DispatcherServiceEventConsumer {
+
   @Autowired
   DispatcherService dispatcherService;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DispatcherServiceEventConsumer.class);
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(DispatcherServiceEventConsumer.class);
 
   public DomainEventHandlers domainEventHandlers() {
     return DomainEventHandlersBuilder
@@ -35,6 +37,7 @@ public class DispatcherServiceEventConsumer {
   }
 
   private void onDriverAcceptTrip(DomainEventEnvelope<DriverAcceptTripEvent> envelope) {
-    dispatcherService.submitTripAcceptance(envelope.getAggregateId(), envelope.getEvent().getAcceptTripDetails());
+    dispatcherService.submitTripAcceptance(envelope.getAggregateId(),
+        envelope.getEvent().getAcceptTripDetails());
   }
 }

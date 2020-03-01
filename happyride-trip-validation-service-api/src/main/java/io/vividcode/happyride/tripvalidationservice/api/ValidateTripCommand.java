@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class ValidateTripCommand implements Command {
+
   @NonNull
   private TripDetails tripDetails;
 }

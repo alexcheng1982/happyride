@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class TripCreatedEvent implements TripDomainEvent {
+
   @NonNull
   private TripDetails tripDetails;
 }

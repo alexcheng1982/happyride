@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class DriverAcceptTripEvent implements TripDomainEvent {
+
   @NonNull
   private DriverAcceptTripDetails acceptTripDetails;
 }

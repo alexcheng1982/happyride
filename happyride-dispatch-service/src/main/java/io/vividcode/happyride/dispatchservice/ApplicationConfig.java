@@ -22,8 +22,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     TramEventsPublisherConfiguration.class,
     TramJdbcKafkaConfiguration.class})
 public class ApplicationConfig {
+
   @Bean
-  public DispatchDomainEventPublisher dispatchAggregateEventPublisher(DomainEventPublisher eventPublisher) {
+  public DispatchDomainEventPublisher dispatchAggregateEventPublisher(
+      DomainEventPublisher eventPublisher) {
     return new DispatchDomainEventPublisher(eventPublisher);
   }
 }

@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AddressRepository extends CrudRepository<Address, String> {
+
   List<Address> findByAreaAreaCodeAndAddressLineContains(Long areaCode, String query);
 }

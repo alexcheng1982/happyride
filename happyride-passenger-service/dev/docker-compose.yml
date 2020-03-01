@@ -7,8 +7,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-    - 5432:5432
+      - 5432:5432
     volumes:
-    - happyride-passenger-pgdata:/var/lib/postgresql/data
+      - happyride-passenger-pgdata:/var/lib/postgresql/data
 volumes:
   happyride-passenger-pgdata:

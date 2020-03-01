@@ -17,7 +17,10 @@ public class DispatcherServiceMessageHandlersConfiguration {
   }
 
   @Bean
-  public DomainEventDispatcher domainEventDispatcher(DispatcherServiceEventConsumer dispatcherServiceEventConsumer, DomainEventDispatcherFactory domainEventDispatcherFactory) {
-    return domainEventDispatcherFactory.make("dispatcherServiceEvents", dispatcherServiceEventConsumer.domainEventHandlers());
+  public DomainEventDispatcher domainEventDispatcher(
+      DispatcherServiceEventConsumer dispatcherServiceEventConsumer,
+      DomainEventDispatcherFactory domainEventDispatcherFactory) {
+    return domainEventDispatcherFactory
+        .make("dispatcherServiceEvents", dispatcherServiceEventConsumer.domainEventHandlers());
   }
 }

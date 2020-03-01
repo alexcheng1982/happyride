@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DispatchRepository extends CrudRepository<Dispatch, String> {
+
   List<Dispatch> findByTripIdAndState(String tripId, DispatchState state);
 
   default Optional<Dispatch> findCurrentDispatch(String tripId) {

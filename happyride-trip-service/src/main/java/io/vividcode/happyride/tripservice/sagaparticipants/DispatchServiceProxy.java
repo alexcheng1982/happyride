@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DispatchServiceProxy {
+
   public final CommandEndpoint<VerifyDispatchCommand> verifyDispatch = CommandEndpointBuilder
       .forCommand(VerifyDispatchCommand.class)
       .withChannel(DispatchServiceChannels.dispatchServiceChannel)

@@ -21,18 +21,22 @@ public class TripController {
 
   @PostMapping
   public ResponseEntity<Void> createTrip(@RequestBody CreateTripRequest request) {
-    Trip created = tripService.createTrip(request.getPassengerId(), request.getStartPos(), request.getEndPos());
+    Trip created = tripService
+        .createTrip(request.getPassengerId(), request.getStartPos(), request.getEndPos());
     return ResponseEntity.created(URI.create("/" + created.getId())).build();
   }
 
   @GetMapping("{id}")
   public ResponseEntity<Trip> getTrip(@PathVariable("id") String id) {
-    return tripService.getTrip(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    return tripService.getTrip(id).map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
   }
 
   @PostMapping("{id}/accept")
-  public ResponseEntity<Void> acceptTrip(@PathVariable("id") String id, @RequestBody AcceptTripRequest request) {
-    tripService.driverAcceptTrip(id, request.getDriverId(), request.getPosLng(), request.getPosLat());
+  public ResponseEntity<Void> acceptTrip(@PathVariable("id") String id,
+      @RequestBody AcceptTripRequest request) {
+    tripService
+        .driverAcceptTrip(id, request.getDriverId(), request.getPosLng(), request.getPosLat());
     return ResponseEntity.noContent().build();
   }
 

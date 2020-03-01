@@ -28,6 +28,7 @@ import org.springframework.test.context.TestPropertySource;
 })
 @DisplayName("Driver service")
 public class DriverServiceTest {
+
   @Autowired
   DriverService driverService;
 

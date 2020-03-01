@@ -1,6 +1,7 @@
 package io.vividcode.happyride.driverservice.service;
 
 public class DriverNotFoundException extends RuntimeException {
+
   private final String driverId;
 
   public DriverNotFoundException(String driverId) {

@@ -14,14 +14,15 @@ import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
 
 public class DriverSimulator {
+
   private final String id;
   private final EventGateway eventGateway;
 
-  private final int[][] deltas = new int[][] {
-      new int[] {1, 0},
-      new int[] {0, -1},
-      new int[] {-1, 0},
-      new int[] {0, 1}
+  private final int[][] deltas = new int[][]{
+      new int[]{1, 0},
+      new int[]{0, -1},
+      new int[]{-1, 0},
+      new int[]{0, 1}
   };
 
   private int direction = 0;
@@ -95,10 +96,11 @@ public class DriverSimulator {
         direction = direction++ % 4;
       }
     }
-    int speed = random.nextInt(1,4);
+    int speed = random.nextInt(1, 4);
     double latDelta = deltas[direction][0] * 0.000001 * speed;
     double lngDelta = deltas[direction][1] * 0.000001 * speed;
-    currentLocation = currentLocation.moveTo(BigDecimal.valueOf(lngDelta), BigDecimal.valueOf(latDelta));
+    currentLocation = currentLocation
+        .moveTo(BigDecimal.valueOf(lngDelta), BigDecimal.valueOf(latDelta));
   }
 
   public DriverSimulatorSnapshot dump() {

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class TripDispatchedEvent implements DispatchDomainEvent {
+
   @NonNull
   private String tripId;
 

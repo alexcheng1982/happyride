@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class AddDriverRequest {
+
   @NonNull
   private String driverId;
 

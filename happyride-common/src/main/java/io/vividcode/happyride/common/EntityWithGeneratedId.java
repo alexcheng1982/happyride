@@ -12,6 +12,7 @@ import lombok.Getter;
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Getter
 public abstract class EntityWithGeneratedId extends AbstractEntity<String> {
+
   @Id
   @Column(length = 36)
   private String id;

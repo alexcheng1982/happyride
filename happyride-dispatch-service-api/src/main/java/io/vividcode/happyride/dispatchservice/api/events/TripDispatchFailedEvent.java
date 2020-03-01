@@ -5,6 +5,7 @@ import lombok.NonNull;
 
 @Data
 public class TripDispatchFailedEvent implements DispatchDomainEvent {
+
   @NonNull
   private String tripId;
 

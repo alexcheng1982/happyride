@@ -17,6 +17,7 @@ public class DispatchCommandHandlersConfiguration {
   public SagaCommandDispatcher dispatchCommandHandlersDispatcher(
       DispatchCommandHandlers dispatchCommandHandlers,
       SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
-    return sagaCommandDispatcherFactory.make("dispatchService", dispatchCommandHandlers.commandHandlers());
+    return sagaCommandDispatcherFactory
+        .make("dispatchService", dispatchCommandHandlers.commandHandlers());
   }
 }

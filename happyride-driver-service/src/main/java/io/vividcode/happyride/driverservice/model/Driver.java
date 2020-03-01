@@ -26,6 +26,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Driver extends BaseEntityWithGeneratedId {
+
   @Column(name = "name")
   private String name;
 

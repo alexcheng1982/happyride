@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class DriverLocationUpdatedEvent {
+
   private DriverLocation location;
 
   private DriverState state;

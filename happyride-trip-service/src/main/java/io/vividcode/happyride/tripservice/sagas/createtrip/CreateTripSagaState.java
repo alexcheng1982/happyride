@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class CreateTripSagaState {
+
   @NonNull
   private String tripId;
 

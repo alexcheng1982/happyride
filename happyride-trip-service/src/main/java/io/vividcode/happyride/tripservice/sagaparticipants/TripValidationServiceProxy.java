@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TripValidationServiceProxy {
+
   public final CommandEndpoint<ValidateTripCommand> validateTrip = CommandEndpointBuilder
       .forCommand(ValidateTripCommand.class)
       .withChannel(TripValidationServiceChannels.tripValidationServiceChannel)

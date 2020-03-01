@@ -25,12 +25,12 @@ services:
       POSTGRES_PASSWORD: eventuate
     volumes:
       - happyride-trip-pgdata:/var/lib/postgresql/data
-#      - ./my-postgres.conf:/etc/postgresql.conf
-#      - ./initialize-postgres.sql:/docker-entrypoint-initdb.d/1-initialize-postgres.sql
-#    command:
-#      - "postgres"
-#      - "-c"
-#      - "config_file=/etc/postgresql.conf"
+  #      - ./my-postgres.conf:/etc/postgresql.conf
+  #      - ./initialize-postgres.sql:/docker-entrypoint-initdb.d/1-initialize-postgres.sql
+  #    command:
+  #      - "postgres"
+  #      - "-c"
+  #      - "config_file=/etc/postgresql.conf"
   cdc-service:
     image: eventuateio/eventuate-cdc-service:0.6.0.RC3
     ports:

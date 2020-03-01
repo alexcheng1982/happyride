@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TripServiceProxy {
+
   public final CommandEndpoint<RejectTripCommand> reject = CommandEndpointBuilder
       .forCommand(RejectTripCommand.class)
       .withChannel(TripServiceChannels.tripServiceChannel)
