@@ -85,6 +85,17 @@ public class DispatcherService {
     return Collections.emptySet();
   }
 
+  public void verifyDispatch(TripDetails tripDetails) {
+    Position startPos = tripDetails.getStartPos();
+    Set<AvailableDriver> availableDrivers = findAvailableDrivers(
+        startPos.getLng().doubleValue(),
+        startPos.getLat().doubleValue()
+    );
+    if (availableDrivers.isEmpty()) {
+      throw new DispatchVerificationException();
+    }
+  }
+
   @Transactional
   public void dispatchTrip(String tripId, TripDetails tripDetails) {
     Position startPos = tripDetails.getStartPos();

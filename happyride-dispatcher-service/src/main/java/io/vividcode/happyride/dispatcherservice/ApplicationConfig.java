@@ -3,6 +3,7 @@ package io.vividcode.happyride.dispatcherservice;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.events.publisher.TramEventsPublisherConfiguration;
 import io.eventuate.tram.jdbckafka.TramJdbcKafkaConfiguration;
+import io.vividcode.happyride.dispatcherservice.commandhandlers.DispatchCommandHandlersConfiguration;
 import io.vividcode.happyride.dispatcherservice.domain.DispatchDomainEventPublisher;
 import io.vividcode.happyride.dispatcherservice.messagehandlers.DispatcherServiceMessageHandlersConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories
 @EnableTransactionManagement
 @Import({DispatcherServiceMessageHandlersConfiguration.class,
+    DispatchCommandHandlersConfiguration.class,
     TramEventsPublisherConfiguration.class,
     TramJdbcKafkaConfiguration.class})
 public class ApplicationConfig {

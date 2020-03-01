@@ -1,0 +1,15 @@
+server:
+  port: 8503
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:8434/happyride-trip-validation
+    username: happyride-trip-validation-user
+    password: happyride-trip-validation-password
+eventuatelocal:
+  kafka:
+    bootstrap:
+      servers: ${DOCKER_HOST_IP:localhost}:29092
+  zookeeper:
+    connection:
+      string: ${DOCKER_HOST_IP:localhost}:2181

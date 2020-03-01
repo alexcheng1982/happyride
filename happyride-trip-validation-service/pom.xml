@@ -9,30 +9,34 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>happyride-dispatcher-service-api</artifactId>
+  <artifactId>happyride-trip-validation-service</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>io.vividcode.happyride</groupId>
-      <artifactId>happyride-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
     <dependency>
       <groupId>io.vividcode.happyride</groupId>
       <artifactId>happyride-trip-service-api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>happyride-trip-validation-service-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>io.eventuate.tram.core</groupId>
-      <artifactId>eventuate-tram-events</artifactId>
+      <artifactId>eventuate-tram-jdbc-kafka</artifactId>
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
       <artifactId>eventuate-tram-commands</artifactId>
     </dependency>
     <dependency>
-      <artifactId>lombok</artifactId>
-      <groupId>org.projectlombok</groupId>
+      <groupId>io.eventuate.tram.sagas</groupId>
+      <artifactId>eventuate-tram-sagas-participant</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
   </dependencies>
 </project>

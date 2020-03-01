@@ -9,14 +9,9 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>happyride-dispatcher-service-api</artifactId>
+  <artifactId>happyride-trip-validation-service-api</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>io.vividcode.happyride</groupId>
-      <artifactId>happyride-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
     <dependency>
       <groupId>io.vividcode.happyride</groupId>
       <artifactId>happyride-trip-service-api</artifactId>
@@ -24,15 +19,12 @@
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
-      <artifactId>eventuate-tram-events</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.eventuate.tram.core</groupId>
       <artifactId>eventuate-tram-commands</artifactId>
     </dependency>
     <dependency>
-      <artifactId>lombok</artifactId>
       <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
     </dependency>
   </dependencies>
+
 </project>

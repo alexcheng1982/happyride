@@ -34,6 +34,10 @@
       <artifactId>eventuate-tram-jdbc-kafka</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.eventuate.tram.sagas</groupId>
+      <artifactId>eventuate-tram-sagas-participant</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>

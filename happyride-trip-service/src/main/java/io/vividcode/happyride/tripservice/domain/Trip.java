@@ -3,10 +3,12 @@ package io.vividcode.happyride.tripservice.domain;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.vividcode.happyride.common.BaseEntityWithGeneratedId;
 import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.tripservice.api.events.TripConfirmedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripCreatedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
 import io.vividcode.happyride.tripservice.api.events.TripFinishedEvent;
+import io.vividcode.happyride.tripservice.api.events.TripRejectedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripStartedEvent;
 import io.vividcode.happyride.tripservice.service.IllegalTripStateException;
 import javax.persistence.AttributeOverride;
@@ -67,13 +69,23 @@ public class Trip extends BaseEntityWithGeneratedId {
     this.passengerId = passengerId;
     this.startPos = startPos;
     this.endPos = endPos;
-    this.state = TripState.PENDING_DISPATCH;
+    this.state = TripState.CREATED;
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> markAsDispatched() {
     assertTripState(TripState.PENDING_DISPATCH);
     setState(TripState.DISPATCHED);
     return new ResultWithDomainEvents<>(this);
+  }
+
+  public ResultWithDomainEvents<Trip, TripDomainEvent> rejectTrip() {
+    setState(TripState.REJECTED);
+    return new ResultWithDomainEvents<>(this, new TripRejectedEvent());
+  }
+
+  public ResultWithDomainEvents<Trip, TripDomainEvent> confirmTrip() {
+    setState(TripState.CONFIRMED);
+    return new ResultWithDomainEvents<>(this, new TripConfirmedEvent());
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> acceptByDriver(String driverId) {
@@ -85,13 +97,13 @@ public class Trip extends BaseEntityWithGeneratedId {
   public ResultWithDomainEvents<Trip, TripDomainEvent> startTrip() {
     assertTripState(TripState.ACCEPTED);
     setState(TripState.STARTED);
-    return new ResultWithDomainEvents<>(this, new TripStartedEvent(getId()));
+    return new ResultWithDomainEvents<>(this, new TripStartedEvent());
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> finishTrip() {
     assertTripState(TripState.STARTED);
     setState(TripState.FINISHED);
-    return new ResultWithDomainEvents<>(this, new TripFinishedEvent(getId()));
+    return new ResultWithDomainEvents<>(this, new TripFinishedEvent());
   }
 
   private void assertTripState(TripState requiredState) {

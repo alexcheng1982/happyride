@@ -2,16 +2,20 @@ package io.vividcode.happyride.tripservice.service;
 
 import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
+import io.eventuate.tram.sagas.orchestration.SagaManager;
 import io.vividcode.happyride.common.Position;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
+import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
 import io.vividcode.happyride.tripservice.domain.Trip;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
+import io.vividcode.happyride.tripservice.sagas.createtrip.CreateTripSagaState;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +30,19 @@ public class TripService {
   @Autowired
   TripDomainEventPublisher tripAggregateEventPublisher;
 
+  @Autowired
+  SagaManager<CreateTripSagaState> createTripSagaManager;
+
   public Trip createTrip(String passengerId, Position startPos, Position endPos) {
     ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
         .createTrip(passengerId, startPos, endPos);
     Trip trip = tripAndEvents.result;
     tripRepository.save(trip);
     tripAggregateEventPublisher.publish(trip, tripAndEvents.events);
+
+    TripDetails tripDetails = new TripDetails(passengerId, startPos, endPos);
+    CreateTripSagaState data = new CreateTripSagaState(trip.getId(), tripDetails);
+    createTripSagaManager.create(data, Trip.class, trip.getId());
     return trip;
   }
 
@@ -55,11 +66,23 @@ public class TripService {
   }
 
   public void markTripAsStarted(String tripId) {
-    withTrip(tripId, trip -> saveAndPublishEvents(trip.startTrip()));
+    updateTrip(tripId, Trip::startTrip);
   }
 
   public void markTripAsFinished(String tripId) {
-    withTrip(tripId, trip -> saveAndPublishEvents(trip.finishTrip()));
+    updateTrip(tripId, Trip::finishTrip);
+  }
+
+  public void rejectTrip(String tripId) {
+    updateTrip(tripId, Trip::rejectTrip);
+  }
+
+  public void confirmTrip(String tripId) {
+    updateTrip(tripId, Trip::confirmTrip);
+  }
+
+  private void updateTrip(String tripId, Function<Trip, ResultWithDomainEvents<Trip, TripDomainEvent>> updater) {
+    withTrip(tripId, updater::apply);
   }
 
   private void withTrip(String tripId, Consumer<Trip> consumer) {
