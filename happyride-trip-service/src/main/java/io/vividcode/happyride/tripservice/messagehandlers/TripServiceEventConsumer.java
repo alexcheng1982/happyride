@@ -3,8 +3,8 @@ package io.vividcode.happyride.tripservice.messagehandlers;
 import io.eventuate.tram.events.subscriber.DomainEventEnvelope;
 import io.eventuate.tram.events.subscriber.DomainEventHandlers;
 import io.eventuate.tram.events.subscriber.DomainEventHandlersBuilder;
-import io.vividcode.happyride.dispatcherservice.api.events.TripAcceptanceAcceptedEvent;
-import io.vividcode.happyride.dispatcherservice.api.events.TripDispatchedEvent;
+import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceAcceptedEvent;
+import io.vividcode.happyride.dispatchservice.api.events.TripDispatchedEvent;
 import io.vividcode.happyride.tripservice.service.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -1,12 +1,11 @@
-package io.vividcode.happyride.driversimulator;
+package io.vividcode.happyride.dispatchservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DriverSimulatorMain {
-
+public class DispatcherServiceApplication {
   public static void main(String[] args) {
-    SpringApplication.run(DriverSimulatorMain.class, args);
+    SpringApplication.run(DispatcherServiceApplication.class, args);
   }
 }

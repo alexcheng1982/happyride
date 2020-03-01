@@ -1,3 +1,5 @@
+server:
+  port: 8509
 axon:
   axonserver:
     servers: ${DOCKER_HOST_IP:localhost}:8124

@@ -1,6 +1,6 @@
 package io.vividcode.happyride.tripservice.sagas.createtrip;
 
-import io.vividcode.happyride.dispatcherservice.api.events.VerifyDispatchCommand;
+import io.vividcode.happyride.dispatchservice.api.events.VerifyDispatchCommand;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.sagaparticipants.ConfirmTripCommand;
 import io.vividcode.happyride.tripservice.sagaparticipants.RejectTripCommand;

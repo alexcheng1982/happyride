@@ -1,10 +1,11 @@
 package io.vividcode.happyride.driversimulator;
 
 import io.vividcode.happyride.common.DriverState;
-import io.vividcode.happyride.dispatcherservice.api.events.DriverLocation;
-import io.vividcode.happyride.dispatcherservice.api.events.DriverLocationUpdatedEvent;
+import io.vividcode.happyride.dispatchservice.api.events.DriverLocation;
+import io.vividcode.happyride.dispatchservice.api.events.DriverLocationUpdatedEvent;
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import org.axonframework.eventhandling.gateway.EventGateway;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
 
 public class DriverSimulator {
+  private final String id;
   private final EventGateway eventGateway;
 
   private final int[][] deltas = new int[][] {
@@ -24,6 +26,7 @@ public class DriverSimulator {
 
   private int direction = 0;
   private DriverLocation currentLocation;
+  private DriverState state = DriverState.OFFLINE;
   private EmitterProcessor<Boolean> stop;
   private final String driverId;
   private final String vehicleId;
@@ -32,14 +35,20 @@ public class DriverSimulator {
 
   public DriverSimulator(String driverId, String vehicleId, EventGateway eventGateway,
       DriverLocation initialLocation) {
+    this.id = UUID.randomUUID().toString();
     this.driverId = driverId;
     this.vehicleId = vehicleId;
     currentLocation = initialLocation;
     this.eventGateway = eventGateway;
   }
 
+  public String getId() {
+    return id;
+  }
+
   public void startSimulation() {
     LOGGER.info("Start simulation for driver [{}] with vehicle [{}]", driverId, vehicleId);
+    state = DriverState.AVAILABLE;
     stop = EmitterProcessor.create();
     Flux.interval(Duration.ofSeconds(5))
         .takeUntilOther(stop)
@@ -50,18 +59,28 @@ public class DriverSimulator {
   }
 
   public void stopSimulation() {
+    LOGGER.info("Stop simulation for driver [{}] with vehicle [{}]", driverId, vehicleId);
+    state = DriverState.OFFLINE;
     stop.onNext(true);
   }
 
-  public void moveTo(DriverLocation location) {
-    currentLocation = location;
+  public void resetPosition(BigDecimal lng, BigDecimal lat) {
+    currentLocation = currentLocation.resetTo(lng, lat);
+  }
+
+  public void markAsAvailable() {
+    state = DriverState.AVAILABLE;
+  }
+
+  public void markAsNotAvailable() {
+    state = DriverState.NOT_AVAILABLE;
   }
 
   private void sendLocation() {
     DriverLocationUpdatedEvent event = new DriverLocationUpdatedEvent();
     event.setTimestamp(System.currentTimeMillis());
     event.setLocation(currentLocation);
-    event.setState(DriverState.AVAILABLE);
+    event.setState(state);
     eventGateway.publish(event);
   }
 
@@ -80,5 +99,16 @@ public class DriverSimulator {
     double latDelta = deltas[direction][0] * 0.000001 * speed;
     double lngDelta = deltas[direction][1] * 0.000001 * speed;
     currentLocation = currentLocation.moveTo(BigDecimal.valueOf(lngDelta), BigDecimal.valueOf(latDelta));
+  }
+
+  public DriverSimulatorSnapshot dump() {
+    DriverSimulatorSnapshot snapshot = new DriverSimulatorSnapshot();
+    snapshot.setId(id);
+    snapshot.setDriverId(driverId);
+    snapshot.setVehicleId(vehicleId);
+    snapshot.setState(state);
+    snapshot.setPosLng(currentLocation.getLng());
+    snapshot.setPosLat(currentLocation.getLat());
+    return snapshot;
   }
 }

@@ -9,42 +9,25 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>happyride-trip-service</artifactId>
+  <artifactId>happyride-dispatch-service</artifactId>
 
   <dependencies>
-    <dependency>
-      <artifactId>happyride-common</artifactId>
-      <groupId>io.vividcode.happyride</groupId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vividcode.happyride</groupId>
-      <artifactId>happyride-trip-service-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
     <dependency>
       <artifactId>happyride-dispatch-service-api</artifactId>
       <groupId>io.vividcode.happyride</groupId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <artifactId>happyride-trip-validation-service-api</artifactId>
-      <groupId>io.vividcode.happyride</groupId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
       <artifactId>eventuate-tram-aggregate-domain-events</artifactId>
-      <version>${eventuate-tram.version}</version>
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
@@ -52,28 +35,38 @@
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.sagas</groupId>
-      <artifactId>eventuate-tram-sagas-simple-dsl</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.eventuate.tram.sagas</groupId>
       <artifactId>eventuate-tram-sagas-participant</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.flywaydb</groupId>
-      <artifactId>flyway-core</artifactId>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.projectlombok</groupId>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.lettuce</groupId>
+      <artifactId>lettuce-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.axonframework</groupId>
+      <artifactId>axon-spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
       <artifactId>lombok</artifactId>
+      <groupId>org.projectlombok</groupId>
     </dependency>
+
+
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <scope>runtime</scope>
+      <groupId>com.playtika.testcontainers</groupId>
+      <artifactId>embedded-redis</artifactId>
     </dependency>
   </dependencies>
+
 </project>

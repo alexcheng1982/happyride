@@ -3,8 +3,8 @@ package io.vividcode.happyride.tripservice.sagaparticipants;
 import io.eventuate.tram.commands.common.Success;
 import io.eventuate.tram.sagas.simpledsl.CommandEndpoint;
 import io.eventuate.tram.sagas.simpledsl.CommandEndpointBuilder;
-import io.vividcode.happyride.dispatcherservice.api.DispatchServiceChannels;
-import io.vividcode.happyride.dispatcherservice.api.events.VerifyDispatchCommand;
+import io.vividcode.happyride.dispatchservice.api.DispatchServiceChannels;
+import io.vividcode.happyride.dispatchservice.api.events.VerifyDispatchCommand;
 import org.springframework.stereotype.Component;
 
 @Component
