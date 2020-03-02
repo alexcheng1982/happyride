@@ -1,6 +1,7 @@
-package io.vividcode.happyride.tripservice.cqrs;
+package io.vividcode.happyride.tripservice.cqrs.domain;
 
-import io.vividcode.happyride.common.Position;
+import static org.axonframework.modelling.command.AggregateLifecycle.apply;
+
 import io.vividcode.happyride.tripservice.api.TripState;
 import io.vividcode.happyride.tripservice.cqrs.api.CancelTripCommand;
 import io.vividcode.happyride.tripservice.cqrs.api.ConfirmTripCommand;
@@ -12,18 +13,11 @@ import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 @Aggregate
 public class Trip {
   @AggregateIdentifier
   private String id;
-
-  private Position startPos;
-
-  private Position endPos;
 
   private TripState state;
 
@@ -34,19 +28,24 @@ public class Trip {
 
   @CommandHandler
   public void handle(CancelTripCommand command) {
+    if (state != TripState.CREATED) {
+      throw new IllegalTripStateException(state, TripState.CANCELLED);
+    }
     apply(new TripCancelledEvent(command.getTripId()));
   }
 
   @CommandHandler
   public void handle(ConfirmTripCommand command) {
+    if (state != TripState.CREATED) {
+      throw new IllegalTripStateException(state, TripState.CONFIRMED);
+    }
     apply(new TripConfirmedEvent(command.getTripId()));
   }
 
   @EventSourcingHandler
   public void on(TripCreatedEvent event) {
     id = event.getTripId();
-    startPos = event.getTripDetails().getStartPos();
-    endPos = event.getTripDetails().getEndPos();
+    state = TripState.CREATED;
   }
 
   @EventSourcingHandler

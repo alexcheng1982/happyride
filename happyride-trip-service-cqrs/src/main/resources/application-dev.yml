@@ -1,5 +1,12 @@
 server:
   port: 8510
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.HSQLDialect
 axon:
   axonserver:
     servers: ${DOCKER_HOST_IP:localhost}:8124
