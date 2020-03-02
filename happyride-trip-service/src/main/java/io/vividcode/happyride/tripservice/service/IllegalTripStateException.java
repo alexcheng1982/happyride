@@ -1,6 +1,6 @@
 package io.vividcode.happyride.tripservice.service;
 
-import io.vividcode.happyride.tripservice.domain.TripState;
+import io.vividcode.happyride.tripservice.api.TripState;
 
 public class IllegalTripStateException extends RuntimeException {
 

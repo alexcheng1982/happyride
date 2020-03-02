@@ -1,4 +1,4 @@
-package io.vividcode.happyride.tripservice.domain;
+package io.vividcode.happyride.tripservice.api;
 
 public enum TripState {
   CREATED,

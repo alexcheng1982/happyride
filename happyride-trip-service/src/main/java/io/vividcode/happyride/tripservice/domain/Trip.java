@@ -3,6 +3,7 @@ package io.vividcode.happyride.tripservice.domain;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.vividcode.happyride.common.BaseEntityWithGeneratedId;
 import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.tripservice.api.TripState;
 import io.vividcode.happyride.tripservice.api.events.TripConfirmedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripCreatedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
