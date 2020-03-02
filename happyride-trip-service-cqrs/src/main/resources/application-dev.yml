@@ -1,0 +1,9 @@
+server:
+  port: 8510
+axon:
+  axonserver:
+    servers: ${DOCKER_HOST_IP:localhost}:8124
+  serializer:
+    general: jackson
+    events: jackson
+    messages: jackson

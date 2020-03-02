@@ -18,6 +18,9 @@
     <module>happyride-dispatch-service-api</module>
     <module>happyride-trip-validation-service</module>
     <module>happyride-trip-validation-service-api</module>
+    <module>happyride-trip-history-service</module>
+    <module>happyride-trip-service-cqrs</module>
+    <module>happyride-trip-service-cqrs-api</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
