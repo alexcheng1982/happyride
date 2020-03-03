@@ -37,13 +37,13 @@ public class PassengerService {
     return passenger;
   }
 
-  public Passenger addAddress(String passengerId, CreateUserAddressRequest request) {
+  public UserAddress addAddress(String passengerId, CreateUserAddressRequest request) {
     Passenger passenger = passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
     UserAddress userAddress = createUserAddress(request);
     passenger.getUserAddresses().add(userAddress);
     passengerRepository.save(passenger);
-    return passenger;
+    return userAddress;
   }
 
   private UserAddress createUserAddress(CreateUserAddressRequest request) {

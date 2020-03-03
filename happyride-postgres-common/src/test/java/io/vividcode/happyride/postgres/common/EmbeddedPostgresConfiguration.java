@@ -12,25 +12,17 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @Configuration
 public class EmbeddedPostgresConfiguration {
 
-  @Value("${spring.datasource.driver-class-name}")
-  private String driverClassName;
-  @Value("${spring.datasource.url}")
-  private String jdbcUrl;
-  @Value("${spring.datasource.username}")
-  private String username;
-  @Value("${spring.datasource.password}")
-  private String password;
-
   @Autowired
-  private ConfigurableEnvironment environment;
+  ConfigurableEnvironment environment;
 
   @Bean(destroyMethod = "close")
   public DataSource testDataSource() {
+    String jdbcUrl = "jdbc:postgresql://${embedded.postgresql.host}:${embedded.postgresql.port}/${embedded.postgresql.schema}";
     HikariConfig hikariConfig = new HikariConfig();
-    hikariConfig.setDriverClassName(driverClassName);
+    hikariConfig.setDriverClassName("org.postgresql.Driver");
     hikariConfig.setJdbcUrl(environment.resolvePlaceholders(jdbcUrl));
-    hikariConfig.setUsername(environment.resolvePlaceholders(username));
-    hikariConfig.setPassword(environment.resolvePlaceholders(password));
+    hikariConfig.setUsername(environment.getProperty("embedded.postgresql.user"));
+    hikariConfig.setPassword(environment.getProperty("embedded.postgresql.password"));
     return new HikariDataSource(hikariConfig);
   }
 }

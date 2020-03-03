@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
+import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
 import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
 import io.vividcode.happyride.passengerservice.domain.Passenger;
@@ -13,16 +14,27 @@ import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest
+@DataJpaTest
+@EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@ContextConfiguration(classes = {TestApplication.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class, EmbeddedPostgresConfiguration.class})
+@ComponentScan
+@ContextConfiguration(classes = {
+    EmbeddedPostgresConfiguration.class}
+)
+@ImportAutoConfiguration(classes = {EmbeddedPostgreSQLDependenciesAutoConfiguration.class, EmbeddedPostgreSQLBootstrapConfiguration.class})
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
 })
@@ -49,7 +61,7 @@ public class PassengerServiceTest {
     CreateUserAddressRequest addressRequest = new CreateUserAddressRequest();
     addressRequest.setName("公司");
     addressRequest.setAddressId("address2");
-    passenger = passengerService.addAddress(passenger.getId(), addressRequest);
+    passengerService.addAddress(passenger.getId(), addressRequest);
     assertEquals(2, passenger.getUserAddresses().size());
   }
 

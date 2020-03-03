@@ -1,5 +1,6 @@
 package io.vividcode.happyride.passengerservice.api.web;
 
+import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
 
@@ -12,5 +13,5 @@ public class CreatePassengerRequest {
 
   private String mobilePhoneNumber;
 
-  private Set<CreateUserAddressRequest> userAddresses;
+  private Set<CreateUserAddressRequest> userAddresses = new HashSet<>();
 }
