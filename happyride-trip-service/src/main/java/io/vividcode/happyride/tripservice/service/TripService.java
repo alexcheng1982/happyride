@@ -51,7 +51,7 @@ public class TripService {
   }
 
   public void markTripAsDispatched(String tripId) {
-    withTrip(tripId, trip -> saveAndPublishEvents(trip.markAsDispatched()));
+    updateTrip(tripId, Trip::markAsDispatched);
   }
 
   public void driverAcceptTrip(String tripId, String driverId, BigDecimal posLng,
@@ -62,7 +62,7 @@ public class TripService {
   }
 
   public void markTripAsAccepted(String tripId, String driverId) {
-    withTrip(tripId, trip -> saveAndPublishEvents(trip.acceptByDriver(driverId)));
+    updateTrip(tripId, trip -> trip.acceptByDriver(driverId));
   }
 
   public void markTripAsStarted(String tripId) {
@@ -83,7 +83,7 @@ public class TripService {
 
   private void updateTrip(String tripId,
       Function<Trip, ResultWithDomainEvents<Trip, TripDomainEvent>> updater) {
-    withTrip(tripId, updater::apply);
+    withTrip(tripId, trip -> saveAndPublishEvents(updater.apply(trip)));
   }
 
   private void withTrip(String tripId, Consumer<Trip> consumer) {
