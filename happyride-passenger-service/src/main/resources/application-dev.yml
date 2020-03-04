@@ -1,3 +1,5 @@
+server:
+  port: 8500
 spring:
   jpa:
     hibernate:
@@ -5,8 +7,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: happyride
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:5432/happyride-passenger-service
     username: postgres
     password: postgres
+  flyway:
+    schemas:
+      - happyride

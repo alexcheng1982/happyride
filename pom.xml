@@ -43,6 +43,7 @@
     <testcontainers.version>1.40</testcontainers.version>
     <guava.version>28.2-jre</guava.version>
     <axon.version>4.3</axon.version>
+    <javafaker.version>1.0.2</javafaker.version>
   </properties>
 
   <dependencyManagement>
@@ -102,6 +103,12 @@
         <groupId>com.playtika.testcontainers</groupId>
         <artifactId>embedded-redis</artifactId>
         <version>${testcontainers.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.github.javafaker</groupId>
+        <artifactId>javafaker</artifactId>
+        <version>${javafaker.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>

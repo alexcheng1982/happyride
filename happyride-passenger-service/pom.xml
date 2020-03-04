@@ -69,6 +69,10 @@
       <artifactId>reactor-netty</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
+    </dependency>
 
 
   </dependencies>
