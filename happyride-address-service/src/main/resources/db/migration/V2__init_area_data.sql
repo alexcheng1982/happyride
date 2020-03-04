@@ -1,4 +1,4 @@
-insert into area(id,level,parent_code,area_code,zip_code,city_code,name,short_name,merger_name,pinyin,lng,lat) values
+insert into happyride.areas(id,level,parent_code,area_code,zip_code,city_code,name,short_name,merger_name,pinyin,lng,lat) values
 (1,0,0,110000000000,000000,'','北京市','北京','北京','BeiJing','116.407526','39.904030'),
 (2,1,110000000000,110100000000,'100000','010','直辖区','北京','北京','BeiJing','116.407526','39.904030'),
 (3,2,110100000000,110101000000,'100000','010','东城区','东城','北京,东城','DongCheng','116.416357','39.928353'),

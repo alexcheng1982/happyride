@@ -1,9 +1,9 @@
-package io.vividcode.happyride.address.service;
+package io.vividcode.happyride.addressservice.service;
 
-import io.vividcode.happyride.address.dataaccess.AddressRepository;
-import io.vividcode.happyride.address.dataaccess.AreaRepository;
-import io.vividcode.happyride.address.domain.Address;
-import io.vividcode.happyride.address.domain.Area;
+import io.vividcode.happyride.addressservice.dataaccess.AddressRepository;
+import io.vividcode.happyride.addressservice.dataaccess.AreaRepository;
+import io.vividcode.happyride.addressservice.domain.Address;
+import io.vividcode.happyride.addressservice.domain.Area;
 import java.math.BigDecimal;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.transaction.Transactional;

@@ -38,14 +38,14 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
 })
-@DisplayName("Passenger service")
+@DisplayName("乘客服务测试")
 public class PassengerServiceTest {
 
   @Autowired
   PassengerService passengerService;
 
   @Test
-  @DisplayName("Create passenger")
+  @DisplayName("创建乘客")
   public void testCreatePassenger() {
     CreatePassengerRequest request = buildCreatePassengerRequest();
     Passenger passenger = passengerService.createPassenger(request);
@@ -54,7 +54,7 @@ public class PassengerServiceTest {
   }
 
   @Test
-  @DisplayName("Add address to an existing passenger")
+  @DisplayName("添加地址到已有乘客")
   public void testAddAddress() {
     CreatePassengerRequest request = buildCreatePassengerRequest();
     Passenger passenger = passengerService.createPassenger(request);

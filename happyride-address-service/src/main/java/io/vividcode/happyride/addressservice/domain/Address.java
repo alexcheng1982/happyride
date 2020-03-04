@@ -1,4 +1,4 @@
-package io.vividcode.happyride.address.domain;
+package io.vividcode.happyride.addressservice.domain;
 
 import io.vividcode.happyride.common.BaseEntityWithGeneratedId;
 import java.math.BigDecimal;
@@ -13,7 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "address")
+@Table(name = "addresses")
 @Getter
 @Setter
 @NoArgsConstructor

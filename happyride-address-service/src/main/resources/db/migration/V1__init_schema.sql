@@ -1,6 +1,8 @@
+CREATE SCHEMA IF NOT EXISTS happyride;
+
 CREATE SEQUENCE hibernate_sequence START 1;
 
-CREATE TABLE area (
+CREATE TABLE happyride.areas (
   id SERIAL PRIMARY KEY,
   level int NOT NULL,
   parent_code bigint NOT NULL DEFAULT '0',
@@ -15,7 +17,7 @@ CREATE TABLE area (
   lat decimal(10,6) NOT NULL DEFAULT '0.000000'
 );
 
-CREATE TABLE address(
+CREATE TABLE happyride.addresses (
   id varchar(36) NOT NULL PRIMARY KEY,
   created_at bigint NOT NULL,
   updated_at bigint NOT NULL,
@@ -23,5 +25,5 @@ CREATE TABLE address(
   address_line varchar(256) NOT NULL,
   lng decimal(10,6) NOT NULL DEFAULT '0.000000',
   lat decimal(10,6) NOT NULL DEFAULT '0.000000',
-  FOREIGN KEY (area_id) REFERENCES area(id)
+  FOREIGN KEY (area_id) REFERENCES happyride.areas(id)
 );
