@@ -20,16 +20,16 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.guava</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
       <artifactId>guava</artifactId>
+      <groupId>com.google.guava</groupId>
     </dependency>
     <dependency>
       <artifactId>lombok</artifactId>
@@ -41,37 +41,37 @@
     </dependency>
 
     <dependency>
-      <groupId>io.vividcode.happyride</groupId>
       <artifactId>happyride-postgres-common</artifactId>
-      <version>${project.version}</version>
       <classifier>tests</classifier>
-      <type>test-jar</type>
+      <groupId>io.vividcode.happyride</groupId>
       <scope>test</scope>
+      <type>test-jar</type>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>com.playtika.testcontainers</groupId>
       <artifactId>embedded-postgresql</artifactId>
+      <groupId>com.playtika.testcontainers</groupId>
     </dependency>
     <dependency>
-      <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
+      <groupId>org.postgresql</groupId>
       <scope>runtime</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.springframework</groupId>
       <artifactId>spring-webflux</artifactId>
+      <groupId>org.springframework</groupId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.projectreactor.netty</groupId>
       <artifactId>reactor-netty</artifactId>
+      <groupId>io.projectreactor.netty</groupId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.javafaker</groupId>
       <artifactId>javafaker</artifactId>
+      <groupId>com.github.javafaker</groupId>
     </dependency>
 
 

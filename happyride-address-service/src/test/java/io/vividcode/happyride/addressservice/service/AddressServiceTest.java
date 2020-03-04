@@ -1,12 +1,12 @@
-package io.vividcode.happyride.addressservice;
+package io.vividcode.happyride.addressservice.service;
 
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
-import io.vividcode.happyride.addressservice.domain.Address;
-import io.vividcode.happyride.addressservice.service.AddressService;
+import io.vividcode.happyride.addressservice.service.domain.Address;
+import io.vividcode.happyride.addressservice.service.service.AddressService;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +17,6 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;

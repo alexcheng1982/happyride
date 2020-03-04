@@ -8,6 +8,8 @@ import io.vividcode.happyride.passengerservice.domain.Passenger;
 import io.vividcode.happyride.passengerservice.domain.UserAddress;
 import io.vividcode.happyride.passengerservice.service.PassengerService;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +40,15 @@ public class PassengerController {
       @RequestBody CreatePassengerRequest request) {
     PassengerView passenger = createPassengerView(passengerService.createPassenger(request));
     return ResponseEntity.created(resourceCreated(passenger.getId())).body(passenger);
+  }
+
+  @GetMapping("{id}/addresses")
+  public List<UserAddressView> getAddresses(@PathVariable("id") String passengerId) {
+    return passengerService.getPassenger(passengerId)
+        .map(Passenger::getUserAddresses)
+        .map(addresses -> addresses.stream()
+            .map(this::createUserAddressView).collect(Collectors.toList()))
+        .orElse(new ArrayList<>());
   }
 
   @PostMapping("{id}/addresses")
@@ -82,7 +93,6 @@ public class PassengerController {
 
   private UserAddressView createUserAddressView(UserAddress userAddress) {
     return new UserAddressView(userAddress.getId(),
-        userAddress.getPassenger().getId(),
         userAddress.getName(),
         userAddress.getAddressId());
   }

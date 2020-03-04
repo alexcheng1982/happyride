@@ -1,7 +1,7 @@
-package io.vividcode.happyride.addressservice.web;
+package io.vividcode.happyride.addressservice.service.web;
 
-import io.vividcode.happyride.addressservice.domain.Address;
-import io.vividcode.happyride.addressservice.service.AddressService;
+import io.vividcode.happyride.addressservice.service.domain.Address;
+import io.vividcode.happyride.addressservice.service.service.AddressService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

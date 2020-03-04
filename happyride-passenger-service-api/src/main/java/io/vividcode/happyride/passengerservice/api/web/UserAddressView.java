@@ -11,9 +11,6 @@ public class UserAddressView {
   private String id;
 
   @NonNull
-  private String passengerId;
-
-  @NonNull
   private String name;
 
   @NonNull

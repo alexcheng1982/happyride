@@ -22,7 +22,7 @@ CREATE TABLE happyride.addresses (
   created_at bigint NOT NULL,
   updated_at bigint NOT NULL,
   area_id int NOT NULL,
-  address_line varchar(256) NOT NULL,
+  address_line varchar(255) NOT NULL,
   lng decimal(10,6) NOT NULL DEFAULT '0.000000',
   lat decimal(10,6) NOT NULL DEFAULT '0.000000',
   FOREIGN KEY (area_id) REFERENCES happyride.areas(id)

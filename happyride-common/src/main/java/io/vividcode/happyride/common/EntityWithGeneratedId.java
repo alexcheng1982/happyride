@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
+import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -14,11 +15,14 @@ import lombok.Getter;
 public abstract class EntityWithGeneratedId extends AbstractEntity<String> {
 
   @Id
-  @Column(length = 36)
+  @Column(name = "id")
+  @Size(max = 36)
   private String id;
 
   @PrePersist
-  void generateId() {
-    id = UUID.randomUUID().toString();
+  public void generateId() {
+    if (id == null) {
+      id = UUID.randomUUID().toString();
+    }
   }
 }
