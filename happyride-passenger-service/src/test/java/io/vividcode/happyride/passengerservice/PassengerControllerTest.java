@@ -1,15 +1,10 @@
-package io.vividcode.happyride.passengerservice.web;
+package io.vividcode.happyride.passengerservice;
 
-import com.github.javafaker.Faker;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
-import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
-import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
 import io.vividcode.happyride.passengerservice.api.web.UserAddressView;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import java.net.URI;
-import java.util.Locale;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +17,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,16 +29,20 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
     EmbeddedPostgreSQLBootstrapConfiguration.class
 })
+@TestPropertySource(properties = {
+    "embedded.postgresql.docker-image=postgres:12-alpine"
+})
 @DisplayName("乘客控制器测试")
 public class PassengerControllerTest {
 
-  private final Faker faker = new Faker(Locale.CHINA);
+  @Autowired
+  PassengerTestUtils testUtils;
 
   @Test
   @DisplayName("创建乘客")
   public void testCreatePassenger(@Autowired WebTestClient webClient) {
     webClient.post()
-        .bodyValue(createPassengerRequest())
+        .bodyValue(testUtils.buildCreatePassengerRequest(1))
         .accept(MediaType.APPLICATION_JSON)
         .exchange()
         .expectStatus().isCreated()
@@ -53,11 +53,11 @@ public class PassengerControllerTest {
   @DisplayName("添加地址")
   public void testAddUserAddress(@Autowired WebTestClient webClient,
       @Autowired TestRestTemplate restTemplate) {
-    URI passengerUri = restTemplate.postForLocation("/", createPassengerRequest());
+    URI passengerUri = restTemplate.postForLocation("/", testUtils.buildCreatePassengerRequest(1));
     URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
         .path("/addresses").build().toUri();
     webClient.post().uri(addressesUri)
-        .bodyValue(createUserAddressRequest())
+        .bodyValue(testUtils.buildCreateUserAddressRequest())
         .exchange()
         .expectStatus().isCreated()
         .expectHeader().exists(HttpHeaders.LOCATION);
@@ -67,12 +67,13 @@ public class PassengerControllerTest {
   @DisplayName("删除地址")
   public void testRemoveAddress(@Autowired WebTestClient webClient,
       @Autowired TestRestTemplate restTemplate) {
-    URI passengerUri = restTemplate.postForLocation("/", createPassengerRequest());
+    URI passengerUri = restTemplate.postForLocation("/", testUtils.buildCreatePassengerRequest(0));
     URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
         .path("/addresses").build().toUri();
-    URI addressUri = restTemplate.postForLocation(addressesUri, createUserAddressRequest());
-    restTemplate.postForLocation(addressesUri, createUserAddressRequest());
-    restTemplate.postForLocation(addressesUri, createUserAddressRequest());
+    URI addressUri = restTemplate
+        .postForLocation(addressesUri, testUtils.buildCreateUserAddressRequest());
+    restTemplate.postForLocation(addressesUri, testUtils.buildCreateUserAddressRequest());
+    restTemplate.postForLocation(addressesUri, testUtils.buildCreateUserAddressRequest());
     webClient.delete().uri(addressUri)
         .exchange()
         .expectStatus().isNoContent();
@@ -83,18 +84,4 @@ public class PassengerControllerTest {
         .hasSize(2);
   }
 
-  private CreatePassengerRequest createPassengerRequest() {
-    CreatePassengerRequest request = new CreatePassengerRequest();
-    request.setName(faker.name().name());
-    request.setEmail(faker.internet().emailAddress());
-    request.setMobilePhoneNumber(faker.phoneNumber().phoneNumber());
-    return request;
-  }
-
-  private CreateUserAddressRequest createUserAddressRequest() {
-    CreateUserAddressRequest request = new CreateUserAddressRequest();
-    request.setName(faker.pokemon().name());
-    request.setAddressId(UUID.randomUUID().toString());
-    return request;
-  }
 }
