@@ -1,12 +1,12 @@
-package io.vividcode.happyride.addressservice.service;
+package io.vividcode.happyride.addressservice;
 
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
-import io.vividcode.happyride.addressservice.service.domain.Address;
-import io.vividcode.happyride.addressservice.service.service.AddressService;
+import io.vividcode.happyride.addressservice.service.AddressService;
+import io.vividcode.happyride.addressservice.domain.Address;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

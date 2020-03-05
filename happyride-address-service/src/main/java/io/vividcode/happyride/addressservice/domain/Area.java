@@ -1,4 +1,4 @@
-package io.vividcode.happyride.addressservice.service.domain;
+package io.vividcode.happyride.addressservice.domain;
 
 import io.vividcode.happyride.common.AbstractEntity;
 import java.math.BigDecimal;

@@ -18,8 +18,9 @@ public class DriverTestUtils {
     request.setName(faker.name().name());
     request.setEmail(faker.internet().emailAddress());
     request.setMobilePhoneNumber(faker.phoneNumber().phoneNumber());
-    List<CreateVehicleRequest> vehicles = new ArrayList<>();
-    for (int i = 0; i < Math.max(0, numberOfVehicles); i++) {
+    int count = Math.max(0, numberOfVehicles);
+    List<CreateVehicleRequest> vehicles = new ArrayList<>(count);
+    for (int i = 0; i < count; i++) {
       vehicles.add(buildCreateVehicleRequest());
     }
     request.setVehicles(vehicles);

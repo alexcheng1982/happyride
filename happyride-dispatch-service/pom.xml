@@ -67,6 +67,14 @@
       <groupId>com.playtika.testcontainers</groupId>
       <artifactId>embedded-redis</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.eventuate.tram.core</groupId>
+      <artifactId>eventuate-tram-test-util</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.eventuate.tram.sagas</groupId>
+      <artifactId>eventuate-tram-sagas-in-memory</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

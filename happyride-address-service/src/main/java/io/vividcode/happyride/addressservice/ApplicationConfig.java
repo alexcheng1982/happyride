@@ -1,4 +1,4 @@
-package io.vividcode.happyride.addressservice.service;
+package io.vividcode.happyride.addressservice;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;

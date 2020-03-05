@@ -1,6 +1,6 @@
-package io.vividcode.happyride.addressservice.service.dataaccess;
+package io.vividcode.happyride.addressservice.dataaccess;
 
-import io.vividcode.happyride.addressservice.service.domain.Area;
+import io.vividcode.happyride.addressservice.domain.Area;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

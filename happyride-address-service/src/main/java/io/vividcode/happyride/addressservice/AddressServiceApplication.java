@@ -1,4 +1,4 @@
-package io.vividcode.happyride.addressservice.service;
+package io.vividcode.happyride.addressservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
