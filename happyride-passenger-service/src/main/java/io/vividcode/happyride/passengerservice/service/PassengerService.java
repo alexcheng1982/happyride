@@ -55,7 +55,7 @@ public class PassengerService {
   public void deleteAddress(String passengerId, String addressId) {
     Passenger passenger = passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
-    passenger.getUserAddress(addressId).ifPresent(passenger::removeAddress);
+    passenger.getUserAddress(addressId).ifPresent(passenger::removeUserAddress);
     passengerRepository.save(passenger);
   }
 

@@ -5,9 +5,9 @@ import io.vividcode.happyride.driverservice.api.web.CreateVehicleRequest;
 import io.vividcode.happyride.driverservice.dataaccess.DriverRepository;
 import io.vividcode.happyride.driverservice.model.Driver;
 import io.vividcode.happyride.driverservice.model.Vehicle;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +29,10 @@ public class DriverService {
     driver.setName(request.getName());
     driver.setEmail(request.getEmail());
     driver.setMobilePhoneNumber(request.getMobilePhoneNumber());
-    Set<Vehicle> vehicles = Optional.ofNullable(request.getVehicles()).map(
+    List<Vehicle> vehicles = Optional.ofNullable(request.getVehicles()).map(
         requests -> requests.stream().map(this::createVehicle)
-            .collect(Collectors.toSet())).orElse(
-        new HashSet<>());
+            .collect(Collectors.toList())).orElse(
+        new ArrayList<>());
     driver.setVehicles(vehicles);
     driverRepository.save(driver);
     return driver;
@@ -42,7 +42,7 @@ public class DriverService {
     Driver driver = driverRepository.findById(driverId)
         .orElseThrow(() -> new DriverNotFoundException(driverId));
     Vehicle vehicle = createVehicle(request);
-    driver.getVehicles().add(vehicle);
+    driver.addVehicle(vehicle);
     driverRepository.save(driver);
     return driver;
   }

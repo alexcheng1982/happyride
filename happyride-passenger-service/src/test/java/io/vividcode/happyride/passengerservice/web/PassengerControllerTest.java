@@ -29,8 +29,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @EnableAutoConfiguration
 @ComponentScan
 @Import(EmbeddedPostgresConfiguration.class)
-@ImportAutoConfiguration(classes = {EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class})
+@ImportAutoConfiguration(classes = {
+    EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
+    EmbeddedPostgreSQLBootstrapConfiguration.class
+})
 @DisplayName("乘客控制器测试")
 public class PassengerControllerTest {
 

@@ -14,5 +14,5 @@ CREATE TABLE happyride.user_addresses (
   passenger_id varchar(36) NOT NULL,
   name varchar(255) NOT NULL,
   address_id varchar(36) NOT NULL,
-  FOREIGN KEY (passenger_id) REFERENCES passengers(id)
+  FOREIGN KEY (passenger_id) REFERENCES happyride.passengers(id)
 );

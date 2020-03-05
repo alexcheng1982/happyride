@@ -39,9 +39,7 @@ public class Passenger extends BaseEntityWithGeneratedId {
   @Size(max = 255)
   private String mobilePhoneNumber;
 
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "passenger_id", referencedColumnName = "id", nullable = false)
   private List<UserAddress> userAddresses = new ArrayList<>();
 
@@ -49,7 +47,7 @@ public class Passenger extends BaseEntityWithGeneratedId {
     userAddresses.add(userAddress);
   }
 
-  public void removeAddress(UserAddress userAddress) {
+  public void removeUserAddress(UserAddress userAddress) {
     userAddresses.remove(userAddress);
   }
 

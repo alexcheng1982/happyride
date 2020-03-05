@@ -4,68 +4,61 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
+import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.vividcode.happyride.driverservice.api.web.CreateDriverRequest;
-import io.vividcode.happyride.driverservice.api.web.CreateVehicleRequest;
 import io.vividcode.happyride.driverservice.model.Driver;
 import io.vividcode.happyride.driverservice.service.DriverService;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
-import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest
+@DataJpaTest
+@EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@ContextConfiguration(classes = {TestApplication.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class, EmbeddedPostgresConfiguration.class})
+@ComponentScan
+@ContextConfiguration(classes = {
+    EmbeddedPostgresConfiguration.class}
+)
+@ImportAutoConfiguration(classes = {
+    EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
+    EmbeddedPostgreSQLBootstrapConfiguration.class
+})
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
 })
-@DisplayName("Driver service")
+@DisplayName("司机服务")
 public class DriverServiceTest {
 
   @Autowired
   DriverService driverService;
 
+  @Autowired
+  DriverTestUtils testUtils;
+
   @Test
-  @DisplayName("Create driver")
+  @DisplayName("创建司机")
   public void testCreateDriver() {
-    CreateDriverRequest request = buildCreateDriverRequest();
+    CreateDriverRequest request = testUtils.buildCreateDriverRequest(1);
     Driver driver = driverService.createDriver(request);
     assertNotNull(driver.getId());
     assertEquals(1, driver.getVehicles().size());
   }
 
   @Test
-  @DisplayName("Add vehicle to an existing driver")
+  @DisplayName("添加车辆到已有司机")
   public void testAddVehicle() {
-    CreateDriverRequest request = buildCreateDriverRequest();
+    CreateDriverRequest request = testUtils.buildCreateDriverRequest(2);
     Driver driver = driverService.createDriver(request);
-    CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
-    vehicleRequest.setMake("Make2");
-    vehicleRequest.setMode("Mode2");
-    vehicleRequest.setYear(2019);
-    vehicleRequest.setRegistration("ABC");
-    driver = driverService.addVehicle(driver.getId(), vehicleRequest);
-    assertEquals(2, driver.getVehicles().size());
-  }
-
-  private CreateDriverRequest buildCreateDriverRequest() {
-    CreateDriverRequest request = new CreateDriverRequest();
-    request.setName("司机1");
-    request.setEmail("d1@example.com");
-    request.setMobilePhoneNumber("13800000000");
-    CreateVehicleRequest vehicleRequest = new CreateVehicleRequest();
-    vehicleRequest.setMake("Make1");
-    vehicleRequest.setMode("Mode1");
-    vehicleRequest.setYear(2010);
-    vehicleRequest.setRegistration("XYZ");
-    request.setVehicles(Collections.singleton(vehicleRequest));
-    return request;
+    driver = driverService.addVehicle(driver.getId(), testUtils.buildCreateVehicleRequest());
+    assertEquals(3, driver.getVehicles().size());
   }
 }

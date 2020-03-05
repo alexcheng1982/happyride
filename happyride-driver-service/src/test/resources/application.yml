@@ -2,8 +2,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${embedded.postgresql.host}:${embedded.postgresql.port}/${embedded.postgresql.schema}
-    username: ${embedded.postgresql.user}
-    password: ${embedded.postgresql.password}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: happyride
+  flyway:
+    schemas:
+      - happyride
+  http:
+    log-request-details: true
+logging:
+  level:
+    "org.springframework.web.reactive.function.client.ExchangeFunctions": TRACE

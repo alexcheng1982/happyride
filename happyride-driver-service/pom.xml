@@ -57,6 +57,20 @@
       <artifactId>embedded-postgresql</artifactId>
     </dependency>
     <dependency>
+      <artifactId>spring-webflux</artifactId>
+      <groupId>org.springframework</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>reactor-netty</artifactId>
+      <groupId>io.projectreactor.netty</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>javafaker</artifactId>
+      <groupId>com.github.javafaker</groupId>
+    </dependency>
+    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
