@@ -1,4 +1,4 @@
-package io.vividcode.happyride.dispatchservice.service;
+package io.vividcode.happyride.dispatchservice;
 
 public class DispatchVerificationException extends RuntimeException {
 

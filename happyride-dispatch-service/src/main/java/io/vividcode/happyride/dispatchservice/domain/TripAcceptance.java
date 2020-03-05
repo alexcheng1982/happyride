@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -25,6 +26,7 @@ public class TripAcceptance extends EntityWithGeneratedId {
 
   @NonNull
   @Column(name = "driver_id")
+  @Size(max = 36)
   private String driverId;
 
   @NonNull
@@ -36,9 +38,11 @@ public class TripAcceptance extends EntityWithGeneratedId {
   private BigDecimal currentPosLat;
 
   @NonNull
+  @Column(name = "timestamp")
   private Long timestamp = System.currentTimeMillis();
 
   @NonNull
   @Enumerated(EnumType.STRING)
+  @Column(name = "state")
   private TripAcceptanceState state = TripAcceptanceState.INVITED;
 }

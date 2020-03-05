@@ -9,7 +9,7 @@ import io.eventuate.tram.messaging.common.Message;
 import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
 import io.vividcode.happyride.dispatchservice.api.DispatchServiceChannels;
 import io.vividcode.happyride.dispatchservice.api.events.VerifyDispatchCommand;
-import io.vividcode.happyride.dispatchservice.service.DispatcherService;
+import io.vividcode.happyride.dispatchservice.DispatcherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

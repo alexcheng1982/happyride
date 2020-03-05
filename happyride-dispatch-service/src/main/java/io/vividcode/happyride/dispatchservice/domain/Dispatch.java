@@ -10,7 +10,7 @@ import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceDeclinedE
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchFailedEvent;
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchFailedReason;
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchedEvent;
-import io.vividcode.happyride.dispatchservice.service.AvailableDriver;
+import io.vividcode.happyride.dispatchservice.AvailableDriver;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import java.math.BigDecimal;
@@ -29,6 +29,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -47,6 +48,7 @@ public class Dispatch extends EntityWithGeneratedId {
 
   @NonNull
   @Column(name = "trip_id")
+  @Size(max = 36)
   private String tripId;
 
   @NonNull
@@ -59,6 +61,7 @@ public class Dispatch extends EntityWithGeneratedId {
 
   @NonNull
   @Enumerated(EnumType.STRING)
+  @Column(name = "state")
   private DispatchState state = DispatchState.WAIT_FOR_ACCEPTANCE;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

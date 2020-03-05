@@ -3,7 +3,7 @@ package io.vividcode.happyride.dispatchservice.messagehandlers;
 import io.eventuate.tram.events.subscriber.DomainEventEnvelope;
 import io.eventuate.tram.events.subscriber.DomainEventHandlers;
 import io.eventuate.tram.events.subscriber.DomainEventHandlersBuilder;
-import io.vividcode.happyride.dispatchservice.service.DispatcherService;
+import io.vividcode.happyride.dispatchservice.DispatcherService;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
 import io.vividcode.happyride.tripservice.api.events.TripCreatedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;

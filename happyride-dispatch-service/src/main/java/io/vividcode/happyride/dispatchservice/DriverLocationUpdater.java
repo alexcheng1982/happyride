@@ -1,4 +1,4 @@
-package io.vividcode.happyride.dispatchservice.service;
+package io.vividcode.happyride.dispatchservice;
 
 import io.vividcode.happyride.common.DriverState;
 import io.vividcode.happyride.dispatchservice.api.events.DriverLocation;
@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 public class DriverLocationUpdater {
 
   @Autowired
-  DispatcherService dispatcherService;
+  DriverLocationService driverLocationService;
 
   @EventHandler
   public void handle(DriverLocationUpdatedEvent event) {
     DriverLocation location = event.getLocation();
     if (event.getState() == DriverState.AVAILABLE) {
-      dispatcherService.addAvailableDriver(location);
+      driverLocationService.addAvailableDriver(location);
     } else {
-      dispatcherService.removeAvailableDriver(location.getDriverId());
+      driverLocationService.removeAvailableDriver(location.getDriverId());
     }
   }
 }

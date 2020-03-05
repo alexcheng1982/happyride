@@ -1,3 +1,13 @@
 spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: happyride
+  flyway:
+    schemas:
+      - happyride
   redis:
     url: redis://user:${embedded.redis.password}@${embedded.redis.host}:${embedded.redis.port}

@@ -64,6 +64,18 @@
 
 
     <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>happyride-postgres-common</artifactId>
+      <version>${project.version}</version>
+      <classifier>tests</classifier>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.playtika.testcontainers</groupId>
+      <artifactId>embedded-postgresql</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.playtika.testcontainers</groupId>
       <artifactId>embedded-redis</artifactId>
     </dependency>
@@ -74,6 +86,10 @@
     <dependency>
       <groupId>io.eventuate.tram.sagas</groupId>
       <artifactId>eventuate-tram-sagas-in-memory</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
     </dependency>
   </dependencies>
 

@@ -1,4 +1,4 @@
-package io.vividcode.happyride.dispatchservice.service;
+package io.vividcode.happyride.dispatchservice;
 
 import java.math.BigDecimal;
 import lombok.Data;
