@@ -4,13 +4,14 @@ import com.google.common.collect.Lists;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.vividcode.happyride.common.EntityWithGeneratedId;
 import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.dispatchservice.AvailableDriver;
 import io.vividcode.happyride.dispatchservice.api.events.DispatchDomainEvent;
-import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceAcceptedEvent;
 import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceDeclinedEvent;
+import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceDeclinedReason;
+import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceSelectedEvent;
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchFailedEvent;
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchFailedReason;
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchedEvent;
-import io.vividcode.happyride.dispatchservice.AvailableDriver;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import java.math.BigDecimal;
@@ -64,6 +65,10 @@ public class Dispatch extends EntityWithGeneratedId {
   @Column(name = "state")
   private DispatchState state = DispatchState.WAIT_FOR_ACCEPTANCE;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "failed_reason")
+  private TripDispatchFailedReason failedReason;
+
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinColumn(name = "dispatch_id", referencedColumnName = "id", nullable = false)
   private List<TripAcceptance> tripAcceptances = Lists.newArrayList();
@@ -77,9 +82,16 @@ public class Dispatch extends EntityWithGeneratedId {
             driver.getPosLat()))
         .collect(Collectors.toList());
     dispatch.setTripAcceptances(tripAcceptances);
-    Set<String> driversId = drivers.stream().map(AvailableDriver::getDriverId)
-        .collect(Collectors.toSet());
-    TripDispatchedEvent event = new TripDispatchedEvent(tripId, tripDetails, driversId);
+    DispatchDomainEvent event;
+    if (drivers.isEmpty()) {
+      dispatch.setState(DispatchState.FAILED);
+      dispatch.setFailedReason(TripDispatchFailedReason.NO_DRIVERS_AVAILABLE);
+      event = new TripDispatchFailedEvent(tripId, TripDispatchFailedReason.NO_DRIVERS_AVAILABLE);
+    } else {
+      Set<String> driversId = drivers.stream().map(AvailableDriver::getDriverId)
+          .collect(Collectors.toSet());
+      event = new TripDispatchedEvent(tripId, tripDetails, driversId);
+    }
     return new ResultWithDomainEvents<>(dispatch, event);
   }
 
@@ -103,16 +115,17 @@ public class Dispatch extends EntityWithGeneratedId {
             .equals(tripAcceptance.getDriverId(), driverId)));
     List<TripAcceptance> toAccept = acceptances
         .getOrDefault(Boolean.TRUE, Collections.emptyList());
-    toAccept.forEach(acceptance -> acceptance.setState(TripAcceptanceState.ACCEPTED));
+    toAccept.forEach(acceptance -> acceptance.setState(TripAcceptanceState.SELECTED));
     List<TripAcceptance> toDecline = acceptances
         .getOrDefault(Boolean.FALSE, Collections.emptyList());
     toDecline.forEach(acceptance -> acceptance.setState(TripAcceptanceState.DECLINED));
     List<DispatchDomainEvent> events = Lists.newArrayList();
     events.addAll(toAccept.stream()
-        .map(acceptance -> new TripAcceptanceAcceptedEvent(tripId, acceptance.getDriverId()))
+        .map(acceptance -> new TripAcceptanceSelectedEvent(tripId, acceptance.getDriverId()))
         .collect(Collectors.toList()));
     events.addAll(toDecline.stream()
-        .map(acceptance -> new TripAcceptanceDeclinedEvent(acceptance.getDriverId(), ""))
+        .map(acceptance -> new TripAcceptanceDeclinedEvent(tripId, acceptance.getDriverId(),
+            TripAcceptanceDeclinedReason.OTHER_SELECTED))
         .collect(Collectors.toList()));
     return new ResultWithDomainEvents<>(this, events.toArray(new DispatchDomainEvent[0]));
   }
@@ -120,6 +133,7 @@ public class Dispatch extends EntityWithGeneratedId {
   public ResultWithDomainEvents<Dispatch, DispatchDomainEvent> markAsFailed(String tripId,
       TripDispatchFailedReason reason) {
     setState(DispatchState.FAILED);
+    setFailedReason(reason);
     TripDispatchFailedEvent event = new TripDispatchFailedEvent(tripId, reason);
     return new ResultWithDomainEvents<>(this, event);
   }

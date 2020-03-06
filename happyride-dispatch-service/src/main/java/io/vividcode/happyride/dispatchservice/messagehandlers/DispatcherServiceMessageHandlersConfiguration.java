@@ -12,15 +12,15 @@ import org.springframework.context.annotation.Import;
 public class DispatcherServiceMessageHandlersConfiguration {
 
   @Bean
-  public DispatcherServiceEventConsumer dispatcherServiceEventConsumer() {
-    return new DispatcherServiceEventConsumer();
+  public DispatchServiceEventConsumer dispatcherServiceEventConsumer() {
+    return new DispatchServiceEventConsumer();
   }
 
   @Bean
   public DomainEventDispatcher domainEventDispatcher(
-      DispatcherServiceEventConsumer dispatcherServiceEventConsumer,
+      DispatchServiceEventConsumer dispatchServiceEventConsumer,
       DomainEventDispatcherFactory domainEventDispatcherFactory) {
     return domainEventDispatcherFactory
-        .make("dispatcherServiceEvents", dispatcherServiceEventConsumer.domainEventHandlers());
+        .make("dispatcherServiceEvents", dispatchServiceEventConsumer.domainEventHandlers());
   }
 }

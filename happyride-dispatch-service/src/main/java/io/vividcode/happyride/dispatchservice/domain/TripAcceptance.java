@@ -1,6 +1,7 @@
 package io.vividcode.happyride.dispatchservice.domain;
 
 import io.vividcode.happyride.common.EntityWithGeneratedId;
+import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceDeclinedReason;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,4 +46,8 @@ public class TripAcceptance extends EntityWithGeneratedId {
   @Enumerated(EnumType.STRING)
   @Column(name = "state")
   private TripAcceptanceState state = TripAcceptanceState.INVITED;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "declined_reason")
+  private TripAcceptanceDeclinedReason declinedReason;
 }

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class DispatcherService {
+public class DispatchService {
 
   @Autowired
   DriverLocationService driverLocationService;
@@ -37,11 +37,7 @@ public class DispatcherService {
   private final Duration acceptanceCheckInterval = Duration.ofSeconds(10);
 
   public void verifyDispatch(TripDetails tripDetails) {
-    Position startPos = tripDetails.getStartPos();
-    Set<AvailableDriver> availableDrivers = driverLocationService.findAvailableDrivers(
-        startPos.getLng(),
-        startPos.getLat()
-    );
+    Set<AvailableDriver> availableDrivers = findAvailableDrivers(tripDetails);
     if (availableDrivers.isEmpty()) {
       throw new DispatchVerificationException();
     }
@@ -49,15 +45,18 @@ public class DispatcherService {
 
   @Transactional
   public void dispatchTrip(String tripId, TripDetails tripDetails) {
-    Position startPos = tripDetails.getStartPos();
-    Set<AvailableDriver> availableDrivers = driverLocationService.findAvailableDrivers(
-        startPos.getLng(),
-        startPos.getLat()
-    );
+    Set<AvailableDriver> availableDrivers = findAvailableDrivers(tripDetails);
     saveAndPublishEvents(Dispatch.createDispatch(tripId, tripDetails, availableDrivers));
-    tripAcceptanceService.startTripAcceptanceCheck(tripId, tripDetails, acceptanceCheckInterval,
-        this::selectTripAcceptance, this::notifyTripDispatchFailed);
-    log.info("Dispatched trip {} to drivers {}", tripId, availableDrivers);
+    if (!availableDrivers.isEmpty()) {
+      tripAcceptanceService.startTripAcceptanceCheck(tripId, tripDetails, acceptanceCheckInterval,
+          this::selectTripAcceptance, this::notifyTripDispatchFailed);
+      log.info("派发行程 {} 给司机 {}", tripId, availableDrivers);
+    }
+  }
+
+  private Set<AvailableDriver> findAvailableDrivers(TripDetails tripDetails) {
+    Position startPos = tripDetails.getStartPos();
+    return driverLocationService.findAvailableDrivers(startPos.getLng(), startPos.getLat());
   }
 
   @Transactional
@@ -76,9 +75,13 @@ public class DispatcherService {
         saveAndPublishEvents(dispatch.selectTripAcceptance(driverId)));
   }
 
+  public Optional<Dispatch> findCurrentDispatchByTrip(String tripId) {
+    return dispatchRepository.findCurrentDispatch(tripId);
+  }
+
   private void withCurrentDispatch(String tripId, Consumer<Dispatch> dispatchConsumer,
       Runnable noDispatchAction) {
-    Optional<Dispatch> optionalDispatch = dispatchRepository.findCurrentDispatch(tripId);
+    Optional<Dispatch> optionalDispatch = findCurrentDispatchByTrip(tripId);
     if (optionalDispatch.isPresent()) {
       dispatchConsumer.accept(optionalDispatch.get());
     } else {
@@ -94,6 +97,7 @@ public class DispatcherService {
 
   @Transactional
   public void notifyTripDispatchFailed(String tripId, TripDispatchFailedReason reason) {
+    log.info("行程 {} 派发失败，原因是 {}", tripId, reason);
     withCurrentDispatch(tripId,
         dispatch -> saveAndPublishEvents(dispatch.markAsFailed(tripId, reason)));
   }

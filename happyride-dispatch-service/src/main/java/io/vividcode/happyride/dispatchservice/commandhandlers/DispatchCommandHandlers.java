@@ -9,7 +9,7 @@ import io.eventuate.tram.messaging.common.Message;
 import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
 import io.vividcode.happyride.dispatchservice.api.DispatchServiceChannels;
 import io.vividcode.happyride.dispatchservice.api.events.VerifyDispatchCommand;
-import io.vividcode.happyride.dispatchservice.DispatcherService;
+import io.vividcode.happyride.dispatchservice.DispatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class DispatchCommandHandlers {
 
   @Autowired
-  DispatcherService dispatcherService;
+  DispatchService dispatchService;
 
   public CommandHandlers commandHandlers() {
     return SagaCommandHandlersBuilder
@@ -27,7 +27,7 @@ public class DispatchCommandHandlers {
   }
 
   private Message verifyDispatch(CommandMessage<VerifyDispatchCommand> cm) {
-    dispatcherService.verifyDispatch(cm.getCommand().getTripDetails());
+    dispatchService.verifyDispatch(cm.getCommand().getTripDetails());
     return withSuccess();
   }
 }

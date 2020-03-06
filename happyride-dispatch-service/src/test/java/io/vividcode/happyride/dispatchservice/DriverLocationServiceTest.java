@@ -1,6 +1,6 @@
 package io.vividcode.happyride.dispatchservice;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.playtika.test.redis.EmbeddedRedisBootstrapConfiguration;
 import com.playtika.test.redis.EmbeddedRedisDependenciesAutoConfiguration;
@@ -43,6 +43,6 @@ public class DriverLocationServiceTest {
             BigDecimal.valueOf(0.0002)));
     Set<AvailableDriver> drivers = driverLocationService
         .findAvailableDrivers(BigDecimal.valueOf(0.0003), BigDecimal.valueOf(0.0004));
-    assertEquals(2, drivers.size());
+    assertThat(drivers).hasSize(2);
   }
 }

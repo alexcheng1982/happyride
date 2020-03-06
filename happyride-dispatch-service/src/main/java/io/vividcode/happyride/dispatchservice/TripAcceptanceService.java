@@ -97,7 +97,7 @@ public class TripAcceptanceService {
     public void run() {
       if (attempt > acceptanceCheckMaxTimes) {
         log.warn("No acceptance for trip {}, notify dispatch failed", tripId);
-        failureCallback.accept(tripId, TripDispatchFailedReason.NO_DRIVERS);
+        failureCallback.accept(tripId, TripDispatchFailedReason.NO_DRIVERS_ACCEPTED);
         return;
       }
       log.info("Check acceptance for trip {}", tripId);

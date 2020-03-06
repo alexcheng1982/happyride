@@ -5,10 +5,12 @@ import lombok.NonNull;
 
 @Data
 public class TripAcceptanceDeclinedEvent implements DispatchDomainEvent {
+  @NonNull
+  private String tripId;
 
   @NonNull
   private String driverId;
 
   @NonNull
-  private String reason;
+  private TripAcceptanceDeclinedReason reason;
 }
