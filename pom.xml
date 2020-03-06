@@ -124,6 +124,12 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>io.eventuate.tram.sagas</groupId>
+        <artifactId>eventuate-tram-sagas-testing-support</artifactId>
+        <version>${eventuate-tram-sagas.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${lombok.version}</version>

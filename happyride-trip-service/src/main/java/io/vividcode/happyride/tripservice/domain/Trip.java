@@ -74,7 +74,7 @@ public class Trip extends BaseEntityWithGeneratedId {
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> markAsDispatched() {
-    assertTripState(TripState.PENDING_DISPATCH);
+    assertTripState(TripState.CONFIRMED);
     setState(TripState.DISPATCHED);
     return new ResultWithDomainEvents<>(this);
   }
