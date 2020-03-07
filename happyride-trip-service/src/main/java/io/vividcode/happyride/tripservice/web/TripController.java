@@ -1,5 +1,6 @@
 package io.vividcode.happyride.tripservice.web;
 
+import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.web.AcceptTripRequest;
 import io.vividcode.happyride.tripservice.api.web.CreateTripRequest;
 import io.vividcode.happyride.tripservice.domain.Trip;
@@ -38,6 +39,26 @@ public class TripController {
     tripService
         .driverAcceptTrip(id, request.getDriverId(), request.getPosLng(), request.getPosLat());
     return ResponseEntity.noContent().build();
+  }
+
+  @PostMapping("{id}/cancelByPassenger")
+  public void cancelByPassenger(@PathVariable("id") String id) {
+    tripService.shouldCancel(id, CancellationParty.PASSENGER);
+  }
+
+  @PostMapping("{id}/cancelByDriver")
+  public void cancelByDriver(@PathVariable("id") String id) {
+    tripService.shouldCancel(id, CancellationParty.DRIVER);
+  }
+
+  @PostMapping("{id}/rejectCancellationByPassenger")
+  public void rejectCancellationByPassenger(@PathVariable("id") String id) {
+    tripService.shouldNotCancel(id, CancellationParty.PASSENGER);
+  }
+
+  @PostMapping("{id}/rejectCancellationByDriver")
+  public void rejectCancellationByDriver(@PathVariable("id") String id) {
+    tripService.shouldNotCancel(id, CancellationParty.DRIVER);
   }
 
   @PostMapping("{id}/start")

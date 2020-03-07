@@ -23,6 +23,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.locationtech.spatial4j</groupId>
+      <artifactId>spatial4j</artifactId>
+      <version>0.7</version>
+    </dependency>
+    <dependency>
       <groupId>io.eventuate.tram.core</groupId>
       <artifactId>eventuate-tram-jdbc-kafka</artifactId>
     </dependency>
@@ -37,6 +42,10 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
     </dependency>
   </dependencies>
 </project>

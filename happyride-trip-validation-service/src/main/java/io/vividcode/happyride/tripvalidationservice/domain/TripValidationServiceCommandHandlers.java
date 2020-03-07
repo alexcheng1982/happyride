@@ -9,6 +9,8 @@ import io.eventuate.tram.messaging.common.Message;
 import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
 import io.vividcode.happyride.tripvalidationservice.api.TripValidationServiceChannels;
 import io.vividcode.happyride.tripvalidationservice.api.ValidateTripCommand;
+import io.vividcode.happyride.tripvalidationservice.service.TripValidationException;
+import io.vividcode.happyride.tripvalidationservice.service.TripValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +32,7 @@ public class TripValidationServiceCommandHandlers {
       tripValidationService.validateTrip(cm.getCommand().getTripDetails());
       return withSuccess();
     } catch (TripValidationException e) {
-      return withFailure();
+      return withFailure(e);
     }
   }
 }

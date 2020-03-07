@@ -12,5 +12,5 @@ CREATE TABLE happyride.trips(
   end_pos_lat decimal(10,6) NOT NULL DEFAULT '0.000000',
   end_pos_lng decimal(10,6) NOT NULL DEFAULT '0.000000',
   end_pos_address_id varchar(36),
-  state varchar(30) NOT NULL
+  state varchar(50) NOT NULL
 );

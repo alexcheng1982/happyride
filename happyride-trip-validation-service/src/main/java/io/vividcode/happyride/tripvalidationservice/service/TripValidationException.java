@@ -1,4 +1,4 @@
-package io.vividcode.happyride.tripvalidationservice.domain;
+package io.vividcode.happyride.tripvalidationservice.service;
 
 public class TripValidationException extends RuntimeException {
 

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
 import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
@@ -79,6 +80,14 @@ public class TripService {
 
   public void confirmTrip(String tripId) {
     updateTrip(tripId, Trip::confirmTrip);
+  }
+
+  public void shouldCancel(String tripId, CancellationParty initiator) {
+    updateTrip(tripId, trip -> trip.shouldCancel(initiator));
+  }
+
+  public void shouldNotCancel(String tripId, CancellationParty initiator) {
+    updateTrip(tripId, trip -> trip.shouldNotCancel(initiator));
   }
 
   private void updateTrip(String tripId,

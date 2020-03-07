@@ -13,3 +13,7 @@ eventuatelocal:
   zookeeper:
     connection:
       string: ${DOCKER_HOST_IP:localhost}:2181
+app:
+  blockedPassengers:
+    - bad_passenger1
+    - bad_passenger2

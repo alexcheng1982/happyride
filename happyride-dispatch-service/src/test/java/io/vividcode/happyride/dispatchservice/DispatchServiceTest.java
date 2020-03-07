@@ -67,9 +67,6 @@ public class DispatchServiceTest {
   @MockBean
   DriverLocationService driverLocationService;
 
-  @MockBean
-  TripAcceptanceService tripAcceptanceService;
-
   @Captor
   private ArgumentCaptor<Dispatch> dispatchCaptor;
 

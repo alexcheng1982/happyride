@@ -4,6 +4,9 @@ import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.vividcode.happyride.common.BaseEntityWithGeneratedId;
 import io.vividcode.happyride.common.Position;
 import io.vividcode.happyride.tripservice.api.TripState;
+import io.vividcode.happyride.tripservice.api.events.CancellationParty;
+import io.vividcode.happyride.tripservice.api.events.TripCancellationResolutionRequiredEvent;
+import io.vividcode.happyride.tripservice.api.events.TripCancelledEvent;
 import io.vividcode.happyride.tripservice.api.events.TripConfirmedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripCreatedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
@@ -12,6 +15,8 @@ import io.vividcode.happyride.tripservice.api.events.TripFinishedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripRejectedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripStartedEvent;
 import io.vividcode.happyride.tripservice.service.IllegalTripStateException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -93,6 +98,43 @@ public class Trip extends BaseEntityWithGeneratedId {
     setDriverId(driverId);
     setState(TripState.ACCEPTED);
     return new ResultWithDomainEvents<>(this);
+  }
+
+  public ResultWithDomainEvents<Trip, TripDomainEvent> shouldCancel(
+      CancellationParty initiator) {
+    List<TripDomainEvent> events = new ArrayList<>();
+    if (initiator == CancellationParty.DRIVER) {
+      if (state == TripState.CANCELLED_BY_PASSENGER) {
+        setState(TripState.CANCELLED);
+        events.add(new TripCancelledEvent());
+      } else {
+        setState(TripState.CANCELLED_BY_DRIVER);
+      }
+    } else {
+      if (state == TripState.CANCELLED_BY_DRIVER) {
+        setState(TripState.CANCELLED);
+        events.add(new TripCancelledEvent());
+      } else {
+        setState(TripState.CANCELLED_BY_PASSENGER);
+      }
+    }
+    return new ResultWithDomainEvents<>(this, events.toArray(new TripDomainEvent[0]));
+  }
+
+  public ResultWithDomainEvents<Trip, TripDomainEvent> shouldNotCancel(CancellationParty initiator) {
+    List<TripDomainEvent> events = new ArrayList<>();
+    if (initiator == CancellationParty.DRIVER) {
+      if (state == TripState.CANCELLED_BY_PASSENGER) {
+        setState(TripState.CANCELLATION_REJECTED_BY_DRIVER);
+        events.add(new TripCancellationResolutionRequiredEvent(initiator));
+      }
+    } else {
+      if (state == TripState.CANCELLED_BY_DRIVER) {
+        setState(TripState.CANCELLATION_REJECTED_BY_PASSENGER);
+        events.add(new TripCancellationResolutionRequiredEvent(initiator));
+      }
+    }
+    return new ResultWithDomainEvents<>(this, events.toArray(new TripDomainEvent[0]));
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> startTrip() {
