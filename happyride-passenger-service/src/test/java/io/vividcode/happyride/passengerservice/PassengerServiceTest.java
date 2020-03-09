@@ -8,6 +8,7 @@ import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfigurat
 import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
 import io.vividcode.happyride.passengerservice.domain.Passenger;
 import io.vividcode.happyride.passengerservice.service.PassengerService;
+import io.vividcode.happyride.passengerservice.support.PassengerUtils;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ public class PassengerServiceTest {
   PassengerService passengerService;
 
   @Autowired
-  PassengerTestUtils testUtils;
+  PassengerUtils testUtils;
 
   @Test
   @DisplayName("创建乘客")

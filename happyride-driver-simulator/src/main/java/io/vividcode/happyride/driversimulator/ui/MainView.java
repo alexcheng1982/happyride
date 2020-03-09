@@ -1,7 +1,6 @@
 package io.vividcode.happyride.driversimulator.ui;
 
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -9,10 +8,8 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import io.vividcode.happyride.common.DriverState;
@@ -28,8 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")
-@PWA(name = "司机模拟器", shortName = "司机模拟器")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
+@PageTitle("司机模拟器")
 @Push
 @Route("")
 public class MainView extends AppLayout {
@@ -42,7 +39,7 @@ public class MainView extends AppLayout {
 
   public MainView() {
     H3 heading = new H3("司机模拟器");
-    addToNavbar(new DrawerToggle(), heading);
+    addToNavbar(heading);
 
     grid = new Grid<>();
     grid.addColumn(DriverSimulatorSnapshot::getDriverId).setHeader("司机");

@@ -4,13 +4,11 @@ import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
 import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
 import io.vividcode.happyride.passengerservice.api.web.PassengerView;
 import io.vividcode.happyride.passengerservice.api.web.UserAddressView;
-import io.vividcode.happyride.passengerservice.domain.Passenger;
-import io.vividcode.happyride.passengerservice.domain.UserAddress;
 import io.vividcode.happyride.passengerservice.service.PassengerService;
+import io.vividcode.happyride.passengerservice.support.PassengerUtils;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,19 +16,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
+@RequestMapping("/api/v1")
 public class PassengerController {
 
   @Autowired
   PassengerService passengerService;
 
+  @GetMapping
+  public List<PassengerView> findAll() {
+    return passengerService.findAll();
+  }
+
   @GetMapping("{id}")
   public ResponseEntity<PassengerView> getPassenger(@PathVariable("id") String passengerId) {
     return passengerService.getPassenger(passengerId)
-        .map(this::createPassengerView)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   }
@@ -38,24 +42,22 @@ public class PassengerController {
   @PostMapping
   public ResponseEntity<PassengerView> createPassenger(
       @RequestBody CreatePassengerRequest request) {
-    PassengerView passenger = createPassengerView(passengerService.createPassenger(request));
+    PassengerView passenger = PassengerUtils
+        .createPassengerView(passengerService.createPassenger(request));
     return ResponseEntity.created(resourceCreated(passenger.getId())).body(passenger);
   }
 
   @GetMapping("{id}/addresses")
   public List<UserAddressView> getAddresses(@PathVariable("id") String passengerId) {
     return passengerService.getPassenger(passengerId)
-        .map(Passenger::getUserAddresses)
-        .map(addresses -> addresses.stream()
-            .map(this::createUserAddressView).collect(Collectors.toList()))
+        .map(PassengerView::getUserAddresses)
         .orElse(new ArrayList<>());
   }
 
   @PostMapping("{id}/addresses")
   public ResponseEntity<UserAddressView> createAddress(@PathVariable("id") String passengerId,
       @RequestBody CreateUserAddressRequest request) {
-    UserAddressView address = createUserAddressView(
-        passengerService.addAddress(passengerId, request));
+    UserAddressView address = passengerService.addAddress(passengerId, request);
     return ResponseEntity.created(resourceCreated(address.getId())).body(address);
   }
 
@@ -63,7 +65,6 @@ public class PassengerController {
   public ResponseEntity<UserAddressView> getAddress(@PathVariable("passengerId") String passengerId,
       @PathVariable("addressId") String addressId) {
     return passengerService.getAddress(passengerId, addressId)
-        .map(this::createUserAddressView)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   }
@@ -80,20 +81,5 @@ public class PassengerController {
         .path("/{id}")
         .buildAndExpand(resourceId)
         .toUri();
-  }
-
-  private PassengerView createPassengerView(Passenger passenger) {
-    return new PassengerView(passenger.getId(),
-        passenger.getName(),
-        passenger.getEmail(),
-        passenger.getMobilePhoneNumber(),
-        passenger.getUserAddresses().stream().map(this::createUserAddressView)
-            .collect(Collectors.toList()));
-  }
-
-  private UserAddressView createUserAddressView(UserAddress userAddress) {
-    return new UserAddressView(userAddress.getId(),
-        userAddress.getName(),
-        userAddress.getAddressId());
   }
 }

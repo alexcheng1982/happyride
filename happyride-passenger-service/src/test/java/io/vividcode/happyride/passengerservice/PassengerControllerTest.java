@@ -3,6 +3,7 @@ package io.vividcode.happyride.passengerservice;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.vividcode.happyride.passengerservice.api.web.UserAddressView;
+import io.vividcode.happyride.passengerservice.support.PassengerUtils;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import java.net.URI;
 import org.junit.jupiter.api.DisplayName;
@@ -36,12 +37,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class PassengerControllerTest {
 
   @Autowired
-  PassengerTestUtils testUtils;
+  PassengerUtils testUtils;
+
+  private String baseUri = "/api/v1";
 
   @Test
   @DisplayName("创建乘客")
   public void testCreatePassenger(@Autowired WebTestClient webClient) {
     webClient.post()
+        .uri(baseUri)
         .bodyValue(testUtils.buildCreatePassengerRequest(1))
         .accept(MediaType.APPLICATION_JSON)
         .exchange()
@@ -53,7 +57,7 @@ public class PassengerControllerTest {
   @DisplayName("添加地址")
   public void testAddUserAddress(@Autowired WebTestClient webClient,
       @Autowired TestRestTemplate restTemplate) {
-    URI passengerUri = restTemplate.postForLocation("/", testUtils.buildCreatePassengerRequest(1));
+    URI passengerUri = restTemplate.postForLocation(baseUri, testUtils.buildCreatePassengerRequest(1));
     URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
         .path("/addresses").build().toUri();
     webClient.post().uri(addressesUri)
@@ -67,7 +71,7 @@ public class PassengerControllerTest {
   @DisplayName("删除地址")
   public void testRemoveAddress(@Autowired WebTestClient webClient,
       @Autowired TestRestTemplate restTemplate) {
-    URI passengerUri = restTemplate.postForLocation("/", testUtils.buildCreatePassengerRequest(0));
+    URI passengerUri = restTemplate.postForLocation(baseUri, testUtils.buildCreatePassengerRequest(0));
     URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
         .path("/addresses").build().toUri();
     URI addressUri = restTemplate

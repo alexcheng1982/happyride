@@ -1,10 +1,14 @@
 package io.vividcode.happyride.passengerservice.service;
 
+import com.google.common.collect.Streams;
 import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
 import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
+import io.vividcode.happyride.passengerservice.api.web.PassengerView;
+import io.vividcode.happyride.passengerservice.api.web.UserAddressView;
 import io.vividcode.happyride.passengerservice.dataaccess.PassengerRepository;
 import io.vividcode.happyride.passengerservice.domain.Passenger;
 import io.vividcode.happyride.passengerservice.domain.UserAddress;
+import io.vividcode.happyride.passengerservice.support.PassengerUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +24,15 @@ public class PassengerService {
   @Autowired
   PassengerRepository passengerRepository;
 
-  public Optional<Passenger> getPassenger(String passengerId) {
-    return passengerRepository.findById(passengerId);
+  public List<PassengerView> findAll() {
+    return Streams.stream(passengerRepository.findAll())
+        .map(this::createPassengerView)
+        .collect(Collectors.toList());
+  }
+
+  public Optional<PassengerView> getPassenger(String passengerId) {
+    return passengerRepository.findById(passengerId)
+        .map(this::createPassengerView);
   }
 
   public Passenger createPassenger(CreatePassengerRequest request) {
@@ -38,18 +49,19 @@ public class PassengerService {
     return passengerRepository.save(passenger);
   }
 
-  public UserAddress addAddress(String passengerId, CreateUserAddressRequest request) {
+  public UserAddressView addAddress(String passengerId, CreateUserAddressRequest request) {
     Passenger passenger = passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
     UserAddress userAddress = createUserAddress(request);
     passenger.addUserAddress(userAddress);
     passengerRepository.save(passenger);
-    return userAddress;
+    return createUserAddressView(userAddress);
   }
 
-  public Optional<UserAddress> getAddress(String passengerId, String addressId) {
+  public Optional<UserAddressView> getAddress(String passengerId, String addressId) {
     return passengerRepository.findById(passengerId)
-        .flatMap(passenger -> passenger.getUserAddress(addressId));
+        .flatMap(passenger -> passenger.getUserAddress(addressId))
+        .map(this::createUserAddressView);
   }
 
   public void deleteAddress(String passengerId, String addressId) {
@@ -65,5 +77,20 @@ public class PassengerService {
     address.setName(request.getName());
     address.setAddressId(request.getAddressId());
     return address;
+  }
+
+  private PassengerView createPassengerView(Passenger passenger) {
+    return new PassengerView(passenger.getId(),
+        passenger.getName(),
+        passenger.getEmail(),
+        passenger.getMobilePhoneNumber(),
+        passenger.getUserAddresses().stream().map(PassengerUtils::createUserAddressView)
+            .collect(Collectors.toList()));
+  }
+
+  private UserAddressView createUserAddressView(UserAddress userAddress) {
+    return new UserAddressView(userAddress.getId(),
+        userAddress.getName(),
+        userAddress.getAddressId());
   }
 }
