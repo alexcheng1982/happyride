@@ -2,7 +2,9 @@ package io.vividcode.happyride.driversimulator;
 
 import io.vividcode.happyride.driversimulator.web.AddDriverRequest;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Autowired;
