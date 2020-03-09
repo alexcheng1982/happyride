@@ -29,9 +29,9 @@ public class Address extends BaseEntityWithGeneratedId {
   @Size(max = 255)
   private String addressLine;
 
-  @Column(name = "lat")
-  private BigDecimal lat;
-
   @Column(name = "lng")
   private BigDecimal lng;
+
+  @Column(name = "lat")
+  private BigDecimal lat;
 }

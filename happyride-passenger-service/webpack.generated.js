@@ -12,10 +12,10 @@ const {BabelMultiTargetPlugin} = require('webpack-babel-multi-target-plugin');
 const path = require('path');
 const baseDir = path.resolve(__dirname);
 // the folder of app resources (main.js and flow templates)
-const frontendFolder = require('path').resolve(__dirname, './frontend');
+const frontendFolder = require('path').resolve(__dirname, 'frontend');
 
 const fileNameOfTheFlowGeneratedMainEntryPoint = require('path').resolve(__dirname, 'target/frontend/generated-flow-imports.js');
-const mavenOutputFolderForFlowBundledFiles = require('path').resolve(__dirname, '');
+const mavenOutputFolderForFlowBundledFiles = require('path').resolve(__dirname, 'target/classes/META-INF/VAADIN');
 
 // public path for resources, must match Flow VAADIN_BUILD
 const build = 'build';

@@ -1,7 +1,7 @@
 package io.vividcode.happyride.addressservice.web;
 
-import io.vividcode.happyride.addressservice.domain.Address;
 import io.vividcode.happyride.addressservice.service.AddressService;
+import io.vividcode.happyride.addressservice.service.AddressView;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ public class AddressController {
   AddressService addressService;
 
   @GetMapping("/search")
-  public List<Address> search(@RequestParam(value = "areaCode") Long areaCode,
+  public List<AddressView> search(@RequestParam(value = "areaCode") Long areaCode,
       @RequestParam("query") String query) {
     return addressService.search(areaCode, query);
   }

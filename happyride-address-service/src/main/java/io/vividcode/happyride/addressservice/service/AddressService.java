@@ -1,8 +1,8 @@
 package io.vividcode.happyride.addressservice.service;
 
 import io.vividcode.happyride.addressservice.dataaccess.AddressRepository;
-import io.vividcode.happyride.addressservice.domain.Address;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,8 @@ public class AddressService {
   @Autowired
   AddressRepository addressRepository;
 
-  public List<Address> search(Long areaCode, String query) {
-    return addressRepository.findByAreaAreaCodeAndAddressLineContains(areaCode, query);
+  public List<AddressView> search(Long areaCode, String query) {
+    return addressRepository.findByAreaAreaCodeAndAddressLineContains(areaCode, query)
+        .stream().map(AddressView::fromAddress).collect(Collectors.toList());
   }
 }
