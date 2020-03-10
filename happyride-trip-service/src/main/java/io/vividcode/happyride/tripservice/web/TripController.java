@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -24,9 +25,9 @@ public class TripController {
 
   @PostMapping
   public ResponseEntity<Void> createTrip(@RequestBody CreateTripRequest request) {
-    TripView created = tripService
+    TripView trip = tripService
         .createTrip(request.getPassengerId(), request.getStartPos(), request.getEndPos());
-    return ResponseEntity.created(URI.create("/" + created.getId())).build();
+    return ResponseEntity.created(resourceCreated(trip.getId())).build();
   }
 
   @GetMapping("{id}")
@@ -74,5 +75,12 @@ public class TripController {
   public ResponseEntity<Void> finishTrip(@PathVariable("id") String id) {
     tripService.markTripAsFinished(id);
     return ResponseEntity.noContent().build();
+  }
+
+  private URI resourceCreated(String resourceId) {
+    return ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(resourceId)
+        .toUri();
   }
 }

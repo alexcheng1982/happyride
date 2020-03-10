@@ -8,6 +8,7 @@ import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
 import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.common.PositionView;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import io.vividcode.happyride.tripservice.api.TripState;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
@@ -116,7 +117,7 @@ public class TripServiceTest {
     return UUID.randomUUID().toString();
   }
 
-  private Position position0() {
-    return new Position(BigDecimal.ZERO, BigDecimal.ZERO);
+  private PositionView position0() {
+    return new PositionView(BigDecimal.ZERO, BigDecimal.ZERO);
   }
 }

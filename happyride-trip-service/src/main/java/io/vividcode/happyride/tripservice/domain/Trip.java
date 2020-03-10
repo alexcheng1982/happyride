@@ -41,7 +41,7 @@ import lombok.ToString;
 public class Trip extends BaseEntityWithGeneratedId {
 
   public static ResultWithDomainEvents<Trip, TripDomainEvent> createTrip(String passengerId,
-      Position startPos, Position endPos) {
+      PositionView startPos, PositionView endPos) {
     Trip trip = new Trip(passengerId, startPos, endPos);
     TripCreatedEvent event = new TripCreatedEvent(new TripDetails(passengerId, startPos, endPos));
     return new ResultWithDomainEvents<>(trip, event);
@@ -73,10 +73,10 @@ public class Trip extends BaseEntityWithGeneratedId {
   @Enumerated(EnumType.STRING)
   private TripState state;
 
-  public Trip(String passengerId, Position startPos, Position endPos) {
+  public Trip(String passengerId, PositionView startPos, PositionView endPos) {
     this.passengerId = passengerId;
-    this.startPos = startPos;
-    this.endPos = endPos;
+    this.startPos = startPos.deserialize();
+    this.endPos = endPos.deserialize();
     this.state = TripState.CREATED;
   }
 

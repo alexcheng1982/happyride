@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
 import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.common.PositionView;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
@@ -35,7 +36,7 @@ public class TripService {
   @Autowired
   SagaManager<CreateTripSagaState> createTripSagaManager;
 
-  public TripView createTrip(String passengerId, Position startPos, Position endPos) {
+  public TripView createTrip(String passengerId, PositionView startPos, PositionView endPos) {
     ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
         .createTrip(passengerId, startPos, endPos);
     Trip trip = tripAndEvents.result;

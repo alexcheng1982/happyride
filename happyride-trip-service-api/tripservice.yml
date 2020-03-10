@@ -1,12 +1,84 @@
 openapi: '3.0.2'
 info:
-  title: API Title
+  title: 行程服务
   version: '1.0'
 servers:
-  - url: https://api.server.test/v1
+  - url: http://localhost:8501/api/v1
 paths:
-  /test:
+  /:
+    post:
+      summary: 创建行程
+      operationId: createTrip
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTripRequest"
+        required: true      
+      responses:
+        '201':
+          description: 创建成功
+  /{id}:        
     get:
+      summary: 获取行程
+      operationId: getTrip
+      parameters:
+        - name: id
+          in: path
+          description: 行程ID
+          required: true
+          schema:
+            type: string
       responses:
         '200':
-          description: OK
+          description: 获取成功  
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TripView" 
+        '404':
+          description: 找不到行程     
+components:
+  schemas:
+    CreateTripRequest:
+      type: object
+      properties:
+        passengerId:
+          type: string   
+        startPos:
+          $ref: "#/components/schemas/PositionView" 
+        endPos:
+          $ref: "#/components/schemas/PositionView" 
+      required:
+        - passengerId
+        - startPos
+        - endPos
+    TripView:
+      type: object
+      properties:
+        id: 
+          type: string
+        passengerId:
+          type: string
+        driverId:
+          type: string
+        startPos:
+          $ref: "#/components/schemas/PositionView" 
+        endPos:
+          $ref: "#/components/schemas/PositionView" 
+        state:
+          type: string                     
+    PositionView:
+      type: object
+      properties:
+        lng:
+          type: number
+          format: double
+        lat:
+          type: number
+          format: double 
+        addressId:
+          type: string 
+      required:
+        - lng
+        - lat     
