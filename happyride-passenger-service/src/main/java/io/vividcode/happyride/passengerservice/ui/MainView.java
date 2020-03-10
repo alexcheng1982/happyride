@@ -3,6 +3,7 @@ package io.vividcode.happyride.passengerservice.ui;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -54,7 +55,8 @@ public class MainView extends AppLayout {
 
   private Button createTripButton(PassengerView item) {
     return new Button("创建行程", event -> {
-
+      Dialog dialog = new Dialog();
+      dialog.open();
     });
   }
 }

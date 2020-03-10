@@ -21,6 +21,7 @@
     <module>happyride-trip-history-service</module>
     <module>happyride-trip-service-cqrs</module>
     <module>happyride-trip-service-cqrs-api</module>
+    <module>happyride-trip-service-client</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -182,6 +183,11 @@
           <configuration>
             <configLocation>google_checks.xml</configLocation>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>io.swagger.codegen.v3</groupId>
+          <artifactId>swagger-codegen-maven-plugin</artifactId>
+          <version>3.0.18</version>
         </plugin>
       </plugins>
     </pluginManagement>
