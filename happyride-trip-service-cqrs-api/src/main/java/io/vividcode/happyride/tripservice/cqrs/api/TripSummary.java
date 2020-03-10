@@ -1,5 +1,6 @@
 package io.vividcode.happyride.tripservice.cqrs.api;
 
+import io.vividcode.happyride.common.PositionView;
 import io.vividcode.happyride.tripservice.api.TripState;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,7 @@
 package io.vividcode.happyride.dispatchservice;
 
 import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.common.PositionView;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import java.math.BigDecimal;
@@ -13,8 +14,8 @@ public class TestUtils {
   }
 
   public static TripDetails tripDetails0() {
-    return new TripDetails(uuid(), new Position(BigDecimal.ZERO, BigDecimal.ZERO),
-        new Position(BigDecimal.ZERO, BigDecimal.ZERO));
+    return new TripDetails(uuid(), new PositionView(BigDecimal.ZERO, BigDecimal.ZERO),
+        new PositionView(BigDecimal.ZERO, BigDecimal.ZERO));
   }
 
   public static AvailableDriver availableDriver0() {

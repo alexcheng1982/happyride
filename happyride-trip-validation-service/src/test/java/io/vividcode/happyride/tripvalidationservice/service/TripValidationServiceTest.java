@@ -3,6 +3,7 @@ package io.vividcode.happyride.tripvalidationservice.service;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.common.PositionView;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripvalidationservice.AppConfig;
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ public class TripValidationServiceTest {
 
   @Test
   public void testBlockingPassenger() {
-    Position position0 = new Position(BigDecimal.ZERO, BigDecimal.ZERO);
+    PositionView position0 = new PositionView(BigDecimal.ZERO, BigDecimal.ZERO);
     TripDetails tripDetails = new TripDetails("passenger1", position0, position0);
     assertThrows(PassengerBlockedException.class,
         () -> tripValidationService.validateTrip(tripDetails));

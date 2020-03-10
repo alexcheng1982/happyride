@@ -4,9 +4,14 @@ info:
   version: '1.0'
 servers:
   - url: http://localhost:8501/api/v1
+tags:
+  - name: trip
+    description: 行程相关
 paths:
   /:
     post:
+      tags:
+        - trip
       summary: 创建行程
       operationId: createTrip
       requestBody:
@@ -20,6 +25,8 @@ paths:
           description: 创建成功
   /{id}:        
     get:
+      tags:
+        - trip
       summary: 获取行程
       operationId: getTrip
       parameters:
