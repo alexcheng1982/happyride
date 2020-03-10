@@ -3,6 +3,7 @@ package io.vividcode.happyride.tripservice.domain;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.vividcode.happyride.common.BaseEntityWithGeneratedId;
 import io.vividcode.happyride.common.Position;
+import io.vividcode.happyride.common.PositionView;
 import io.vividcode.happyride.tripservice.api.TripState;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.events.TripCancellationResolutionRequiredEvent;
@@ -14,6 +15,7 @@ import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
 import io.vividcode.happyride.tripservice.api.events.TripFinishedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripRejectedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripStartedEvent;
+import io.vividcode.happyride.tripservice.api.web.TripView;
 import io.vividcode.happyride.tripservice.service.IllegalTripStateException;
 import java.util.ArrayList;
 import java.util.List;
@@ -153,5 +155,16 @@ public class Trip extends BaseEntityWithGeneratedId {
     if (state != requiredState) {
       throw new IllegalTripStateException(requiredState);
     }
+  }
+
+  public TripView serialize() {
+    TripView tripView = new TripView();
+    tripView.setId(getId());
+    tripView.setPassengerId(getPassengerId());
+    tripView.setDriverId(getDriverId());
+    tripView.setStartPos(getStartPos().serialize());
+    tripView.setEndPos(getEndPos().serialize());
+    tripView.setState(getState().name());
+    return tripView;
   }
 }

@@ -9,6 +9,7 @@ import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
+import io.vividcode.happyride.tripservice.api.web.TripView;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
 import io.vividcode.happyride.tripservice.domain.Trip;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
@@ -34,7 +35,7 @@ public class TripService {
   @Autowired
   SagaManager<CreateTripSagaState> createTripSagaManager;
 
-  public Trip createTrip(String passengerId, Position startPos, Position endPos) {
+  public TripView createTrip(String passengerId, Position startPos, Position endPos) {
     ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
         .createTrip(passengerId, startPos, endPos);
     Trip trip = tripAndEvents.result;
@@ -44,11 +45,11 @@ public class TripService {
     TripDetails tripDetails = new TripDetails(passengerId, startPos, endPos);
     CreateTripSagaState data = new CreateTripSagaState(trip.getId(), tripDetails);
     createTripSagaManager.create(data, Trip.class, trip.getId());
-    return trip;
+    return trip.serialize();
   }
 
-  public Optional<Trip> getTrip(String id) {
-    return tripRepository.findById(id);
+  public Optional<TripView> getTrip(String id) {
+    return tripRepository.findById(id).map(Trip::serialize);
   }
 
   public void markTripAsDispatched(String tripId) {

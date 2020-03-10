@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.vividcode.happyride.driverservice.api.web.CreateDriverRequest;
-import io.vividcode.happyride.driverservice.model.Driver;
+import io.vividcode.happyride.driverservice.api.web.DriverView;
 import io.vividcode.happyride.driverservice.service.DriverService;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import org.junit.jupiter.api.DisplayName;
@@ -41,14 +41,11 @@ public class DriverServiceTest {
   @Autowired
   DriverService driverService;
 
-  @Autowired
-  DriverTestUtils testUtils;
-
   @Test
   @DisplayName("创建司机")
   public void testCreateDriver() {
-    CreateDriverRequest request = testUtils.buildCreateDriverRequest(1);
-    Driver driver = driverService.createDriver(request);
+    CreateDriverRequest request = DriverTestUtils.buildCreateDriverRequest(1);
+    DriverView driver = driverService.createDriver(request);
     assertNotNull(driver.getId());
     assertEquals(1, driver.getVehicles().size());
   }
@@ -56,9 +53,9 @@ public class DriverServiceTest {
   @Test
   @DisplayName("添加车辆到已有司机")
   public void testAddVehicle() {
-    CreateDriverRequest request = testUtils.buildCreateDriverRequest(2);
-    Driver driver = driverService.createDriver(request);
-    driver = driverService.addVehicle(driver.getId(), testUtils.buildCreateVehicleRequest());
+    CreateDriverRequest request = DriverTestUtils.buildCreateDriverRequest(2);
+    DriverView driver = driverService.createDriver(request);
+    driver = driverService.addVehicle(driver.getId(), DriverTestUtils.buildCreateVehicleRequest());
     assertEquals(3, driver.getVehicles().size());
   }
 }

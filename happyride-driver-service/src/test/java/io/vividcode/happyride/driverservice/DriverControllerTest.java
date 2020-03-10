@@ -31,14 +31,12 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @DisplayName("司机控制器测试")
 public class DriverControllerTest {
 
-  @Autowired
-  DriverTestUtils testUtils;
-
   @Test
   @DisplayName("创建司机")
   public void testCreateDriver(@Autowired WebTestClient webClient) {
     webClient.post()
-        .bodyValue(testUtils.buildCreateDriverRequest(1))
+        .uri("/api/v1")
+        .bodyValue(DriverTestUtils.buildCreateDriverRequest(1))
         .accept(MediaType.APPLICATION_JSON)
         .exchange()
         .expectStatus().isCreated()

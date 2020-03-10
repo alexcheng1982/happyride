@@ -2,9 +2,11 @@ package io.vividcode.happyride.driverservice.service;
 
 import io.vividcode.happyride.driverservice.api.web.CreateDriverRequest;
 import io.vividcode.happyride.driverservice.api.web.CreateVehicleRequest;
+import io.vividcode.happyride.driverservice.api.web.DriverView;
 import io.vividcode.happyride.driverservice.dataaccess.DriverRepository;
 import io.vividcode.happyride.driverservice.model.Driver;
 import io.vividcode.happyride.driverservice.model.Vehicle;
+import io.vividcode.happyride.driverservice.support.DriverUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +22,11 @@ public class DriverService {
   @Autowired
   DriverRepository driverRepository;
 
-  public Optional<Driver> getDriver(String driverId) {
-    return driverRepository.findById(driverId);
+  public Optional<DriverView> getDriver(String driverId) {
+    return driverRepository.findById(driverId).map(DriverUtils::createDriverView);
   }
 
-  public Driver createDriver(CreateDriverRequest request) {
+  public DriverView createDriver(CreateDriverRequest request) {
     Driver driver = new Driver();
     driver.setName(request.getName());
     driver.setEmail(request.getEmail());
@@ -35,16 +37,16 @@ public class DriverService {
         new ArrayList<>());
     driver.setVehicles(vehicles);
     driverRepository.save(driver);
-    return driver;
+    return DriverUtils.createDriverView(driver);
   }
 
-  public Driver addVehicle(String driverId, CreateVehicleRequest request) {
+  public DriverView addVehicle(String driverId, CreateVehicleRequest request) {
     Driver driver = driverRepository.findById(driverId)
         .orElseThrow(() -> new DriverNotFoundException(driverId));
     Vehicle vehicle = createVehicle(request);
     driver.addVehicle(vehicle);
     driverRepository.save(driver);
-    return driver;
+    return DriverUtils.createDriverView(driver);
   }
 
   private Vehicle createVehicle(CreateVehicleRequest request) {

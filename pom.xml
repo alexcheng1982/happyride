@@ -33,7 +33,7 @@
   <packaging>pom</packaging>
   <version>1.0.0-SNAPSHOT</version>
   <name>happyride</name>
-  <description>Demo project for Spring Boot</description>
+  <description>Happy Ride</description>
 
   <properties>
     <java.version>1.8</java.version>

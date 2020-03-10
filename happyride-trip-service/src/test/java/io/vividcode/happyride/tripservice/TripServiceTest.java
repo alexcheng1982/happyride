@@ -14,6 +14,7 @@ import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.events.TripCancellationResolutionRequiredEvent;
 import io.vividcode.happyride.tripservice.api.events.TripCancelledEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
+import io.vividcode.happyride.tripservice.api.web.TripView;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
 import io.vividcode.happyride.tripservice.domain.Trip;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
@@ -80,7 +81,7 @@ public class TripServiceTest {
   @Test
   @DisplayName("行程取消成功")
   public void testCancelTrip() {
-    Trip trip = tripService.createTrip(uuid(), position0(), position0());
+    TripView trip = tripService.createTrip(uuid(), position0(), position0());
     String tripId = trip.getId();
     tripService.shouldCancel(tripId, CancellationParty.PASSENGER);
     tripService.shouldCancel(tripId, CancellationParty.DRIVER);
@@ -97,7 +98,7 @@ public class TripServiceTest {
   @Test
   @DisplayName("行程取消需要调解")
   public void testCancelTripRequiresResolution() {
-    Trip trip = tripService.createTrip(uuid(), position0(), position0());
+    TripView trip = tripService.createTrip(uuid(), position0(), position0());
     String tripId = trip.getId();
     tripService.shouldCancel(tripId, CancellationParty.PASSENGER);
     tripService.shouldNotCancel(tripId, CancellationParty.DRIVER);

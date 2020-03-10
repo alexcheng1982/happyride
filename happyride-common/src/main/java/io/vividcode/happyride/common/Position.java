@@ -24,4 +24,12 @@ public class Position {
 
   @Column(name = "address_id", length = 36)
   private String addressId;
+
+  public PositionView serialize() {
+    PositionView positionView = new PositionView();
+    positionView.setLng(getLng());
+    positionView.setLat(getLat());
+    positionView.setAddressId(getAddressId());
+    return positionView;
+  }
 }

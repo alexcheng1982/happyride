@@ -6,14 +6,12 @@ import io.vividcode.happyride.driverservice.api.web.CreateVehicleRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.springframework.stereotype.Component;
 
-@Component
 public class DriverTestUtils {
 
-  private final Faker faker = new Faker(Locale.CHINA);
+  private static final Faker faker = new Faker(Locale.CHINA);
 
-  public CreateDriverRequest buildCreateDriverRequest(int numberOfVehicles) {
+  public static CreateDriverRequest buildCreateDriverRequest(int numberOfVehicles) {
     CreateDriverRequest request = new CreateDriverRequest();
     request.setName(faker.name().name());
     request.setEmail(faker.internet().emailAddress());
@@ -27,7 +25,7 @@ public class DriverTestUtils {
     return request;
   }
 
-  public CreateVehicleRequest buildCreateVehicleRequest() {
+  public static CreateVehicleRequest buildCreateVehicleRequest() {
     CreateVehicleRequest request = new CreateVehicleRequest();
     request.setMake(fakerString(60));
     request.setMode(fakerString(60));
@@ -36,11 +34,11 @@ public class DriverTestUtils {
     return request;
   }
 
-  private String fakerString(int maxChars) {
+  private static String fakerString(int maxChars) {
     return faker.lorem().characters(1, maxChars);
   }
 
-  private int vehicleYear() {
+  private static int vehicleYear() {
     return faker.number().numberBetween(1980, 2020);
   }
 }
