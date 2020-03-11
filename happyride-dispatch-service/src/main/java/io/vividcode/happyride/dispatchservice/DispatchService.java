@@ -1,7 +1,6 @@
 package io.vividcode.happyride.dispatchservice;
 
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
-import io.vividcode.happyride.common.Position;
 import io.vividcode.happyride.common.PositionView;
 import io.vividcode.happyride.dispatchservice.api.events.DispatchDomainEvent;
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchFailedReason;
@@ -51,7 +50,7 @@ public class DispatchService {
     if (!availableDrivers.isEmpty()) {
       tripAcceptanceService.startTripAcceptanceCheck(tripId, tripDetails, acceptanceCheckInterval,
           this::selectTripAcceptance, this::notifyTripDispatchFailed);
-      log.info("派发行程 {} 给司机 {}", tripId, availableDrivers);
+      log.info("Dispatch trip {} to drivers {}", tripId, availableDrivers);
     }
   }
 
@@ -98,7 +97,7 @@ public class DispatchService {
 
   @Transactional
   public void notifyTripDispatchFailed(String tripId, TripDispatchFailedReason reason) {
-    log.info("行程 {} 派发失败，原因是 {}", tripId, reason);
+    log.info("Failed to dispatch trip {} with reason {}", tripId, reason);
     withCurrentDispatch(tripId,
         dispatch -> saveAndPublishEvents(dispatch.markAsFailed(tripId, reason)));
   }

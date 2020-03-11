@@ -17,10 +17,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableJpaRepositories
 @EnableTransactionManagement
-@Import({DispatchServiceMessageHandlersConfiguration.class,
+@Import({
+    DispatchServiceMessageHandlersConfiguration.class,
     DispatchCommandHandlersConfiguration.class,
     TramEventsPublisherConfiguration.class,
-    TramJdbcKafkaConfiguration.class})
+    TramJdbcKafkaConfiguration.class
+})
 public class ApplicationConfig {
 
   @Bean

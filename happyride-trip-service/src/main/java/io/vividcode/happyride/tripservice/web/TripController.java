@@ -38,11 +38,10 @@ public class TripController {
   }
 
   @PostMapping("{id}/accept")
-  public ResponseEntity<Void> acceptTrip(@PathVariable("id") String id,
+  public void acceptTrip(@PathVariable("id") String id,
       @RequestBody AcceptTripRequest request) {
     tripService
         .driverAcceptTrip(id, request.getDriverId(), request.getPosLng(), request.getPosLat());
-    return ResponseEntity.noContent().build();
   }
 
   @PostMapping("{id}/cancelByPassenger")

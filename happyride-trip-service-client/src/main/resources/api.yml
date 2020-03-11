@@ -44,7 +44,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/TripView" 
         '404':
-          description: 找不到行程     
+          description: 找不到行程
+  /{id}/accept:
+    post:
+      tags:
+        - trip
+      summary: 接受行程
+      operationId: acceptTrip
+      parameters:
+        - name: id
+          in: path
+          description: 行程ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AcceptTripRequest"
+        required: true
+      responses:
+        '200':
+          description: 接收成功
 components:
   schemas:
     CreateTripRequest:
@@ -60,6 +82,21 @@ components:
         - passengerId
         - startPos
         - endPos
+    AcceptTripRequest:
+        type: object
+        properties:
+          driverId:
+            type: string
+          posLng:
+            type: number
+            format: double
+          posLat:
+            type: number
+            format: double
+        required:
+          - driverId
+          - posLng
+          - posLat
     TripView:
       type: object
       properties:
