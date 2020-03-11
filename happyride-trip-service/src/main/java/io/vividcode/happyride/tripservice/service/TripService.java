@@ -3,7 +3,6 @@ package io.vividcode.happyride.tripservice.service;
 import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
-import io.vividcode.happyride.common.Position;
 import io.vividcode.happyride.common.PositionView;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
@@ -74,6 +73,10 @@ public class TripService {
 
   public void markTripAsFinished(String tripId) {
     updateTrip(tripId, Trip::finishTrip);
+  }
+
+  public void markTripAsFailed(String tripId) {
+    updateTrip(tripId, Trip::markAsFailed);
   }
 
   public void rejectTrip(String tripId) {

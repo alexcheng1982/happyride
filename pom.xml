@@ -37,6 +37,7 @@
   <description>Happy Ride</description>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <eventuate-tram.version>0.22.0.RC8</eventuate-tram.version>
     <eventuate-tram-sagas.version>0.12.0.RC7</eventuate-tram-sagas.version>

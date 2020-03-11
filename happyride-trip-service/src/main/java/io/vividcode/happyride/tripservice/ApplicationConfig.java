@@ -20,9 +20,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableJpaRepositories
 @EnableTransactionManagement
-@Import({TramEventsPublisherConfiguration.class, TramJdbcKafkaConfiguration.class,
+@Import({TramEventsPublisherConfiguration.class,
+    TramJdbcKafkaConfiguration.class,
     SagaOrchestratorConfiguration.class,
-    TripServiceMessageHandlersConfiguration.class, TripCommandHandlersConfiguration.class})
+    TripServiceMessageHandlersConfiguration.class,
+    TripCommandHandlersConfiguration.class})
 public class ApplicationConfig {
 
   @Bean

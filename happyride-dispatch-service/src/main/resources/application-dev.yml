@@ -8,9 +8,9 @@ spring:
         default_schema: happyride
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:8433/happyride-dispatcher
-    username: happyride-dispatcher-user
-    password: happyride-dispatcher-password
+    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:8433/happyride-dispatch
+    username: happyride-dispatch-user
+    password: happyride-dispatch-password
   redis:
     url: redis://${DOCKER_HOST_IP:localhost}:6379
   flyway:

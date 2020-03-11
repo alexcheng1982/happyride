@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DispatcherServiceApplication {
+public class DispatchServiceApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(DispatcherServiceApplication.class, args);
+    SpringApplication.run(DispatchServiceApplication.class, args);
   }
 }

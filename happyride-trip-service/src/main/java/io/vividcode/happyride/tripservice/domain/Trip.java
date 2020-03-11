@@ -86,6 +86,11 @@ public class Trip extends BaseEntityWithGeneratedId {
     return new ResultWithDomainEvents<>(this);
   }
 
+  public ResultWithDomainEvents<Trip, TripDomainEvent> markAsFailed() {
+    setState(TripState.FAILED);
+    return new ResultWithDomainEvents<>(this);
+  }
+
   public ResultWithDomainEvents<Trip, TripDomainEvent> rejectTrip() {
     setState(TripState.REJECTED);
     return new ResultWithDomainEvents<>(this, new TripRejectedEvent());
