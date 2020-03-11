@@ -5,7 +5,7 @@ import io.eventuate.tram.events.publisher.TramEventsPublisherConfiguration;
 import io.eventuate.tram.jdbckafka.TramJdbcKafkaConfiguration;
 import io.vividcode.happyride.dispatchservice.commandhandlers.DispatchCommandHandlersConfiguration;
 import io.vividcode.happyride.dispatchservice.domain.DispatchDomainEventPublisher;
-import io.vividcode.happyride.dispatchservice.messagehandlers.DispatcherServiceMessageHandlersConfiguration;
+import io.vividcode.happyride.dispatchservice.messagehandlers.DispatchServiceMessageHandlersConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableJpaRepositories
 @EnableTransactionManagement
-@Import({DispatcherServiceMessageHandlersConfiguration.class,
+@Import({DispatchServiceMessageHandlersConfiguration.class,
     DispatchCommandHandlersConfiguration.class,
     TramEventsPublisherConfiguration.class,
     TramJdbcKafkaConfiguration.class})

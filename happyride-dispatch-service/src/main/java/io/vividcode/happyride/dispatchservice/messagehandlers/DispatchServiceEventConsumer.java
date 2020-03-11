@@ -5,6 +5,7 @@ import io.eventuate.tram.events.subscriber.DomainEventHandlers;
 import io.eventuate.tram.events.subscriber.DomainEventHandlersBuilder;
 import io.vividcode.happyride.dispatchservice.DispatchService;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
+import io.vividcode.happyride.tripservice.api.events.TripConfirmedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripCreatedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import org.slf4j.Logger;
@@ -22,12 +23,12 @@ public class DispatchServiceEventConsumer {
   public DomainEventHandlers domainEventHandlers() {
     return DomainEventHandlersBuilder
         .forAggregateType("io.vividcode.happyride.tripservice.domain.Trip")
-        .onEvent(TripCreatedEvent.class, this::onTripCreated)
+        .onEvent(TripConfirmedEvent.class, this::onTripConfirmed)
         .onEvent(DriverAcceptTripEvent.class, this::onDriverAcceptTrip)
         .build();
   }
 
-  private void onTripCreated(DomainEventEnvelope<TripCreatedEvent> envelope) {
+  private void onTripConfirmed(DomainEventEnvelope<TripConfirmedEvent> envelope) {
     TripDetails tripDetails = envelope.getEvent().getTripDetails();
     try {
       dispatchService.dispatchTrip(envelope.getAggregateId(), tripDetails);

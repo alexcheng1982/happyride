@@ -11,10 +11,12 @@ import io.vividcode.happyride.tripvalidationservice.api.TripValidationServiceCha
 import io.vividcode.happyride.tripvalidationservice.api.ValidateTripCommand;
 import io.vividcode.happyride.tripvalidationservice.service.TripValidationException;
 import io.vividcode.happyride.tripvalidationservice.service.TripValidationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class TripValidationServiceCommandHandlers {
 
   @Autowired
@@ -32,7 +34,8 @@ public class TripValidationServiceCommandHandlers {
       tripValidationService.validateTrip(cm.getCommand().getTripDetails());
       return withSuccess();
     } catch (TripValidationException e) {
-      return withFailure(e);
+      log.warn("Trip is not valid", e);
+      return withFailure();
     }
   }
 }

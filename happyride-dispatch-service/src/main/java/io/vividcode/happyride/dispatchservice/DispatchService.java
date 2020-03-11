@@ -40,7 +40,7 @@ public class DispatchService {
   public void verifyDispatch(TripDetails tripDetails) {
     Set<AvailableDriver> availableDrivers = findAvailableDrivers(tripDetails);
     if (availableDrivers.isEmpty()) {
-      throw new DispatchVerificationException();
+      throw new DispatchVerificationException("No available drivers");
     }
   }
 

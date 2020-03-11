@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import(TramEventSubscriberConfiguration.class)
-public class DispatcherServiceMessageHandlersConfiguration {
+public class DispatchServiceMessageHandlersConfiguration {
 
   @Bean
-  public DispatchServiceEventConsumer dispatcherServiceEventConsumer() {
+  public DispatchServiceEventConsumer dispatchServiceEventConsumer() {
     return new DispatchServiceEventConsumer();
   }
 
@@ -21,6 +21,6 @@ public class DispatcherServiceMessageHandlersConfiguration {
       DispatchServiceEventConsumer dispatchServiceEventConsumer,
       DomainEventDispatcherFactory domainEventDispatcherFactory) {
     return domainEventDispatcherFactory
-        .make("dispatcherServiceEvents", dispatchServiceEventConsumer.domainEventHandlers());
+        .make("dispatchServiceEvents", dispatchServiceEventConsumer.domainEventHandlers());
   }
 }

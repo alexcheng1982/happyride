@@ -98,7 +98,8 @@ public class Trip extends BaseEntityWithGeneratedId {
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> confirmTrip() {
     setState(TripState.CONFIRMED);
-    return new ResultWithDomainEvents<>(this, new TripConfirmedEvent());
+    TripDetails tripDetails = new TripDetails(passengerId, startPos.serialize(), endPos.serialize());
+    return new ResultWithDomainEvents<>(this, new TripConfirmedEvent(tripDetails));
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> acceptByDriver(String driverId) {
