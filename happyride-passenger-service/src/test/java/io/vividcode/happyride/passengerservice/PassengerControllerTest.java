@@ -36,9 +36,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @DisplayName("乘客控制器测试")
 public class PassengerControllerTest {
 
-  @Autowired
-  PassengerUtils testUtils;
-
   private String baseUri = "/api/v1";
 
   @Test
@@ -46,7 +43,7 @@ public class PassengerControllerTest {
   public void testCreatePassenger(@Autowired WebTestClient webClient) {
     webClient.post()
         .uri(baseUri)
-        .bodyValue(testUtils.buildCreatePassengerRequest(1))
+        .bodyValue(PassengerUtils.buildCreatePassengerRequest(1))
         .accept(MediaType.APPLICATION_JSON)
         .exchange()
         .expectStatus().isCreated()
@@ -57,11 +54,12 @@ public class PassengerControllerTest {
   @DisplayName("添加地址")
   public void testAddUserAddress(@Autowired WebTestClient webClient,
       @Autowired TestRestTemplate restTemplate) {
-    URI passengerUri = restTemplate.postForLocation(baseUri, testUtils.buildCreatePassengerRequest(1));
+    URI passengerUri = restTemplate
+        .postForLocation(baseUri, PassengerUtils.buildCreatePassengerRequest(1));
     URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
         .path("/addresses").build().toUri();
     webClient.post().uri(addressesUri)
-        .bodyValue(testUtils.buildCreateUserAddressRequest())
+        .bodyValue(PassengerUtils.buildCreateUserAddressRequest())
         .exchange()
         .expectStatus().isCreated()
         .expectHeader().exists(HttpHeaders.LOCATION);
@@ -71,13 +69,14 @@ public class PassengerControllerTest {
   @DisplayName("删除地址")
   public void testRemoveAddress(@Autowired WebTestClient webClient,
       @Autowired TestRestTemplate restTemplate) {
-    URI passengerUri = restTemplate.postForLocation(baseUri, testUtils.buildCreatePassengerRequest(0));
+    URI passengerUri = restTemplate
+        .postForLocation(baseUri, PassengerUtils.buildCreatePassengerRequest(0));
     URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
         .path("/addresses").build().toUri();
     URI addressUri = restTemplate
-        .postForLocation(addressesUri, testUtils.buildCreateUserAddressRequest());
-    restTemplate.postForLocation(addressesUri, testUtils.buildCreateUserAddressRequest());
-    restTemplate.postForLocation(addressesUri, testUtils.buildCreateUserAddressRequest());
+        .postForLocation(addressesUri, PassengerUtils.buildCreateUserAddressRequest());
+    restTemplate.postForLocation(addressesUri, PassengerUtils.buildCreateUserAddressRequest());
+    restTemplate.postForLocation(addressesUri, PassengerUtils.buildCreateUserAddressRequest());
     webClient.delete().uri(addressUri)
         .exchange()
         .expectStatus().isNoContent();

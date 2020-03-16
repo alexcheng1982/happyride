@@ -10,6 +10,7 @@ import io.eventuate.tram.messaging.common.Message;
 import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
 import io.vividcode.happyride.dispatchservice.DispatchVerificationException;
 import io.vividcode.happyride.dispatchservice.api.DispatchServiceChannels;
+import io.vividcode.happyride.dispatchservice.api.events.InvalidDispatchRequestReply;
 import io.vividcode.happyride.dispatchservice.api.events.VerifyDispatchCommand;
 import io.vividcode.happyride.dispatchservice.DispatchService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class DispatchCommandHandlers {
       return withSuccess();
     } catch (DispatchVerificationException e) {
       log.warn("Dispatch is not valid", e);
-      return withFailure();
+      return withFailure(new InvalidDispatchRequestReply());
     }
   }
 }

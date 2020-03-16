@@ -7,6 +7,7 @@ import io.eventuate.tram.commands.consumer.CommandHandlers;
 import io.eventuate.tram.commands.consumer.CommandMessage;
 import io.eventuate.tram.messaging.common.Message;
 import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
+import io.vividcode.happyride.tripvalidationservice.api.InvalidTripReply;
 import io.vividcode.happyride.tripvalidationservice.api.TripValidationServiceChannels;
 import io.vividcode.happyride.tripvalidationservice.api.ValidateTripCommand;
 import io.vividcode.happyride.tripvalidationservice.service.TripValidationException;
@@ -35,7 +36,7 @@ public class TripValidationServiceCommandHandlers {
       return withSuccess();
     } catch (TripValidationException e) {
       log.warn("Trip is not valid", e);
-      return withFailure();
+      return withFailure(new InvalidTripReply());
     }
   }
 }

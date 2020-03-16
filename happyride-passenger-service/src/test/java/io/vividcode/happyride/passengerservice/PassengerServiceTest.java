@@ -29,8 +29,10 @@ import org.springframework.test.context.TestPropertySource;
 @ContextConfiguration(classes = {
     EmbeddedPostgresConfiguration.class}
 )
-@ImportAutoConfiguration(classes = {EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class})
+@ImportAutoConfiguration(classes = {
+    EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
+    EmbeddedPostgreSQLBootstrapConfiguration.class
+})
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
 })
@@ -40,13 +42,10 @@ public class PassengerServiceTest {
   @Autowired
   PassengerService passengerService;
 
-  @Autowired
-  PassengerUtils testUtils;
-
   @Test
   @DisplayName("创建乘客")
   public void testCreatePassenger() {
-    CreatePassengerRequest request = testUtils.buildCreatePassengerRequest(1);
+    CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(1);
     Passenger passenger = passengerService.createPassenger(request);
     assertNotNull(passenger.getId());
     assertEquals(1, passenger.getUserAddresses().size());
@@ -55,9 +54,9 @@ public class PassengerServiceTest {
   @Test
   @DisplayName("添加地址到已有乘客")
   public void testAddAddress() {
-    CreatePassengerRequest request = testUtils.buildCreatePassengerRequest(1);
+    CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(1);
     Passenger passenger = passengerService.createPassenger(request);
-    passengerService.addAddress(passenger.getId(), testUtils.buildCreateUserAddressRequest());
+    passengerService.addAddress(passenger.getId(), PassengerUtils.buildCreateUserAddressRequest());
     assertEquals(2, passenger.getUserAddresses().size());
   }
 

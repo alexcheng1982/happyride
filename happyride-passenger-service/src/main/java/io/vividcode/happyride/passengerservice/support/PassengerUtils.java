@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Component;
 
-@Component
 public class PassengerUtils {
 
   private static final Faker faker = new Faker(Locale.CHINA);
