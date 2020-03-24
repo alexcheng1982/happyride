@@ -214,4 +214,57 @@
     </plugins>
   </reporting>
 
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>bintray</name>
+      <url>https://jcenter.bintray.com</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>bintray-eventuateio-oss-eventuate-maven-release</id>
+      <name>bintray</name>
+      <url>https://dl.bintray.com/eventuateio-oss/eventuate-maven-release</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>bintray-eventuateio-oss-eventuate-maven-rc</id>
+      <name>bintray</name>
+      <url>https://dl.bintray.com/eventuateio-oss/eventuate-maven-rc</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>bintray-plugins</name>
+      <url>https://jcenter.bintray.com</url>
+    </pluginRepository>
+    <pluginRepository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>bintray-eventuateio-oss-eventuate-maven-release</id>
+      <name>bintray-plugins</name>
+      <url>https://dl.bintray.com/eventuateio-oss/eventuate-maven-release</url>
+    </pluginRepository>
+    <pluginRepository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>bintray-eventuateio-oss-eventuate-maven-rc</id>
+      <name>bintray-plugins</name>
+      <url>https://dl.bintray.com/eventuateio-oss/eventuate-maven-rc</url>
+    </pluginRepository>
+  </pluginRepositories>
+
 </project>
