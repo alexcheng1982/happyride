@@ -76,13 +76,14 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/src/main/resources/api.yml</inputSpec>
+              <inputSpec>${project.basedir}/src/main/resources/openapi.yml</inputSpec>
               <language>java</language>
               <apiPackage>io.vividcode.happyride.tripservice.client.api</apiPackage>
               <generateModels>false</generateModels>
               <generateApiTests>false</generateApiTests>
               <importMappings>
                 <importMapping>CreateTripRequest=io.vividcode.happyride.tripservice.api.web.CreateTripRequest</importMapping>
+                <importMapping>AcceptTripRequest=io.vividcode.happyride.tripservice.api.web.AcceptTripRequest</importMapping>
                 <importMapping>PositionView=io.vividcode.happyride.common.PositionView</importMapping>
                 <importMapping>TripView=io.vividcode.happyride.tripservice.api.web.TripView</importMapping>
               </importMappings>
