@@ -35,7 +35,7 @@ public class PassengerService {
         .map(this::createPassengerView);
   }
 
-  public Passenger createPassenger(CreatePassengerRequest request) {
+  public PassengerView createPassenger(CreatePassengerRequest request) {
     Passenger passenger = new Passenger();
     passenger.setName(request.getName());
     passenger.setEmail(request.getEmail());
@@ -46,16 +46,15 @@ public class PassengerService {
             .collect(Collectors.toList())
         ).orElse(new ArrayList<>());
     passenger.setUserAddresses(userAddresses);
-    return passengerRepository.save(passenger);
+    return createPassengerView(passengerRepository.save(passenger));
   }
 
-  public UserAddressView addAddress(String passengerId, CreateUserAddressRequest request) {
+  public PassengerView addAddress(String passengerId, CreateUserAddressRequest request) {
     Passenger passenger = passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
     UserAddress userAddress = createUserAddress(request);
     passenger.addUserAddress(userAddress);
-    passengerRepository.save(passenger);
-    return createUserAddressView(userAddress);
+    return createPassengerView(passenger);
   }
 
   public Optional<UserAddressView> getAddress(String passengerId, String addressId) {
@@ -64,11 +63,11 @@ public class PassengerService {
         .map(this::createUserAddressView);
   }
 
-  public void deleteAddress(String passengerId, String addressId) {
+  public PassengerView deleteAddress(String passengerId, String addressId) {
     Passenger passenger = passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
     passenger.getUserAddress(addressId).ifPresent(passenger::removeUserAddress);
-    passengerRepository.save(passenger);
+    return createPassengerView(passenger);
   }
 
   private UserAddress createUserAddress(CreateUserAddressRequest request) {

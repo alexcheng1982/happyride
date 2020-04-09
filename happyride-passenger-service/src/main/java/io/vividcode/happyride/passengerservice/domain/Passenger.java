@@ -15,6 +15,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -28,6 +29,7 @@ public class Passenger extends BaseEntityWithGeneratedId {
 
   @Column(name = "name")
   @Size(max = 255)
+  @NonNull
   private String name;
 
   @Column(name = "email")
@@ -37,14 +39,18 @@ public class Passenger extends BaseEntityWithGeneratedId {
 
   @Column(name = "mobile_phone_number")
   @Size(max = 255)
+  @NonNull
   private String mobilePhoneNumber;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "passenger_id", referencedColumnName = "id", nullable = false)
+  @NonNull
   private List<UserAddress> userAddresses = new ArrayList<>();
 
   public void addUserAddress(UserAddress userAddress) {
-    userAddresses.add(userAddress);
+    if (userAddress != null) {
+      userAddresses.add(userAddress);
+    }
   }
 
   public void removeUserAddress(UserAddress userAddress) {

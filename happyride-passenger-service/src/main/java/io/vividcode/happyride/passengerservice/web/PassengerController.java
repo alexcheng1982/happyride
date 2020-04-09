@@ -5,7 +5,6 @@ import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
 import io.vividcode.happyride.passengerservice.api.web.PassengerView;
 import io.vividcode.happyride.passengerservice.api.web.UserAddressView;
 import io.vividcode.happyride.passengerservice.service.PassengerService;
-import io.vividcode.happyride.passengerservice.support.PassengerUtils;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +41,7 @@ public class PassengerController {
   @PostMapping
   public ResponseEntity<PassengerView> createPassenger(
       @RequestBody CreatePassengerRequest request) {
-    PassengerView passenger = PassengerUtils
-        .createPassengerView(passengerService.createPassenger(request));
+    PassengerView passenger = passengerService.createPassenger(request);
     return ResponseEntity.created(resourceCreated(passenger.getId())).body(passenger);
   }
 
@@ -55,18 +53,10 @@ public class PassengerController {
   }
 
   @PostMapping("{id}/addresses")
-  public ResponseEntity<UserAddressView> createAddress(@PathVariable("id") String passengerId,
+  public ResponseEntity<PassengerView> createAddress(@PathVariable("id") String passengerId,
       @RequestBody CreateUserAddressRequest request) {
-    UserAddressView address = passengerService.addAddress(passengerId, request);
-    return ResponseEntity.created(resourceCreated(address.getId())).body(address);
-  }
-
-  @GetMapping("{passengerId}/addresses/{addressId}")
-  public ResponseEntity<UserAddressView> getAddress(@PathVariable("passengerId") String passengerId,
-      @PathVariable("addressId") String addressId) {
-    return passengerService.getAddress(passengerId, addressId)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+    PassengerView passenger = passengerService.addAddress(passengerId, request);
+    return ResponseEntity.ok(passenger);
   }
 
   @DeleteMapping("{passengerId}/addresses/{addressId}")
