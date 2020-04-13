@@ -1,14 +1,13 @@
-package io.vividcode.happyride.passengerservice.service;
+package io.vividcode.happyride.passengerservice.domain;
+
+import static io.vividcode.happyride.passengerservice.domain.PassengerUtils.createPassengerVO;
 
 import com.google.common.collect.Streams;
 import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
 import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
-import io.vividcode.happyride.passengerservice.api.web.PassengerView;
-import io.vividcode.happyride.passengerservice.api.web.UserAddressView;
+import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
+import io.vividcode.happyride.passengerservice.api.web.UserAddressVO;
 import io.vividcode.happyride.passengerservice.dataaccess.PassengerRepository;
-import io.vividcode.happyride.passengerservice.domain.Passenger;
-import io.vividcode.happyride.passengerservice.domain.UserAddress;
-import io.vividcode.happyride.passengerservice.support.PassengerUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,18 +23,18 @@ public class PassengerService {
   @Autowired
   PassengerRepository passengerRepository;
 
-  public List<PassengerView> findAll() {
+  public List<PassengerVO> findAll() {
     return Streams.stream(passengerRepository.findAll())
-        .map(this::createPassengerView)
+        .map(PassengerUtils::createPassengerVO)
         .collect(Collectors.toList());
   }
 
-  public Optional<PassengerView> getPassenger(String passengerId) {
+  public Optional<PassengerVO> getPassenger(String passengerId) {
     return passengerRepository.findById(passengerId)
-        .map(this::createPassengerView);
+        .map(PassengerUtils::createPassengerVO);
   }
 
-  public PassengerView createPassenger(CreatePassengerRequest request) {
+  public PassengerVO createPassenger(CreatePassengerRequest request) {
     Passenger passenger = new Passenger();
     passenger.setName(request.getName());
     passenger.setEmail(request.getEmail());
@@ -46,50 +45,39 @@ public class PassengerService {
             .collect(Collectors.toList())
         ).orElse(new ArrayList<>());
     passenger.setUserAddresses(userAddresses);
-    return createPassengerView(passengerRepository.save(passenger));
+    return createPassengerVO(passengerRepository.save(passenger));
   }
 
-  public PassengerView addAddress(String passengerId, CreateUserAddressRequest request) {
+  public PassengerVO addAddress(String passengerId, CreateUserAddressRequest request) {
     Passenger passenger = passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
     UserAddress userAddress = createUserAddress(request);
     passenger.addUserAddress(userAddress);
-    return createPassengerView(passenger);
+    return createPassengerVO(passenger);
   }
 
-  public Optional<UserAddressView> getAddress(String passengerId, String addressId) {
+  public Optional<UserAddressVO> getAddress(String passengerId, String addressId) {
     return passengerRepository.findById(passengerId)
         .flatMap(passenger -> passenger.getUserAddress(addressId))
-        .map(this::createUserAddressView);
+        .map(PassengerUtils::createUserAddressVO);
   }
 
-  public PassengerView deleteAddress(String passengerId, String addressId) {
+  public PassengerVO deleteAddress(String passengerId, String addressId) {
     Passenger passenger = passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
     passenger.getUserAddress(addressId).ifPresent(passenger::removeUserAddress);
-    return createPassengerView(passenger);
+    return createPassengerVO(passenger);
   }
+
 
   private UserAddress createUserAddress(CreateUserAddressRequest request) {
     UserAddress address = new UserAddress();
     address.generateId();
     address.setName(request.getName());
     address.setAddressId(request.getAddressId());
+    address.setAddressName(request.getAddressName());
     return address;
   }
 
-  private PassengerView createPassengerView(Passenger passenger) {
-    return new PassengerView(passenger.getId(),
-        passenger.getName(),
-        passenger.getEmail(),
-        passenger.getMobilePhoneNumber(),
-        passenger.getUserAddresses().stream().map(PassengerUtils::createUserAddressView)
-            .collect(Collectors.toList()));
-  }
 
-  private UserAddressView createUserAddressView(UserAddress userAddress) {
-    return new UserAddressView(userAddress.getId(),
-        userAddress.getName(),
-        userAddress.getAddressId());
-  }
 }

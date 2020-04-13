@@ -1,19 +1,19 @@
 package io.vividcode.happyride.tripservice.api.web;
 
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import lombok.Data;
 
 @Data
-public class TripView {
+public class TripVO {
   private String id;
 
   private String passengerId;
 
   private String driverId;
 
-  private PositionView startPos;
+  private PositionVO startPos;
 
-  private PositionView endPos;
+  private PositionVO endPos;
 
   private String state;
 }

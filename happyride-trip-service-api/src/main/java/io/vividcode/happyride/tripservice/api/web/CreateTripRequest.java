@@ -1,7 +1,7 @@
 package io.vividcode.happyride.tripservice.api.web;
 
 
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -16,9 +16,9 @@ public class CreateTripRequest {
   private String passengerId;
 
   @NonNull
-  private PositionView startPos;
+  private PositionVO startPos;
 
   @NonNull
-  private PositionView endPos;
+  private PositionVO endPos;
 
 }

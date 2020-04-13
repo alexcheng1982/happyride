@@ -1,7 +1,7 @@
 package io.vividcode.happyride.dispatchservice;
 
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.dispatchservice.api.events.DispatchDomainEvent;
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchFailedReason;
 import io.vividcode.happyride.dispatchservice.dataaccess.DispatchRepository;
@@ -55,7 +55,7 @@ public class DispatchService {
   }
 
   private Set<AvailableDriver> findAvailableDrivers(TripDetails tripDetails) {
-    PositionView startPos = tripDetails.getStartPos();
+    PositionVO startPos = tripDetails.getStartPos();
     return driverLocationService.findAvailableDrivers(startPos.getLng(), startPos.getLat());
   }
 

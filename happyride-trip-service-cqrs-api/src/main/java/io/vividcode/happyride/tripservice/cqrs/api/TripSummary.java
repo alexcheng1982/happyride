@@ -1,6 +1,6 @@
 package io.vividcode.happyride.tripservice.cqrs.api;
 
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.tripservice.api.TripState;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,9 @@ public class TripSummary {
 
   private String id;
 
-  private PositionView startPos;
+  private PositionVO startPos;
 
-  private PositionView endPos;
+  private PositionVO endPos;
 
   private TripState state;
 }

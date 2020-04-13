@@ -1,4 +1,4 @@
-package io.vividcode.happyride.passengerservice.service;
+package io.vividcode.happyride.passengerservice.domain;
 
 public class PassengerNotFoundException extends RuntimeException {
 

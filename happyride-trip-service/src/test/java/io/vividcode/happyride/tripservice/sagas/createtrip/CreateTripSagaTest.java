@@ -2,8 +2,7 @@ package io.vividcode.happyride.tripservice.sagas.createtrip;
 
 import static io.eventuate.tram.sagas.testing.SagaUnitTestSupport.given;
 
-import io.vividcode.happyride.common.Position;
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.dispatchservice.api.DispatchServiceChannels;
 import io.vividcode.happyride.dispatchservice.api.events.VerifyDispatchCommand;
 import io.vividcode.happyride.tripservice.api.TripServiceChannels;
@@ -93,8 +92,8 @@ public class CreateTripSagaTest {
   }
 
   private TripDetails tripDetails0() {
-    return new TripDetails(uuid(), new PositionView(BigDecimal.ZERO, BigDecimal.ZERO),
-        new PositionView(BigDecimal.ZERO, BigDecimal.ZERO));
+    return new TripDetails(uuid(), new PositionVO(BigDecimal.ZERO, BigDecimal.ZERO),
+        new PositionVO(BigDecimal.ZERO, BigDecimal.ZERO));
   }
 
   private String uuid() {

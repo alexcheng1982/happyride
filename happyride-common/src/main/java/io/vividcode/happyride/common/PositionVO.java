@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
-public class PositionView {
+public class PositionVO {
   @NonNull
   private BigDecimal lng;
 

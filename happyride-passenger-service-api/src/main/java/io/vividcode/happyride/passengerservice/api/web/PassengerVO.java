@@ -7,7 +7,7 @@ import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
-public class PassengerView {
+public class PassengerVO {
   @NonNull
   private String id;
 
@@ -19,5 +19,5 @@ public class PassengerView {
   @NonNull
   private String mobilePhoneNumber;
 
-  private List<UserAddressView> userAddresses;
+  private List<UserAddressVO> userAddresses;
 }

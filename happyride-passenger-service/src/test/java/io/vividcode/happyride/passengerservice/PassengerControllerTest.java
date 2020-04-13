@@ -2,8 +2,8 @@ package io.vividcode.happyride.passengerservice;
 
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
-import io.vividcode.happyride.passengerservice.api.web.UserAddressView;
-import io.vividcode.happyride.passengerservice.support.PassengerUtils;
+import io.vividcode.happyride.passengerservice.api.web.UserAddressVO;
+import io.vividcode.happyride.passengerservice.domain.PassengerUtils;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import java.net.URI;
 import org.junit.jupiter.api.DisplayName;
@@ -83,7 +83,7 @@ public class PassengerControllerTest {
     webClient.get().uri(addressesUri)
         .exchange()
         .expectStatus().isOk()
-        .expectBodyList(UserAddressView.class)
+        .expectBodyList(UserAddressVO.class)
         .hasSize(2);
   }
 

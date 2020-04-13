@@ -84,8 +84,8 @@
               <importMappings>
                 <importMapping>CreateTripRequest=io.vividcode.happyride.tripservice.api.web.CreateTripRequest</importMapping>
                 <importMapping>AcceptTripRequest=io.vividcode.happyride.tripservice.api.web.AcceptTripRequest</importMapping>
-                <importMapping>PositionView=io.vividcode.happyride.common.PositionView</importMapping>
-                <importMapping>TripView=io.vividcode.happyride.tripservice.api.web.TripView</importMapping>
+                <importMapping>PositionVO=io.vividcode.happyride.common.PositionVO</importMapping>
+                <importMapping>TripVO=io.vividcode.happyride.tripservice.api.web.TripVO</importMapping>
               </importMappings>
               <configOptions>
 

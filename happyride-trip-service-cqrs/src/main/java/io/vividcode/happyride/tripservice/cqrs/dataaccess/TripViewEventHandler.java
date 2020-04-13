@@ -1,7 +1,6 @@
 package io.vividcode.happyride.tripservice.cqrs.dataaccess;
 
-import io.vividcode.happyride.common.Position;
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.tripservice.api.TripState;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.cqrs.api.TripCancelledEvent;
@@ -25,10 +24,10 @@ public class TripViewEventHandler {
 
     tripView.setId(event.getTripId());
     TripDetails tripDetails = event.getTripDetails();
-    PositionView startPos = tripDetails.getStartPos();
+    PositionVO startPos = tripDetails.getStartPos();
     tripView.setStartPosLng(startPos.getLng());
     tripView.setStartPosLat(startPos.getLat());
-    PositionView endPos = tripDetails.getEndPos();
+    PositionVO endPos = tripDetails.getEndPos();
     tripView.setEndPosLng(endPos.getLng());
     tripView.setEndPosLat(endPos.getLat());
     tripView.setState(TripState.CREATED);

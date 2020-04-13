@@ -3,7 +3,7 @@ package io.vividcode.happyride.tripservice.web;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.web.AcceptTripRequest;
 import io.vividcode.happyride.tripservice.api.web.CreateTripRequest;
-import io.vividcode.happyride.tripservice.api.web.TripView;
+import io.vividcode.happyride.tripservice.api.web.TripVO;
 import io.vividcode.happyride.tripservice.service.TripService;
 import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +25,13 @@ public class TripController {
 
   @PostMapping
   public ResponseEntity<Void> createTrip(@RequestBody CreateTripRequest request) {
-    TripView trip = tripService
+    TripVO trip = tripService
         .createTrip(request.getPassengerId(), request.getStartPos(), request.getEndPos());
     return ResponseEntity.created(resourceCreated(trip.getId())).build();
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<TripView> getTrip(@PathVariable("id") String id) {
+  public ResponseEntity<TripVO> getTrip(@PathVariable("id") String id) {
     return tripService.getTrip(id)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());

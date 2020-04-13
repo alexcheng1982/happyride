@@ -42,7 +42,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TripView" 
+                $ref: "#/components/schemas/TripVO"
         '404':
           description: 找不到行程
   /{id}/accept:
@@ -75,9 +75,9 @@ components:
         passengerId:
           type: string   
         startPos:
-          $ref: "#/components/schemas/PositionView" 
+          $ref: "#/components/schemas/PositionVO"
         endPos:
-          $ref: "#/components/schemas/PositionView" 
+          $ref: "#/components/schemas/PositionVO"
       required:
         - passengerId
         - startPos
@@ -97,7 +97,7 @@ components:
           - driverId
           - posLng
           - posLat
-    TripView:
+    TripVO:
       type: object
       properties:
         id: 
@@ -107,12 +107,12 @@ components:
         driverId:
           type: string
         startPos:
-          $ref: "#/components/schemas/PositionView" 
+          $ref: "#/components/schemas/PositionVO"
         endPos:
-          $ref: "#/components/schemas/PositionView" 
+          $ref: "#/components/schemas/PositionVO"
         state:
           type: string                     
-    PositionView:
+    PositionVO:
       type: object
       properties:
         lng:

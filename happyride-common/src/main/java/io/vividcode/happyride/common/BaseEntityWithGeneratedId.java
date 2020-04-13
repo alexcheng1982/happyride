@@ -20,8 +20,7 @@ public abstract class BaseEntityWithGeneratedId extends EntityWithGeneratedId {
 
   @PrePersist
   void setInitialDate() {
-    createdAt = System.currentTimeMillis();
-    updatedAt = System.currentTimeMillis();
+    createdAt = updatedAt = System.currentTimeMillis();
   }
 
   @PreUpdate

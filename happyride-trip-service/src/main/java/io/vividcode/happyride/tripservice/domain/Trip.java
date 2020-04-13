@@ -3,7 +3,7 @@ package io.vividcode.happyride.tripservice.domain;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.vividcode.happyride.common.BaseEntityWithGeneratedId;
 import io.vividcode.happyride.common.Position;
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.tripservice.api.TripState;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.events.TripCancellationResolutionRequiredEvent;
@@ -15,7 +15,7 @@ import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
 import io.vividcode.happyride.tripservice.api.events.TripFinishedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripRejectedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripStartedEvent;
-import io.vividcode.happyride.tripservice.api.web.TripView;
+import io.vividcode.happyride.tripservice.api.web.TripVO;
 import io.vividcode.happyride.tripservice.service.IllegalTripStateException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ import lombok.ToString;
 public class Trip extends BaseEntityWithGeneratedId {
 
   public static ResultWithDomainEvents<Trip, TripDomainEvent> createTrip(String passengerId,
-      PositionView startPos, PositionView endPos) {
+      PositionVO startPos, PositionVO endPos) {
     Trip trip = new Trip(passengerId, startPos, endPos);
     TripCreatedEvent event = new TripCreatedEvent(new TripDetails(passengerId, startPos, endPos));
     return new ResultWithDomainEvents<>(trip, event);
@@ -73,7 +73,7 @@ public class Trip extends BaseEntityWithGeneratedId {
   @Enumerated(EnumType.STRING)
   private TripState state;
 
-  public Trip(String passengerId, PositionView startPos, PositionView endPos) {
+  public Trip(String passengerId, PositionVO startPos, PositionVO endPos) {
     this.passengerId = passengerId;
     this.startPos = startPos.deserialize();
     this.endPos = endPos.deserialize();
@@ -163,14 +163,14 @@ public class Trip extends BaseEntityWithGeneratedId {
     }
   }
 
-  public TripView serialize() {
-    TripView tripView = new TripView();
-    tripView.setId(getId());
-    tripView.setPassengerId(getPassengerId());
-    tripView.setDriverId(getDriverId());
-    tripView.setStartPos(getStartPos().serialize());
-    tripView.setEndPos(getEndPos().serialize());
-    tripView.setState(getState().name());
-    return tripView;
+  public TripVO serialize() {
+    TripVO tripVO = new TripVO();
+    tripVO.setId(getId());
+    tripVO.setPassengerId(getPassengerId());
+    tripVO.setDriverId(getDriverId());
+    tripVO.setStartPos(getStartPos().serialize());
+    tripVO.setEndPos(getEndPos().serialize());
+    tripVO.setState(getState().name());
+    return tripVO;
   }
 }

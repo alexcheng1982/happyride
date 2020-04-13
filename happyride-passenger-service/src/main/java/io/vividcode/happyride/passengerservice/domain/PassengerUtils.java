@@ -1,12 +1,10 @@
-package io.vividcode.happyride.passengerservice.support;
+package io.vividcode.happyride.passengerservice.domain;
 
 import com.github.javafaker.Faker;
 import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
 import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
-import io.vividcode.happyride.passengerservice.api.web.PassengerView;
-import io.vividcode.happyride.passengerservice.api.web.UserAddressView;
-import io.vividcode.happyride.passengerservice.domain.Passenger;
-import io.vividcode.happyride.passengerservice.domain.UserAddress;
+import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
+import io.vividcode.happyride.passengerservice.api.web.UserAddressVO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -35,21 +33,23 @@ public class PassengerUtils {
     CreateUserAddressRequest request = new CreateUserAddressRequest();
     request.setName(faker.pokemon().name());
     request.setAddressId(UUID.randomUUID().toString());
+    request.setAddressName(faker.address().fullAddress());
     return request;
   }
 
-  public static PassengerView createPassengerView(Passenger passenger) {
-    return new PassengerView(passenger.getId(),
+  public static PassengerVO createPassengerVO(Passenger passenger) {
+    return new PassengerVO(passenger.getId(),
         passenger.getName(),
         passenger.getEmail(),
         passenger.getMobilePhoneNumber(),
-        passenger.getUserAddresses().stream().map(PassengerUtils::createUserAddressView)
+        passenger.getUserAddresses().stream().map(PassengerUtils::createUserAddressVO)
             .collect(Collectors.toList()));
   }
 
-  public static UserAddressView createUserAddressView(UserAddress userAddress) {
-    return new UserAddressView(userAddress.getId(),
+  public static UserAddressVO createUserAddressVO(UserAddress userAddress) {
+    return new UserAddressVO(userAddress.getId(),
         userAddress.getName(),
-        userAddress.getAddressId());
+        userAddress.getAddressId(),
+        userAddress.getAddressName());
   }
 }

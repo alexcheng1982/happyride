@@ -3,8 +3,7 @@ package io.vividcode.happyride.dispatchservice.domain;
 import com.google.common.collect.Lists;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.vividcode.happyride.common.EntityWithGeneratedId;
-import io.vividcode.happyride.common.Position;
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.dispatchservice.AvailableDriver;
 import io.vividcode.happyride.dispatchservice.api.events.DispatchDomainEvent;
 import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceDeclinedEvent;
@@ -76,7 +75,7 @@ public class Dispatch extends EntityWithGeneratedId {
 
   public static ResultWithDomainEvents<Dispatch, DispatchDomainEvent> createDispatch(String tripId,
       TripDetails tripDetails, Set<AvailableDriver> drivers) {
-    PositionView startPos = tripDetails.getStartPos();
+    PositionVO startPos = tripDetails.getStartPos();
     Dispatch dispatch = new Dispatch(tripId, startPos.getLng(), startPos.getLat());
     List<TripAcceptance> tripAcceptances = drivers.stream()
         .map(driver -> new TripAcceptance(driver.getDriverId(), driver.getPosLng(),

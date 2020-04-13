@@ -2,9 +2,9 @@ package io.vividcode.happyride.passengerservice.web;
 
 import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
 import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
-import io.vividcode.happyride.passengerservice.api.web.PassengerView;
-import io.vividcode.happyride.passengerservice.api.web.UserAddressView;
-import io.vividcode.happyride.passengerservice.service.PassengerService;
+import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
+import io.vividcode.happyride.passengerservice.api.web.UserAddressVO;
+import io.vividcode.happyride.passengerservice.domain.PassengerService;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,35 +27,35 @@ public class PassengerController {
   PassengerService passengerService;
 
   @GetMapping
-  public List<PassengerView> findAll() {
+  public List<PassengerVO> findAll() {
     return passengerService.findAll();
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<PassengerView> getPassenger(@PathVariable("id") String passengerId) {
+  public ResponseEntity<PassengerVO> getPassenger(@PathVariable("id") String passengerId) {
     return passengerService.getPassenger(passengerId)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   }
 
   @PostMapping
-  public ResponseEntity<PassengerView> createPassenger(
+  public ResponseEntity<PassengerVO> createPassenger(
       @RequestBody CreatePassengerRequest request) {
-    PassengerView passenger = passengerService.createPassenger(request);
+    PassengerVO passenger = passengerService.createPassenger(request);
     return ResponseEntity.created(resourceCreated(passenger.getId())).body(passenger);
   }
 
   @GetMapping("{id}/addresses")
-  public List<UserAddressView> getAddresses(@PathVariable("id") String passengerId) {
+  public List<UserAddressVO> getAddresses(@PathVariable("id") String passengerId) {
     return passengerService.getPassenger(passengerId)
-        .map(PassengerView::getUserAddresses)
+        .map(PassengerVO::getUserAddresses)
         .orElse(new ArrayList<>());
   }
 
   @PostMapping("{id}/addresses")
-  public ResponseEntity<PassengerView> createAddress(@PathVariable("id") String passengerId,
+  public ResponseEntity<PassengerVO> createAddress(@PathVariable("id") String passengerId,
       @RequestBody CreateUserAddressRequest request) {
-    PassengerView passenger = passengerService.addAddress(passengerId, request);
+    PassengerVO passenger = passengerService.addAddress(passengerId, request);
     return ResponseEntity.ok(passenger);
   }
 

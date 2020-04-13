@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
-import io.vividcode.happyride.passengerservice.api.web.PassengerView;
-import io.vividcode.happyride.passengerservice.service.PassengerService;
-import io.vividcode.happyride.passengerservice.support.PassengerUtils;
+import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
+import io.vividcode.happyride.passengerservice.domain.PassengerService;
+import io.vividcode.happyride.passengerservice.domain.PassengerUtils;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ public class PassengerServiceTest {
   @DisplayName("创建乘客")
   public void testCreatePassenger() {
     CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(1);
-    PassengerView passenger = passengerService.createPassenger(request);
+    PassengerVO passenger = passengerService.createPassenger(request);
     assertNotNull(passenger.getId());
     assertThat(passenger.getUserAddresses()).hasSize(1);
   }
@@ -55,7 +55,7 @@ public class PassengerServiceTest {
   @DisplayName("添加地址到已有乘客")
   public void testAddAddress() {
     CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(1);
-    PassengerView passenger = passengerService.createPassenger(request);
+    PassengerVO passenger = passengerService.createPassenger(request);
     passenger = passengerService.addAddress(passenger.getId(), PassengerUtils.buildCreateUserAddressRequest());
     assertThat(passenger.getUserAddresses()).hasSize(2);
   }
@@ -64,7 +64,7 @@ public class PassengerServiceTest {
   @DisplayName("删除已有地址")
   public void testDeleteAddress() {
     CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(3);
-    PassengerView passenger = passengerService.createPassenger(request);
+    PassengerVO passenger = passengerService.createPassenger(request);
     String addressId = passenger.getUserAddresses().get(1).getId();
     passenger = passengerService.deleteAddress(passenger.getId(), addressId);
     assertThat(passenger.getUserAddresses()).hasSize(2);

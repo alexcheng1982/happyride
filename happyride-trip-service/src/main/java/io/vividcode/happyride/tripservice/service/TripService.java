@@ -3,13 +3,13 @@ package io.vividcode.happyride.tripservice.service;
 import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
-import io.vividcode.happyride.tripservice.api.web.TripView;
+import io.vividcode.happyride.tripservice.api.web.TripVO;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
 import io.vividcode.happyride.tripservice.domain.Trip;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
@@ -35,7 +35,7 @@ public class TripService {
   @Autowired
   SagaManager<CreateTripSagaState> createTripSagaManager;
 
-  public TripView createTrip(String passengerId, PositionView startPos, PositionView endPos) {
+  public TripVO createTrip(String passengerId, PositionVO startPos, PositionVO endPos) {
     ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
         .createTrip(passengerId, startPos, endPos);
     Trip trip = tripAndEvents.result;
@@ -48,7 +48,7 @@ public class TripService {
     return trip.serialize();
   }
 
-  public Optional<TripView> getTrip(String id) {
+  public Optional<TripVO> getTrip(String id) {
     return tripRepository.findById(id).map(Trip::serialize);
   }
 

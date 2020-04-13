@@ -27,7 +27,7 @@ public class Position {
   @Column(name = "address_id", length = 36)
   private String addressId;
 
-  public PositionView serialize() {
-    return new PositionView(lng, lat, addressId);
+  public PositionVO serialize() {
+    return new PositionVO(lng, lat, addressId);
   }
 }

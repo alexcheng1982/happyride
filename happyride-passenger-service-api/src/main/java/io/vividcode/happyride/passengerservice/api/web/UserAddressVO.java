@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-public class UserAddressView {
+public class UserAddressVO {
 
   @NonNull
   private String id;
@@ -15,4 +15,7 @@ public class UserAddressView {
 
   @NonNull
   private String addressId;
+
+  @NonNull
+  private String addressName;
 }

@@ -1,7 +1,7 @@
 package io.vividcode.happyride.passengerservice.ui;
 
-import io.vividcode.happyride.passengerservice.service.PassengerService;
-import io.vividcode.happyride.passengerservice.support.PassengerUtils;
+import io.vividcode.happyride.passengerservice.domain.PassengerService;
+import io.vividcode.happyride.passengerservice.domain.PassengerUtils;
 import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;

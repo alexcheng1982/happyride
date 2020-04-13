@@ -1,6 +1,6 @@
 package io.vividcode.happyride.tripservice.cqrs.domain;
 
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.cqrs.api.CancelTripCommand;
 import io.vividcode.happyride.tripservice.cqrs.api.ConfirmTripCommand;
@@ -24,8 +24,8 @@ public class TripService {
   @Autowired
   TripViewRepository tripViewRepository;
 
-  public CompletableFuture<String> createTrip(String passengerId, PositionView startPos,
-      PositionView endPos) {
+  public CompletableFuture<String> createTrip(String passengerId, PositionVO startPos,
+      PositionVO endPos) {
     String tripId = UUID.randomUUID().toString();
     TripDetails tripDetails = new TripDetails(passengerId, startPos, endPos);
     CreateTripCommand command = new CreateTripCommand(tripId, tripDetails);
@@ -49,8 +49,8 @@ public class TripService {
           TripSummary tripSummary = new TripSummary();
           tripSummary.setId(tripView.getId());
           tripSummary
-              .setStartPos(new PositionView(tripView.getStartPosLng(), tripView.getStartPosLat()));
-          tripSummary.setEndPos(new PositionView(tripView.getEndPosLng(), tripView.getEndPosLat()));
+              .setStartPos(new PositionVO(tripView.getStartPosLng(), tripView.getStartPosLat()));
+          tripSummary.setEndPos(new PositionVO(tripView.getEndPosLng(), tripView.getEndPosLat()));
           tripSummary.setState(tripView.getState());
           return tripSummary;
         })

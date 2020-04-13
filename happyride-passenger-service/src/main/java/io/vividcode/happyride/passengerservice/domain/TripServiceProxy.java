@@ -1,4 +1,4 @@
-package io.vividcode.happyride.passengerservice.service;
+package io.vividcode.happyride.passengerservice.domain;
 
 import io.vividcode.happyride.tripservice.api.web.CreateTripRequest;
 import io.vividcode.happyride.tripservice.client.ApiException;

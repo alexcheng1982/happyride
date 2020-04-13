@@ -7,15 +7,14 @@ import static org.mockito.Mockito.verify;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
-import io.vividcode.happyride.common.Position;
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import io.vividcode.happyride.tripservice.api.TripState;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.events.TripCancellationResolutionRequiredEvent;
 import io.vividcode.happyride.tripservice.api.events.TripCancelledEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
-import io.vividcode.happyride.tripservice.api.web.TripView;
+import io.vividcode.happyride.tripservice.api.web.TripVO;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
 import io.vividcode.happyride.tripservice.domain.Trip;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
@@ -82,7 +81,7 @@ public class TripServiceTest {
   @Test
   @DisplayName("行程取消成功")
   public void testCancelTrip() {
-    TripView trip = tripService.createTrip(uuid(), position0(), position0());
+    TripVO trip = tripService.createTrip(uuid(), position0(), position0());
     String tripId = trip.getId();
     tripService.shouldCancel(tripId, CancellationParty.PASSENGER);
     tripService.shouldCancel(tripId, CancellationParty.DRIVER);
@@ -99,7 +98,7 @@ public class TripServiceTest {
   @Test
   @DisplayName("行程取消需要调解")
   public void testCancelTripRequiresResolution() {
-    TripView trip = tripService.createTrip(uuid(), position0(), position0());
+    TripVO trip = tripService.createTrip(uuid(), position0(), position0());
     String tripId = trip.getId();
     tripService.shouldCancel(tripId, CancellationParty.PASSENGER);
     tripService.shouldNotCancel(tripId, CancellationParty.DRIVER);
@@ -117,7 +116,7 @@ public class TripServiceTest {
     return UUID.randomUUID().toString();
   }
 
-  private PositionView position0() {
-    return new PositionView(BigDecimal.ZERO, BigDecimal.ZERO);
+  private PositionVO position0() {
+    return new PositionVO(BigDecimal.ZERO, BigDecimal.ZERO);
   }
 }

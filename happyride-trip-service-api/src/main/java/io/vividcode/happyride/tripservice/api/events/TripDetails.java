@@ -1,7 +1,7 @@
 package io.vividcode.happyride.tripservice.api.events;
 
 
-import io.vividcode.happyride.common.PositionView;
+import io.vividcode.happyride.common.PositionVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -18,8 +18,8 @@ public class TripDetails {
   private String driverId;
 
   @NonNull
-  private PositionView startPos;
+  private PositionVO startPos;
 
   @NonNull
-  private PositionView endPos;
+  private PositionVO endPos;
 }

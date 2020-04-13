@@ -15,4 +15,7 @@ public class CreateUserAddressRequest {
 
   @NonNull
   private String addressId;
+
+  @NonNull
+  private String addressName;
 }
