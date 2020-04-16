@@ -27,10 +27,10 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.2.6.RELEASE</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <relativePath/>
   </parent>
   <groupId>io.vividcode.happyride</groupId>
-  <artifactId>parent</artifactId>
+  <artifactId>happyride</artifactId>
   <packaging>pom</packaging>
   <version>1.0.0-SNAPSHOT</version>
   <name>happyride</name>
@@ -44,7 +44,7 @@
     <eventuate-tram.version>0.22.0.RC8</eventuate-tram.version>
     <eventuate-tram-sagas.version>0.12.0.RC7</eventuate-tram-sagas.version>
     <lombok.version>1.18.10</lombok.version>
-    <testcontainers.version>1.40</testcontainers.version>
+    <testcontainers.version>1.44</testcontainers.version>
     <guava.version>28.2-jre</guava.version>
     <axon.version>4.3</axon.version>
     <javafaker.version>1.0.2</javafaker.version>

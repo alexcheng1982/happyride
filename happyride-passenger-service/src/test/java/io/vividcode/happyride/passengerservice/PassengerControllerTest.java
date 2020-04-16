@@ -36,7 +36,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @DisplayName("乘客控制器测试")
 public class PassengerControllerTest {
 
-  private String baseUri = "/api/v1";
+  private final String baseUri = "/api/v1";
 
   @Test
   @DisplayName("创建乘客")

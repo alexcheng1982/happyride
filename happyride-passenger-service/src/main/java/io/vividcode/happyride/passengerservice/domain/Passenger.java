@@ -57,6 +57,10 @@ public class Passenger extends BaseEntityWithGeneratedId {
     userAddresses.remove(userAddress);
   }
 
+  public void removeUserAddress(String addressId) {
+    getUserAddress(addressId).ifPresent(this::removeUserAddress);
+  }
+
   public Optional<UserAddress> getUserAddress(String addressId) {
     return userAddresses.stream()
         .filter(address -> Objects.equals(address.getId(), addressId))
