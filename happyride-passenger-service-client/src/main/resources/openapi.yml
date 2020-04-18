@@ -1,0 +1,162 @@
+openapi: '3.0.3'
+info:
+  title: Passenger management service
+  version: '1.0'
+servers:
+  - url: http://localhost:8500/api/v1
+tags:
+  - name: passenger
+    description: Passenger
+paths:
+  /:
+    post:
+      tags:
+        - passenger
+      summary: Create a new passenger
+      operationId: createPassenger
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePassengerRequest"
+        required: true
+      responses:
+        '201':
+          description: Created
+  /{passengerId}:
+    get:
+      tags:
+        - passenger
+      summary: Get a passenger
+      operationId: getPassenger
+      parameters:
+        - name: passengerId
+          in: path
+          description: Passenger id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PassengerVO"
+        '404':
+          description: Passenger not found
+  /{passengerId}/addresses:
+    post:
+      tags:
+        - passenger
+      summary: Create a new address
+      operationId: createAddress
+      parameters:
+        - name: passengerId
+          in: path
+          description: Passenger id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserAddressRequest"
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PassengerVO"
+  /{passengerId}/addresses/{addressId}:
+    delete:
+      tags:
+        - passenger
+      summary: Delete an address
+      operationId: deleteAddress
+      parameters:
+        - name: passengerId
+          in: path
+          description: Passenger id
+          required: true
+          schema:
+            type: string
+        - name: addressId
+          in: path
+          description: Address id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successful
+
+components:
+  schemas:
+    CreatePassengerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        mobilePhoneNumber:
+          type: string
+        userAddresses:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateUserAddressRequest"
+      required:
+        - name
+        - mobilePhoneNumber
+    CreateUserAddressRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        addressId:
+          type: string
+        addressName:
+          type: string
+      required:
+        - name
+        - addressId
+        - addressName
+    PassengerVO:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        mobilePhoneNumber:
+          type: string
+        userAddresses:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserAddressVO"
+      required:
+        - id
+        - name
+        - mobilePhoneNumber
+    UserAddressVO:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        addressId:
+          type: string
+        addressName:
+          type: string
+      required:
+        - id
+        - name
+        - addressId
+        - addressName

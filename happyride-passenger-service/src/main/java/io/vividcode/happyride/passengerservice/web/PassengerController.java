@@ -45,13 +45,6 @@ public class PassengerController {
     return ResponseEntity.created(resourceCreated(passenger.getId())).body(passenger);
   }
 
-  @GetMapping("{id}/addresses")
-  public List<UserAddressVO> getAddresses(@PathVariable("id") String passengerId) {
-    return passengerService.getPassenger(passengerId)
-        .map(PassengerVO::getUserAddresses)
-        .orElse(new ArrayList<>());
-  }
-
   @PostMapping("{id}/addresses")
   public ResponseEntity<PassengerVO> createAddress(@PathVariable("id") String passengerId,
       @RequestBody CreateUserAddressRequest request) {

@@ -1,8 +1,11 @@
 package io.vividcode.happyride.passengerservice;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
-import io.vividcode.happyride.passengerservice.api.web.UserAddressVO;
+import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
 import io.vividcode.happyride.passengerservice.domain.PassengerUtils;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
 import java.net.URI;
@@ -33,14 +36,20 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
 })
-@DisplayName("乘客控制器测试")
+@DisplayName("Passenger controller test")
 public class PassengerControllerTest {
 
   private final String baseUri = "/api/v1";
 
+  @Autowired
+  WebTestClient webClient;
+
+  @Autowired
+  TestRestTemplate restTemplate;
+
   @Test
-  @DisplayName("创建乘客")
-  public void testCreatePassenger(@Autowired WebTestClient webClient) {
+  @DisplayName("Create a new passenger")
+  public void testCreatePassenger() {
     webClient.post()
         .uri(baseUri)
         .bodyValue(PassengerUtils.buildCreatePassengerRequest(1))
@@ -51,40 +60,40 @@ public class PassengerControllerTest {
   }
 
   @Test
-  @DisplayName("添加地址")
-  public void testAddUserAddress(@Autowired WebTestClient webClient,
-      @Autowired TestRestTemplate restTemplate) {
+  @DisplayName("Add a new address")
+  public void testAddUserAddress() {
     URI passengerUri = restTemplate
-        .postForLocation(baseUri, PassengerUtils.buildCreatePassengerRequest(1));
+        .postForLocation(baseUri,
+            PassengerUtils.buildCreatePassengerRequest(1));
     URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
         .path("/addresses").build().toUri();
     webClient.post().uri(addressesUri)
         .bodyValue(PassengerUtils.buildCreateUserAddressRequest())
         .exchange()
-        .expectStatus().isCreated()
-        .expectHeader().exists(HttpHeaders.LOCATION);
+        .expectStatus().isOk()
+        .expectBody(PassengerVO.class)
+        .value(hasProperty("userAddresses", hasSize(2)));
   }
 
   @Test
-  @DisplayName("删除地址")
-  public void testRemoveAddress(@Autowired WebTestClient webClient,
-      @Autowired TestRestTemplate restTemplate) {
+  @DisplayName("Remove an address")
+  public void testRemoveAddress() {
     URI passengerUri = restTemplate
-        .postForLocation(baseUri, PassengerUtils.buildCreatePassengerRequest(0));
-    URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
-        .path("/addresses").build().toUri();
-    URI addressUri = restTemplate
-        .postForLocation(addressesUri, PassengerUtils.buildCreateUserAddressRequest());
-    restTemplate.postForLocation(addressesUri, PassengerUtils.buildCreateUserAddressRequest());
-    restTemplate.postForLocation(addressesUri, PassengerUtils.buildCreateUserAddressRequest());
+        .postForLocation(baseUri,
+            PassengerUtils.buildCreatePassengerRequest(3));
+    PassengerVO passenger = restTemplate
+        .getForObject(passengerUri, PassengerVO.class);
+    String addressId = passenger.getUserAddresses().get(0).getId();
+    URI addressUri = ServletUriComponentsBuilder.fromUri(passengerUri)
+        .path("/addresses/" + addressId).build().toUri();
     webClient.delete().uri(addressUri)
         .exchange()
         .expectStatus().isNoContent();
-    webClient.get().uri(addressesUri)
+    webClient.get().uri(passengerUri)
         .exchange()
         .expectStatus().isOk()
-        .expectBodyList(UserAddressVO.class)
-        .hasSize(2);
+        .expectBody(PassengerVO.class)
+        .value(hasProperty("userAddresses", hasSize(2)));
   }
 
 }

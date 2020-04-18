@@ -23,14 +23,14 @@ paths:
       responses:
         '201':
           description: 创建成功
-  /{id}:        
+  /{tripId}:
     get:
       tags:
         - trip
       summary: 获取行程
       operationId: getTrip
       parameters:
-        - name: id
+        - name: tripId
           in: path
           description: 行程ID
           required: true
@@ -45,14 +45,14 @@ paths:
                 $ref: "#/components/schemas/TripVO"
         '404':
           description: 找不到行程
-  /{id}/accept:
+  /{tripId}/accept:
     post:
       tags:
         - trip
       summary: 接受行程
       operationId: acceptTrip
       parameters:
-        - name: id
+        - name: tripId
           in: path
           description: 行程ID
           required: true

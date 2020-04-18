@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>happyride-trip-service-client</artifactId>
+  <artifactId>happyride-passenger-service-client</artifactId>
 
   <properties>
     <swagger-core-version>2.0.10</swagger-core-version>
@@ -23,7 +23,7 @@
   <dependencies>
     <dependency>
       <groupId>io.vividcode.happyride</groupId>
-      <artifactId>happyride-trip-service-api</artifactId>
+      <artifactId>happyride-passenger-service-api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -78,14 +78,14 @@
             <configuration>
               <inputSpec>${project.basedir}/src/main/resources/openapi.yml</inputSpec>
               <language>java</language>
-              <apiPackage>io.vividcode.happyride.tripservice.client.api</apiPackage>
+              <apiPackage>io.vividcode.happyride.passengerservice.client.api</apiPackage>
               <generateModels>false</generateModels>
               <generateApiTests>false</generateApiTests>
               <importMappings>
-                <importMapping>CreateTripRequest=io.vividcode.happyride.tripservice.api.web.CreateTripRequest</importMapping>
-                <importMapping>AcceptTripRequest=io.vividcode.happyride.tripservice.api.web.AcceptTripRequest</importMapping>
-                <importMapping>PositionVO=io.vividcode.happyride.common.PositionVO</importMapping>
-                <importMapping>TripVO=io.vividcode.happyride.tripservice.api.web.TripVO</importMapping>
+                <importMapping>CreatePassengerRequest=io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest</importMapping>
+                <importMapping>CreateUserAddressRequest=io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest</importMapping>
+                <importMapping>PassengerVO=io.vividcode.happyride.passengerservice.api.web.PassengerVO</importMapping>
+                <importMapping>UserAddressVO=io.vividcode.happyride.passengerservice.api.web.UserAddressVO</importMapping>
               </importMappings>
               <configOptions>
               </configOptions>
