@@ -2,6 +2,7 @@ package io.vividcode.happyride.tripservice.service;
 
 import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
+import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
 import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
@@ -13,6 +14,7 @@ import io.vividcode.happyride.tripservice.api.web.TripVO;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
 import io.vividcode.happyride.tripservice.domain.Trip;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
+import io.vividcode.happyride.tripservice.sagas.createtrip.CreateTripSaga;
 import io.vividcode.happyride.tripservice.sagas.createtrip.CreateTripSagaState;
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -33,7 +35,10 @@ public class TripService {
   TripDomainEventPublisher tripAggregateEventPublisher;
 
   @Autowired
-  SagaManager<CreateTripSagaState> createTripSagaManager;
+  SagaInstanceFactory sagaInstanceFactory;
+
+  @Autowired
+  CreateTripSaga createTripSaga;
 
   public TripVO createTrip(String passengerId, PositionVO startPos, PositionVO endPos) {
     ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
@@ -44,7 +49,7 @@ public class TripService {
 
     TripDetails tripDetails = new TripDetails(passengerId, startPos, endPos);
     CreateTripSagaState data = new CreateTripSagaState(trip.getId(), tripDetails);
-    createTripSagaManager.create(data, Trip.class, trip.getId());
+    sagaInstanceFactory.create(createTripSaga, data);
     return trip.serialize();
   }
 

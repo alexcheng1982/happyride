@@ -52,7 +52,8 @@ public class PassengerControllerClientTest {
   void testCreatePassenger() {
     try {
       ApiResponse<Void> response = passengerApi
-          .createPassengerWithHttpInfo(PassengerUtils.buildCreatePassengerRequest(1));
+          .createPassengerWithHttpInfo(
+              PassengerUtils.buildCreatePassengerRequest(1));
       assertThat(response.getStatusCode()).isEqualTo(201);
       assertThat(response.getHeaders()).containsKey("Location");
     } catch (ApiException e) {
@@ -66,7 +67,8 @@ public class PassengerControllerClientTest {
     try {
       String passengerId = createPassenger(1);
       PassengerVO passenger = passengerApi
-          .createAddress(PassengerUtils.buildCreateUserAddressRequest(), passengerId);
+          .createAddress(PassengerUtils.buildCreateUserAddressRequest(),
+              passengerId);
       assertThat(passenger.getUserAddresses()).hasSize(2);
     } catch (ApiException e) {
       fail(e);
@@ -90,7 +92,8 @@ public class PassengerControllerClientTest {
 
   private String createPassenger(int numberOfAddresses) throws ApiException {
     ApiResponse<Void> response = passengerApi
-        .createPassengerWithHttpInfo(PassengerUtils.buildCreatePassengerRequest(numberOfAddresses));
+        .createPassengerWithHttpInfo(
+            PassengerUtils.buildCreatePassengerRequest(numberOfAddresses));
     assertThat(response.getHeaders()).containsKey("Location");
     String location = response.getHeaders().get("Location").get(0);
     return StringUtils.substringAfterLast(location, "/");

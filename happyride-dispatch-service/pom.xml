@@ -31,11 +31,11 @@
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
-      <artifactId>eventuate-tram-jdbc-kafka</artifactId>
+      <artifactId>eventuate-tram-spring-jdbc-kafka</artifactId>
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.sagas</groupId>
-      <artifactId>eventuate-tram-sagas-participant</artifactId>
+      <artifactId>eventuate-tram-sagas-spring-participant</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

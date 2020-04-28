@@ -1,6 +1,6 @@
 package io.vividcode.happyride.tripvalidationservice;
 
-import io.eventuate.tram.jdbckafka.TramJdbcKafkaConfiguration;
+import io.eventuate.tram.spring.jdbckafka.TramJdbcKafkaConfiguration;
 import io.vividcode.happyride.tripvalidationservice.domain.TripValidationServiceConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

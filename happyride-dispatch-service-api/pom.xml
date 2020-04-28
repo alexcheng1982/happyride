@@ -24,11 +24,11 @@
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
-      <artifactId>eventuate-tram-events</artifactId>
+      <artifactId>eventuate-tram-spring-events</artifactId>
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
-      <artifactId>eventuate-tram-commands</artifactId>
+      <artifactId>eventuate-tram-spring-commands</artifactId>
     </dependency>
     <dependency>
       <artifactId>lombok</artifactId>

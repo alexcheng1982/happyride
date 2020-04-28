@@ -1,8 +1,8 @@
 package io.vividcode.happyride.dispatchservice;
 
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
-import io.eventuate.tram.events.publisher.TramEventsPublisherConfiguration;
-import io.eventuate.tram.jdbckafka.TramJdbcKafkaConfiguration;
+import io.eventuate.tram.spring.events.publisher.TramEventsPublisherConfiguration;
+import io.eventuate.tram.spring.jdbckafka.TramJdbcKafkaConfiguration;
 import io.vividcode.happyride.dispatchservice.commandhandlers.DispatchCommandHandlersConfiguration;
 import io.vividcode.happyride.dispatchservice.domain.DispatchDomainEventPublisher;
 import io.vividcode.happyride.dispatchservice.messagehandlers.DispatchServiceMessageHandlersConfiguration;
