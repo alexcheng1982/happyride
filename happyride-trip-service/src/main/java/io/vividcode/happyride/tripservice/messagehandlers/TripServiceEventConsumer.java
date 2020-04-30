@@ -6,7 +6,7 @@ import io.eventuate.tram.events.subscriber.DomainEventHandlersBuilder;
 import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceSelectedEvent;
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchFailedEvent;
 import io.vividcode.happyride.dispatchservice.api.events.TripDispatchedEvent;
-import io.vividcode.happyride.tripservice.service.TripService;
+import io.vividcode.happyride.tripservice.domain.TripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 

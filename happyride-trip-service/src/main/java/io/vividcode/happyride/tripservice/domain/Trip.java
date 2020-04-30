@@ -16,7 +16,6 @@ import io.vividcode.happyride.tripservice.api.events.TripFinishedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripRejectedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripStartedEvent;
 import io.vividcode.happyride.tripservice.api.web.TripVO;
-import io.vividcode.happyride.tripservice.service.IllegalTripStateException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.AttributeOverride;

@@ -10,7 +10,7 @@ import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
 import io.vividcode.happyride.tripservice.api.TripServiceChannels;
 import io.vividcode.happyride.tripservice.sagaparticipants.ConfirmTripCommand;
 import io.vividcode.happyride.tripservice.sagaparticipants.RejectTripCommand;
-import io.vividcode.happyride.tripservice.service.TripService;
+import io.vividcode.happyride.tripservice.domain.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

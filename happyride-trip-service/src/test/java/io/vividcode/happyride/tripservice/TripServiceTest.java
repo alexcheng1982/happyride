@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
+import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
 import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
@@ -18,8 +19,9 @@ import io.vividcode.happyride.tripservice.api.web.TripVO;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
 import io.vividcode.happyride.tripservice.domain.Trip;
 import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
+import io.vividcode.happyride.tripservice.sagas.createtrip.CreateTripSaga;
 import io.vividcode.happyride.tripservice.sagas.createtrip.CreateTripSagaState;
-import io.vividcode.happyride.tripservice.service.TripService;
+import io.vividcode.happyride.tripservice.domain.TripService;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -55,7 +57,7 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
 })
-@DisplayName("行程服务")
+@DisplayName("Trip service")
 public class TripServiceTest {
 
   @Autowired
@@ -65,7 +67,10 @@ public class TripServiceTest {
   TripDomainEventPublisher eventPublisher;
 
   @MockBean
-  SagaManager<CreateTripSagaState> sagaManager;
+  SagaInstanceFactory sagaInstanceFactory;
+
+  @MockBean
+  CreateTripSaga createTripSaga;
 
   @Captor
   private ArgumentCaptor<Trip> tripCaptor;
@@ -79,7 +84,7 @@ public class TripServiceTest {
   }
 
   @Test
-  @DisplayName("行程取消成功")
+  @DisplayName("Cancel trip")
   public void testCancelTrip() {
     TripVO trip = tripService.createTrip(uuid(), position0(), position0());
     String tripId = trip.getId();
@@ -88,7 +93,7 @@ public class TripServiceTest {
 
     assertThat(tripService.getTrip(tripId))
         .hasValueSatisfying(t -> assertThat(t.getState()).isEqualTo(
-            TripState.CANCELLED));
+            TripState.CANCELLED.name()));
     verify(eventPublisher, times(3))
         .publish(tripCaptor.capture(), eventsCaptor.capture());
     assertThat(eventsCaptor.getValue()).hasSize(1)
@@ -96,7 +101,7 @@ public class TripServiceTest {
   }
 
   @Test
-  @DisplayName("行程取消需要调解")
+  @DisplayName("Trip cancellation requires resolution")
   public void testCancelTripRequiresResolution() {
     TripVO trip = tripService.createTrip(uuid(), position0(), position0());
     String tripId = trip.getId();
@@ -105,7 +110,7 @@ public class TripServiceTest {
 
     assertThat(tripService.getTrip(tripId))
         .hasValueSatisfying(t -> assertThat(t.getState()).isEqualTo(
-            TripState.CANCELLATION_REJECTED_BY_DRIVER));
+            TripState.CANCELLATION_REJECTED_BY_DRIVER.name()));
     verify(eventPublisher, times(3))
         .publish(tripCaptor.capture(), eventsCaptor.capture());
     assertThat(eventsCaptor.getValue()).hasSize(1)

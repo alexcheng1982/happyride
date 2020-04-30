@@ -1,4 +1,4 @@
-package io.vividcode.happyride.tripservice.service;
+package io.vividcode.happyride.tripservice.domain;
 
 import io.vividcode.happyride.tripservice.api.TripState;
 

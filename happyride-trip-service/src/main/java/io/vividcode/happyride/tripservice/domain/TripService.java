@@ -1,4 +1,4 @@
-package io.vividcode.happyride.tripservice.service;
+package io.vividcode.happyride.tripservice.domain;
 
 import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;

@@ -28,7 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfig.class)
-@DisplayName("行程Saga")
+@DisplayName("Trip saga")
 public class CreateTripSagaTest {
 
   @Autowired
@@ -41,7 +41,7 @@ public class CreateTripSagaTest {
   DispatchServiceProxy dispatchService;
 
   @Test
-  @DisplayName("正确的行程创建")
+  @DisplayName("Create trip")
   public void shouldCreateTrip() {
     String tripId = uuid();
     TripDetails tripDetails = tripDetails0();
@@ -59,7 +59,7 @@ public class CreateTripSagaTest {
   }
 
   @Test
-  @DisplayName("行程校验失败时拒绝行程")
+  @DisplayName("Reject trip due to validation failed")
   public void shouldRejectTripDueToTripValidationFailed() {
     String tripId = uuid();
     TripDetails tripDetails = tripDetails0();
@@ -72,7 +72,7 @@ public class CreateTripSagaTest {
   }
 
   @Test
-  @DisplayName("派发验证失败时拒绝行程")
+  @DisplayName("Reject trip due to dispatch verification failed")
   public void shouldRejectTripDueToDispatchVerificationFailed() {
     String tripId = uuid();
     TripDetails tripDetails = tripDetails0();

@@ -4,7 +4,7 @@ import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.web.AcceptTripRequest;
 import io.vividcode.happyride.tripservice.api.web.CreateTripRequest;
 import io.vividcode.happyride.tripservice.api.web.TripVO;
-import io.vividcode.happyride.tripservice.service.TripService;
+import io.vividcode.happyride.tripservice.domain.TripService;
 import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

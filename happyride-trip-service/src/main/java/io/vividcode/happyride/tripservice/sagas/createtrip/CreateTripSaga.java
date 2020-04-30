@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CreateTripSaga implements SimpleSaga<CreateTripSagaState> {
 
-  private SagaDefinition<CreateTripSagaState> sagaDefinition;
+  private final SagaDefinition<CreateTripSagaState> sagaDefinition;
 
   public CreateTripSaga(TripServiceProxy tripService,
       TripValidationServiceProxy tripValidationService,
