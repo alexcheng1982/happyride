@@ -12,8 +12,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:8431/happyride-passenger
-    username: happyride-passenger-user
-    password: happyride-passenger-password
+    username: postgres
+    password: postgres
   flyway:
     schemas:
       - happyride

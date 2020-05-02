@@ -36,32 +36,32 @@ services:
       - 8430:5432
     environment:
       POSTGRES_DB: happyride-address
-      POSTGRES_USER: happyride-address-user
-      POSTGRES_PASSWORD: happyride-address-password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
   postgres-passenger:
     image: eventuateio/eventuate-postgres:0.9.0.RELEASE
     ports:
       - 8431:5432
     environment:
       POSTGRES_DB: happyride-passenger
-      POSTGRES_USER: happyride-passenger-user
-      POSTGRES_PASSWORD: happyride-passenger-password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
   postgres-trip:
     image: eventuateio/eventuate-postgres:0.9.0.RELEASE
     ports:
       - 8432:5432
     environment:
       POSTGRES_DB: happyride-trip
-      POSTGRES_USER: happyride-trip-user
-      POSTGRES_PASSWORD: happyride-trip-password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
   postgres-dispatch:
     image: eventuateio/eventuate-postgres:0.9.0.RELEASE
     ports:
       - 8433:5432
     environment:
       POSTGRES_DB: happyride-dispatch
-      POSTGRES_USER: happyride-dispatch-user
-      POSTGRES_PASSWORD: happyride-dispatch-password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
 
   postgres-trip-validation:
     image: eventuateio/eventuate-postgres:0.9.0.RELEASE
@@ -69,8 +69,8 @@ services:
       - 8434:5432
     environment:
       POSTGRES_DB: happyride-trip-validation
-      POSTGRES_USER: happyride-trip-validation-user
-      POSTGRES_PASSWORD: happyride-trip-validation-password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
   cdc-service:
     image: eventuateio/eventuate-cdc-service:0.6.0.RELEASE
     ports:
@@ -94,8 +94,8 @@ services:
 
       EVENTUATE_CDC_READER_TRIP_TYPE: postgres-wal
       EVENTUATE_CDC_READER_TRIP_DATASOURCEURL: jdbc:postgresql://postgres-trip/happyride-trip
-      EVENTUATE_CDC_READER_TRIP_DATASOURCEUSERNAME: happyride-trip-user
-      EVENTUATE_CDC_READER_TRIP_DATASOURCEPASSWORD: happyride-trip-password
+      EVENTUATE_CDC_READER_TRIP_DATASOURCEUSERNAME: postgres
+      EVENTUATE_CDC_READER_TRIP_DATASOURCEPASSWORD: postgres
       EVENTUATE_CDC_READER_TRIP_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
       EVENTUATE_CDC_READER_TRIP_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/trip
 
@@ -105,8 +105,8 @@ services:
 
       EVENTUATE_CDC_READER_DISPATCH_TYPE: postgres-wal
       EVENTUATE_CDC_READER_DISPATCH_DATASOURCEURL: jdbc:postgresql://postgres-dispatch/happyride-dispatch
-      EVENTUATE_CDC_READER_DISPATCH_DATASOURCEUSERNAME: happyride-dispatch-user
-      EVENTUATE_CDC_READER_DISPATCH_DATASOURCEPASSWORD: happyride-dispatch-password
+      EVENTUATE_CDC_READER_DISPATCH_DATASOURCEUSERNAME: postgres
+      EVENTUATE_CDC_READER_DISPATCH_DATASOURCEPASSWORD: postgres
       EVENTUATE_CDC_READER_DISPATCH_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
       EVENTUATE_CDC_READER_DISPATCH_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/dispatch
 
@@ -116,7 +116,7 @@ services:
 
       EVENTUATE_CDC_READER_TRIPVALIDATION_TYPE: postgres-wal
       EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEURL: jdbc:postgresql://postgres-trip-validation/happyride-trip-validation
-      EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEUSERNAME: happyride-trip-validation-user
-      EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEPASSWORD: happyride-trip-validation-password
+      EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEUSERNAME: postgres
+      EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEPASSWORD: postgres
       EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
       EVENTUATE_CDC_READER_TRIPVALIDATION_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/trip_validation

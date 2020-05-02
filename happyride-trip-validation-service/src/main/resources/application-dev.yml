@@ -4,8 +4,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:8434/happyride-trip-validation
-    username: happyride-trip-validation-user
-    password: happyride-trip-validation-password
+    username: postgres
+    password: postgres
 eventuatelocal:
   kafka:
     bootstrap:
