@@ -21,6 +21,7 @@ public class DispatchServiceMessageHandlersConfiguration {
       DispatchServiceEventConsumer dispatchServiceEventConsumer,
       DomainEventDispatcherFactory domainEventDispatcherFactory) {
     return domainEventDispatcherFactory
-        .make("dispatchServiceEvents", dispatchServiceEventConsumer.domainEventHandlers());
+        .make("dispatchServiceEvents",
+            dispatchServiceEventConsumer.domainEventHandlers());
   }
 }

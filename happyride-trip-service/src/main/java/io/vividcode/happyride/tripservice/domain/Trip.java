@@ -162,7 +162,7 @@ public class Trip extends BaseEntityWithGeneratedId {
     }
   }
 
-  public TripVO serialize() {
+  public TripVO toTripVO() {
     TripVO tripVO = new TripVO();
     tripVO.setId(getId());
     tripVO.setPassengerId(getPassengerId());

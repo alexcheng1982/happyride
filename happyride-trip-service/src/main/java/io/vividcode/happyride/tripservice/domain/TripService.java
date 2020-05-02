@@ -3,7 +3,6 @@ package io.vividcode.happyride.tripservice.domain;
 import com.google.common.collect.ImmutableList;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
-import io.eventuate.tram.sagas.orchestration.SagaManager;
 import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.tripservice.api.events.CancellationParty;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
@@ -12,8 +11,6 @@ import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDomainEvent;
 import io.vividcode.happyride.tripservice.api.web.TripVO;
 import io.vividcode.happyride.tripservice.dataaccess.TripRepository;
-import io.vividcode.happyride.tripservice.domain.Trip;
-import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
 import io.vividcode.happyride.tripservice.sagas.createtrip.CreateTripSaga;
 import io.vividcode.happyride.tripservice.sagas.createtrip.CreateTripSagaState;
 import java.math.BigDecimal;
@@ -32,7 +29,7 @@ public class TripService {
   TripRepository tripRepository;
 
   @Autowired
-  TripDomainEventPublisher tripAggregateEventPublisher;
+  TripDomainEventPublisher tripDomainEventPublisher;
 
   @Autowired
   SagaInstanceFactory sagaInstanceFactory;
@@ -45,16 +42,16 @@ public class TripService {
         .createTrip(passengerId, startPos, endPos);
     Trip trip = tripAndEvents.result;
     tripRepository.save(trip);
-    tripAggregateEventPublisher.publish(trip, tripAndEvents.events);
+    tripDomainEventPublisher.publish(trip, tripAndEvents.events);
 
     TripDetails tripDetails = new TripDetails(passengerId, startPos, endPos);
     CreateTripSagaState data = new CreateTripSagaState(trip.getId(), tripDetails);
     sagaInstanceFactory.create(createTripSaga, data);
-    return trip.serialize();
+    return trip.toTripVO();
   }
 
   public Optional<TripVO> getTrip(String id) {
-    return tripRepository.findById(id).map(Trip::serialize);
+    return tripRepository.findById(id).map(Trip::toTripVO);
   }
 
   public void markTripAsDispatched(String tripId) {
@@ -63,7 +60,7 @@ public class TripService {
 
   public void driverAcceptTrip(String tripId, String driverId, BigDecimal posLng,
       BigDecimal posLat) {
-    withTrip(tripId, trip -> tripAggregateEventPublisher.publish(trip,
+    withTrip(tripId, trip -> tripDomainEventPublisher.publish(trip,
         ImmutableList
             .of(new DriverAcceptTripEvent(new DriverAcceptTripDetails(driverId, posLng, posLat)))));
   }
@@ -112,6 +109,6 @@ public class TripService {
   private void saveAndPublishEvents(ResultWithDomainEvents<Trip, TripDomainEvent> result) {
     Trip trip = result.result;
     tripRepository.save(trip);
-    tripAggregateEventPublisher.publish(trip, result.events);
+    tripDomainEventPublisher.publish(trip, result.events);
   }
 }
