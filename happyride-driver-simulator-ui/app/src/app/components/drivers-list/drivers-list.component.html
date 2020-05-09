@@ -1,0 +1,61 @@
+<table mat-table [dataSource]="drivers">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>Driver ID</th>
+    <td mat-cell *matCellDef="let driver">{{ driver.driverId }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="state">
+    <th mat-header-cell *matHeaderCellDef>State</th>
+    <td mat-cell *matCellDef="let driver">{{ driver.state }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef>Position (Lat, Lng)</th>
+    <td mat-cell *matCellDef="let driver">
+      {{ driver.posLat }}, {{ driver.posLng }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let driver">
+      <div class="button-row">
+        <button
+          *ngIf="driver.isOffline"
+          (click)="sendAction(driver, 'start')"
+          mat-stroked-button
+          color="primary"
+        >
+          Start
+        </button>
+        <button
+          *ngIf="driver.isNotAvailable"
+          (click)="sendAction(driver, 'markAsAvailable')"
+          mat-stroked-button
+          color="accent"
+        >
+          Mark as available
+        </button>
+        <button
+          *ngIf="driver.isAvailable"
+          (click)="sendAction(driver, 'markAsNotAvailable')"
+          mat-stroked-button
+          color="accent"
+        >
+          Mark as not available
+        </button>
+        <button
+          *ngIf="!driver.isOffline"
+          (click)="sendAction(driver, 'stop')"
+          mat-stroked-button
+          color="warn"
+        >
+          Stop
+        </button>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

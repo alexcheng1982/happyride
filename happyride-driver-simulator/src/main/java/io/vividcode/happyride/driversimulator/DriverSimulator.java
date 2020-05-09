@@ -32,85 +32,95 @@ public class DriverSimulator {
   private final String driverId;
   private final String vehicleId;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DriverSimulator.class);
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(DriverSimulator.class);
 
-  public DriverSimulator(String driverId, String vehicleId, EventGateway eventGateway,
-      DriverLocation initialLocation) {
+  public DriverSimulator(final String driverId, final String vehicleId,
+      final EventGateway eventGateway,
+      final DriverLocation initialLocation) {
     this.id = UUID.randomUUID().toString();
     this.driverId = driverId;
     this.vehicleId = vehicleId;
-    currentLocation = initialLocation;
+    this.currentLocation = initialLocation;
     this.eventGateway = eventGateway;
   }
 
   public String getId() {
-    return id;
+    return this.id;
+  }
+
+  public String getDriverId() {
+    return this.driverId;
   }
 
   public void startSimulation() {
-    LOGGER.info("Start simulation for driver [{}] with vehicle [{}]", driverId, vehicleId);
-    state = DriverState.AVAILABLE;
-    stop = EmitterProcessor.create();
+    LOGGER.info("Start simulation for driver [{}] with vehicle [{}]",
+        this.driverId,
+        this.vehicleId);
+    this.state = DriverState.AVAILABLE;
+    this.stop = EmitterProcessor.create();
     Flux.interval(Duration.ofSeconds(5))
-        .takeUntilOther(stop)
+        .takeUntilOther(this.stop)
         .subscribe((v) -> {
-          updateLocation();
-          sendLocation();
+          this.updateLocation();
+          this.sendLocation();
         });
   }
 
   public void stopSimulation() {
-    LOGGER.info("Stop simulation for driver [{}] with vehicle [{}]", driverId, vehicleId);
-    state = DriverState.OFFLINE;
-    stop.onNext(true);
+    LOGGER.info("Stop simulation for driver [{}] with vehicle [{}]",
+        this.driverId,
+        this.vehicleId);
+    this.state = DriverState.OFFLINE;
+    this.stop.onNext(true);
   }
 
-  public void resetPosition(BigDecimal lng, BigDecimal lat) {
-    currentLocation = currentLocation.resetTo(lng, lat);
+  public void resetPosition(final BigDecimal lng, final BigDecimal lat) {
+    this.currentLocation = this.currentLocation.resetTo(lng, lat);
   }
 
   public void markAsAvailable() {
-    state = DriverState.AVAILABLE;
+    this.state = DriverState.AVAILABLE;
   }
 
   public void markAsNotAvailable() {
-    state = DriverState.NOT_AVAILABLE;
+    this.state = DriverState.NOT_AVAILABLE;
   }
 
   private void sendLocation() {
-    DriverLocationUpdatedEvent event = new DriverLocationUpdatedEvent();
+    final DriverLocationUpdatedEvent event = new DriverLocationUpdatedEvent();
     event.setTimestamp(System.currentTimeMillis());
-    event.setLocation(currentLocation);
-    event.setState(state);
-    eventGateway.publish(event);
+    event.setLocation(this.currentLocation);
+    event.setState(this.state);
+    this.eventGateway.publish(event);
   }
 
   private void updateLocation() {
-    ThreadLocalRandom random = ThreadLocalRandom.current();
-    boolean shouldTurn = random.nextInt(3) > 1;
+    final ThreadLocalRandom random = ThreadLocalRandom.current();
+    final boolean shouldTurn = random.nextInt(3) > 1;
     if (shouldTurn) {
-      boolean turnLeft = random.nextBoolean();
+      final boolean turnLeft = random.nextBoolean();
       if (turnLeft) {
-        direction = (direction + 3) % 4;
+        this.direction = (this.direction + 3) % 4;
       } else {
-        direction = direction++ % 4;
+        this.direction = this.direction++ % 4;
       }
     }
-    int speed = random.nextInt(1, 4);
-    double latDelta = deltas[direction][0] * 0.000001 * speed;
-    double lngDelta = deltas[direction][1] * 0.000001 * speed;
-    currentLocation = currentLocation
+    final int speed = random.nextInt(1, 4);
+    final double latDelta = this.deltas[this.direction][0] * 0.000001 * speed;
+    final double lngDelta = this.deltas[this.direction][1] * 0.000001 * speed;
+    this.currentLocation = this.currentLocation
         .moveTo(BigDecimal.valueOf(lngDelta), BigDecimal.valueOf(latDelta));
   }
 
   public DriverSimulatorSnapshot dump() {
-    DriverSimulatorSnapshot snapshot = new DriverSimulatorSnapshot();
-    snapshot.setId(id);
-    snapshot.setDriverId(driverId);
-    snapshot.setVehicleId(vehicleId);
-    snapshot.setState(state);
-    snapshot.setPosLng(currentLocation.getLng());
-    snapshot.setPosLat(currentLocation.getLat());
+    final DriverSimulatorSnapshot snapshot = new DriverSimulatorSnapshot();
+    snapshot.setId(this.id);
+    snapshot.setDriverId(this.driverId);
+    snapshot.setVehicleId(this.vehicleId);
+    snapshot.setState(this.state);
+    snapshot.setPosLng(this.currentLocation.getLng());
+    snapshot.setPosLat(this.currentLocation.getLat());
     return snapshot;
   }
 }

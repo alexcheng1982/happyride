@@ -23,6 +23,7 @@
     <module>happyride-trip-service-cqrs-api</module>
     <module>happyride-trip-service-client</module>
     <module>happyride-passenger-service-client</module>
+    <module>happyride-driver-simulator-ui</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>

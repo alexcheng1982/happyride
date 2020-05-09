@@ -1,0 +1,12 @@
+table {
+  width: 100%;
+}
+
+.button-row {
+  display: table-cell;
+
+  button {
+    display: table-cell;
+    margin-right: 8px;
+  }
+}

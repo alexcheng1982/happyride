@@ -1,0 +1,14 @@
+<div>
+  <mat-toolbar color="primary">
+    <span>Driver Simulator</span>
+    <span class="spacer"></span>
+    <button mat-raised-button (click)="addDriver()">
+      <mat-icon>add_circle</mat-icon>
+      <span>Add Driver</span>
+    </button>
+  </mat-toolbar>
+  <app-drivers-list
+    [drivers]="drivers"
+    (actions)="handleSimulatorAction($event)"
+  ></app-drivers-list>
+</div>
