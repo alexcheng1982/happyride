@@ -30,47 +30,59 @@ public class TripAcceptanceService {
   @Autowired
   TaskScheduler taskScheduler;
 
-  private final Distance searchRadius = new Distance(10, DistanceUnit.KILOMETERS);
+  private final Distance searchRadius = new Distance(10,
+      DistanceUnit.KILOMETERS);
   private final String passenger = "__passenger__";
   private final int acceptanceCheckMaxTimes = 3;
 
-  public void startTripAcceptanceCheck(String tripId, TripDetails tripDetails, Duration interval,
-      BiConsumer<String, String> successCallback,
-      BiConsumer<String, TripDispatchFailedReason> failureCallback) {
-    redisTemplate.opsForGeo()
-        .add(keyForTripAcceptance(tripId),
+  public void startTripAcceptanceCheck(final String tripId,
+      final TripDetails tripDetails,
+      final Duration interval,
+      final BiConsumer<String, String> successCallback,
+      final BiConsumer<String, TripDispatchFailedReason> failureCallback) {
+    this.redisTemplate.opsForGeo()
+        .add(this.keyForTripAcceptance(tripId),
             new Point(tripDetails.getStartPos().getLng().doubleValue(),
-                tripDetails.getStartPos().getLat().doubleValue()), passenger);
-    scheduleCheckTripAcceptanceTask(tripId, interval, successCallback, failureCallback, 1);
+                tripDetails.getStartPos().getLat().doubleValue()),
+            this.passenger);
+    this.scheduleCheckTripAcceptanceTask(tripId, interval, successCallback,
+        failureCallback, 1);
   }
 
-  private void scheduleCheckTripAcceptanceTask(String tripId, Duration interval,
-      BiConsumer<String, String> successCallback,
-      BiConsumer<String, TripDispatchFailedReason> failureCallback, int attempt) {
-    taskScheduler
-        .schedule(new CheckTripAcceptanceTask(tripId, interval, successCallback, failureCallback,
+  private void scheduleCheckTripAcceptanceTask(
+      final String tripId,
+      final Duration interval,
+      final BiConsumer<String, String> successCallback,
+      final BiConsumer<String, TripDispatchFailedReason> failureCallback,
+      final int attempt) {
+    this.taskScheduler
+        .schedule(new CheckTripAcceptanceTask(tripId, interval, successCallback,
+                failureCallback,
                 attempt),
             Instant.now().plusMillis(interval.toMillis()));
   }
 
-  public void addDriverToAcceptTrip(String tripId, DriverAcceptTripDetails details) {
-    redisTemplate.opsForGeo()
-        .add(keyForTripAcceptance(tripId),
+  public void addDriverToAcceptTrip(final String tripId,
+      final DriverAcceptTripDetails details) {
+    this.redisTemplate.opsForGeo()
+        .add(this.keyForTripAcceptance(tripId),
             new Point(details.getPosLng().doubleValue(),
                 details.getPosLat().doubleValue()), details.getDriverId());
   }
 
-  private Optional<String> findDriverToAcceptTrip(String tripId) {
-    GeoResults<GeoLocation<String>> results = redisTemplate.opsForGeo()
-        .radius(keyForTripAcceptance(tripId), passenger, searchRadius,
+  private Optional<String> findDriverToAcceptTrip(final String tripId) {
+    final GeoResults<GeoLocation<String>> results = this.redisTemplate
+        .opsForGeo()
+        .radius(this.keyForTripAcceptance(tripId), this.passenger,
+            this.searchRadius,
             GeoRadiusCommandArgs.newGeoRadiusArgs().sortAscending());
     return results.getContent().stream()
         .map(result -> result.getContent().getName())
-        .filter(name -> !Objects.equals(name, passenger))
+        .filter(name -> !Objects.equals(name, this.passenger))
         .findFirst();
   }
 
-  private String keyForTripAcceptance(String tripId) {
+  private String keyForTripAcceptance(final String tripId) {
     return String.format("accept_trip_%s", tripId);
   }
 
@@ -82,10 +94,10 @@ public class TripAcceptanceService {
     private final BiConsumer<String, String> successCallback;
     private final BiConsumer<String, TripDispatchFailedReason> failureCallback;
 
-    CheckTripAcceptanceTask(String tripId, Duration interval,
-        BiConsumer<String, String> successCallback,
-        BiConsumer<String, TripDispatchFailedReason> failureCallback,
-        int attempt) {
+    CheckTripAcceptanceTask(final String tripId, final Duration interval,
+        final BiConsumer<String, String> successCallback,
+        final BiConsumer<String, TripDispatchFailedReason> failureCallback,
+        final int attempt) {
       this.tripId = tripId;
       this.interval = interval;
       this.successCallback = successCallback;
@@ -95,19 +107,30 @@ public class TripAcceptanceService {
 
     @Override
     public void run() {
-      if (attempt > acceptanceCheckMaxTimes) {
-        log.warn("No acceptance for trip {}, notify dispatch failed", tripId);
-        failureCallback.accept(tripId, TripDispatchFailedReason.NO_DRIVERS_ACCEPTED);
+      if (this.attempt > TripAcceptanceService.this.acceptanceCheckMaxTimes) {
+        TripAcceptanceService.log
+            .warn("No acceptance for trip {}, notify dispatch failed",
+                this.tripId);
+        this.failureCallback
+            .accept(this.tripId, TripDispatchFailedReason.NO_DRIVERS_ACCEPTED);
         return;
       }
-      log.info("Check acceptance for trip {}", tripId);
-      Optional<String> driverToAcceptTrip = findDriverToAcceptTrip(tripId);
+      TripAcceptanceService.log
+          .info("Check acceptance for trip {}", this.tripId);
+      final Optional<String> driverToAcceptTrip = TripAcceptanceService.this
+          .findDriverToAcceptTrip(
+              this.tripId);
       if (driverToAcceptTrip.isPresent()) {
-        successCallback.accept(tripId, driverToAcceptTrip.get());
+        this.successCallback.accept(this.tripId, driverToAcceptTrip.get());
       } else {
-        log.info("No acceptance found for trip {}, will try again in {}", tripId, interval);
-        scheduleCheckTripAcceptanceTask(tripId, interval, successCallback, failureCallback,
-            attempt + 1);
+        TripAcceptanceService.log
+            .info("No acceptance found for trip {}, will try again in {}",
+                this.tripId, this.interval);
+        TripAcceptanceService.this
+            .scheduleCheckTripAcceptanceTask(this.tripId, this.interval,
+                this.successCallback,
+                this.failureCallback,
+                this.attempt + 1);
       }
     }
   }

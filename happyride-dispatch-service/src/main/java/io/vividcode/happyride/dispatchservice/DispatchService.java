@@ -36,52 +36,62 @@ public class DispatchService {
 
   private final Duration acceptanceCheckInterval = Duration.ofSeconds(10);
 
-  public void verifyDispatch(TripDetails tripDetails) {
-    Set<AvailableDriver> availableDrivers = findAvailableDrivers(tripDetails);
+  public void verifyDispatch(final TripDetails tripDetails) {
+    final Set<AvailableDriver> availableDrivers = this
+        .findAvailableDrivers(tripDetails);
     if (availableDrivers.isEmpty()) {
       throw new DispatchVerificationException("No available drivers");
     }
   }
 
   @Transactional
-  public void dispatchTrip(String tripId, TripDetails tripDetails) {
-    Set<AvailableDriver> availableDrivers = findAvailableDrivers(tripDetails);
-    saveAndPublishEvents(Dispatch.createDispatch(tripId, tripDetails, availableDrivers));
+  public void dispatchTrip(final String tripId, final TripDetails tripDetails) {
+    final Set<AvailableDriver> availableDrivers = this
+        .findAvailableDrivers(tripDetails);
+    this.saveAndPublishEvents(
+        Dispatch.createDispatch(tripId, tripDetails, availableDrivers));
     if (!availableDrivers.isEmpty()) {
-      tripAcceptanceService.startTripAcceptanceCheck(tripId, tripDetails, acceptanceCheckInterval,
+      this.tripAcceptanceService.startTripAcceptanceCheck(tripId, tripDetails,
+          this.acceptanceCheckInterval,
           this::selectTripAcceptance, this::notifyTripDispatchFailed);
       log.info("Dispatch trip {} to drivers {}", tripId, availableDrivers);
     }
   }
 
-  private Set<AvailableDriver> findAvailableDrivers(TripDetails tripDetails) {
-    PositionVO startPos = tripDetails.getStartPos();
-    return driverLocationService.findAvailableDrivers(startPos.getLng(), startPos.getLat());
+  private Set<AvailableDriver> findAvailableDrivers(
+      final TripDetails tripDetails) {
+    final PositionVO startPos = tripDetails.getStartPos();
+    return this.driverLocationService
+        .findAvailableDrivers(startPos.getLng(), startPos.getLat());
   }
 
   @Transactional
-  public void submitTripAcceptance(String tripId, DriverAcceptTripDetails details) {
-    log.info("Driver {} wants to accept trip {}", details.getDriverId(), tripId);
-    withCurrentDispatch(tripId, dispatch -> {
-      dispatchRepository.save(dispatch.submitTripAcceptance(details));
-      tripAcceptanceService.addDriverToAcceptTrip(tripId, details);
+  public void submitTripAcceptance(final String tripId,
+      final DriverAcceptTripDetails details) {
+    log.info("Driver {} wants to accept trip {}", details.getDriverId(),
+        tripId);
+    this.withCurrentDispatch(tripId, dispatch -> {
+      this.dispatchRepository.save(dispatch.submitTripAcceptance(details));
+      this.tripAcceptanceService.addDriverToAcceptTrip(tripId, details);
     });
   }
 
   @Transactional
-  public void selectTripAcceptance(String tripId, String driverId) {
+  public void selectTripAcceptance(final String tripId, final String driverId) {
     log.info("Select driver {} to accept trip {}", driverId, tripId);
-    withCurrentDispatch(tripId, dispatch ->
-        saveAndPublishEvents(dispatch.selectTripAcceptance(driverId)));
+    this.withCurrentDispatch(tripId, dispatch ->
+        this.saveAndPublishEvents(dispatch.selectTripAcceptance(driverId)));
   }
 
-  public Optional<Dispatch> findCurrentDispatchByTrip(String tripId) {
-    return dispatchRepository.findCurrentDispatch(tripId);
+  public Optional<Dispatch> findCurrentDispatchByTrip(final String tripId) {
+    return this.dispatchRepository.findCurrentDispatch(tripId);
   }
 
-  private void withCurrentDispatch(String tripId, Consumer<Dispatch> dispatchConsumer,
-      Runnable noDispatchAction) {
-    Optional<Dispatch> optionalDispatch = findCurrentDispatchByTrip(tripId);
+  private void withCurrentDispatch(final String tripId,
+      final Consumer<Dispatch> dispatchConsumer,
+      final Runnable noDispatchAction) {
+    final Optional<Dispatch> optionalDispatch = this
+        .findCurrentDispatchByTrip(tripId);
     if (optionalDispatch.isPresent()) {
       dispatchConsumer.accept(optionalDispatch.get());
     } else {
@@ -90,23 +100,25 @@ public class DispatchService {
     }
   }
 
-  private void withCurrentDispatch(String tripId, Consumer<Dispatch> dispatchConsumer) {
-    withCurrentDispatch(tripId, dispatchConsumer, () -> {
+  private void withCurrentDispatch(final String tripId,
+      final Consumer<Dispatch> dispatchConsumer) {
+    this.withCurrentDispatch(tripId, dispatchConsumer, () -> {
     });
   }
 
   @Transactional
-  public void notifyTripDispatchFailed(String tripId, TripDispatchFailedReason reason) {
+  public void notifyTripDispatchFailed(final String tripId,
+      final TripDispatchFailedReason reason) {
     log.info("Failed to dispatch trip {} with reason {}", tripId, reason);
-    withCurrentDispatch(tripId,
-        dispatch -> saveAndPublishEvents(dispatch.markAsFailed(tripId, reason)));
+    this.withCurrentDispatch(tripId,
+        dispatch -> this.saveAndPublishEvents(
+            dispatch.markAsFailed(tripId, reason)));
   }
 
-  private void saveAndPublishEvents(ResultWithDomainEvents<Dispatch, DispatchDomainEvent> result) {
-    Dispatch dispatch = result.result;
-    dispatchRepository.save(dispatch);
-    eventPublisher.publish(dispatch, result.events);
+  private void saveAndPublishEvents(
+      final ResultWithDomainEvents<Dispatch, DispatchDomainEvent> result) {
+    final Dispatch dispatch = result.result;
+    this.dispatchRepository.save(dispatch);
+    this.eventPublisher.publish(dispatch, result.events);
   }
-
-
 }

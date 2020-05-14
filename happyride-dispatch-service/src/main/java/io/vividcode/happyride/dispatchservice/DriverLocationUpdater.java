@@ -14,12 +14,12 @@ public class DriverLocationUpdater {
   DriverLocationService driverLocationService;
 
   @EventHandler
-  public void handle(DriverLocationUpdatedEvent event) {
-    DriverLocation location = event.getLocation();
+  public void handle(final DriverLocationUpdatedEvent event) {
+    final DriverLocation location = event.getLocation();
     if (event.getState() == DriverState.AVAILABLE) {
-      driverLocationService.addAvailableDriver(location);
+      this.driverLocationService.addAvailableDriver(location);
     } else {
-      driverLocationService.removeAvailableDriver(location.getDriverId());
+      this.driverLocationService.removeAvailableDriver(location.getDriverId());
     }
   }
 }

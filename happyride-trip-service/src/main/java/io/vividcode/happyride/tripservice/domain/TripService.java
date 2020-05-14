@@ -29,7 +29,7 @@ public class TripService {
   TripRepository tripRepository;
 
   @Autowired
-  TripDomainEventPublisher tripDomainEventPublisher;
+  TripDomainEventPublisher eventPublisher;
 
   @Autowired
   SagaInstanceFactory sagaInstanceFactory;
@@ -37,78 +37,87 @@ public class TripService {
   @Autowired
   CreateTripSaga createTripSaga;
 
-  public TripVO createTrip(String passengerId, PositionVO startPos, PositionVO endPos) {
-    ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
+  public TripVO createTrip(final String passengerId, final PositionVO startPos,
+      final PositionVO endPos) {
+    final ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
         .createTrip(passengerId, startPos, endPos);
-    Trip trip = tripAndEvents.result;
-    tripRepository.save(trip);
-    tripDomainEventPublisher.publish(trip, tripAndEvents.events);
+    final Trip trip = tripAndEvents.result;
+    this.tripRepository.save(trip);
+    this.eventPublisher.publish(trip, tripAndEvents.events);
 
-    TripDetails tripDetails = new TripDetails(passengerId, startPos, endPos);
-    CreateTripSagaState data = new CreateTripSagaState(trip.getId(), tripDetails);
-    sagaInstanceFactory.create(createTripSaga, data);
+    final TripDetails tripDetails = new TripDetails(passengerId, startPos,
+        endPos);
+    final CreateTripSagaState data = new CreateTripSagaState(trip.getId(),
+        tripDetails);
+    this.sagaInstanceFactory.create(this.createTripSaga, data);
     return trip.toTripVO();
   }
 
-  public Optional<TripVO> getTrip(String id) {
-    return tripRepository.findById(id).map(Trip::toTripVO);
+  public Optional<TripVO> getTrip(final String id) {
+    return this.tripRepository.findById(id).map(Trip::toTripVO);
   }
 
-  public void markTripAsDispatched(String tripId) {
-    updateTrip(tripId, Trip::markAsDispatched);
+  public void markTripAsDispatched(final String tripId) {
+    this.updateTrip(tripId, Trip::markAsDispatched);
   }
 
-  public void driverAcceptTrip(String tripId, String driverId, BigDecimal posLng,
-      BigDecimal posLat) {
-    withTrip(tripId, trip -> tripDomainEventPublisher.publish(trip,
+  public void driverAcceptTrip(final String tripId, final String driverId,
+      final BigDecimal posLng,
+      final BigDecimal posLat) {
+    this.withTrip(tripId, trip -> this.eventPublisher.publish(trip,
         ImmutableList
-            .of(new DriverAcceptTripEvent(new DriverAcceptTripDetails(driverId, posLng, posLat)))));
+            .of(new DriverAcceptTripEvent(
+                new DriverAcceptTripDetails(driverId, posLng, posLat)))));
   }
 
-  public void markTripAsAccepted(String tripId, String driverId) {
-    updateTrip(tripId, trip -> trip.acceptByDriver(driverId));
+  public void markTripAsAccepted(final String tripId, final String driverId) {
+    this.updateTrip(tripId, trip -> trip.acceptByDriver(driverId));
   }
 
-  public void markTripAsStarted(String tripId) {
-    updateTrip(tripId, Trip::startTrip);
+  public void markTripAsStarted(final String tripId) {
+    this.updateTrip(tripId, Trip::startTrip);
   }
 
-  public void markTripAsFinished(String tripId) {
-    updateTrip(tripId, Trip::finishTrip);
+  public void markTripAsFinished(final String tripId) {
+    this.updateTrip(tripId, Trip::finishTrip);
   }
 
-  public void markTripAsFailed(String tripId) {
-    updateTrip(tripId, Trip::markAsFailed);
+  public void markTripAsFailed(final String tripId) {
+    this.updateTrip(tripId, Trip::markAsFailed);
   }
 
-  public void rejectTrip(String tripId) {
-    updateTrip(tripId, Trip::rejectTrip);
+  public void rejectTrip(final String tripId) {
+    this.updateTrip(tripId, Trip::rejectTrip);
   }
 
-  public void confirmTrip(String tripId) {
-    updateTrip(tripId, Trip::confirmTrip);
+  public void confirmTrip(final String tripId) {
+    this.updateTrip(tripId, Trip::confirmTrip);
   }
 
-  public void shouldCancel(String tripId, CancellationParty initiator) {
-    updateTrip(tripId, trip -> trip.shouldCancel(initiator));
+  public void shouldCancel(final String tripId,
+      final CancellationParty initiator) {
+    this.updateTrip(tripId, trip -> trip.shouldCancel(initiator));
   }
 
-  public void shouldNotCancel(String tripId, CancellationParty initiator) {
-    updateTrip(tripId, trip -> trip.shouldNotCancel(initiator));
+  public void shouldNotCancel(final String tripId,
+      final CancellationParty initiator) {
+    this.updateTrip(tripId, trip -> trip.shouldNotCancel(initiator));
   }
 
-  private void updateTrip(String tripId,
-      Function<Trip, ResultWithDomainEvents<Trip, TripDomainEvent>> updater) {
-    withTrip(tripId, trip -> saveAndPublishEvents(updater.apply(trip)));
+  private void updateTrip(final String tripId,
+      final Function<Trip, ResultWithDomainEvents<Trip, TripDomainEvent>> updater) {
+    this.withTrip(tripId,
+        trip -> this.saveAndPublishEvents(updater.apply(trip)));
   }
 
-  private void withTrip(String tripId, Consumer<Trip> consumer) {
-    tripRepository.findById(tripId).ifPresent(consumer);
+  private void withTrip(final String tripId, final Consumer<Trip> consumer) {
+    this.tripRepository.findById(tripId).ifPresent(consumer);
   }
 
-  private void saveAndPublishEvents(ResultWithDomainEvents<Trip, TripDomainEvent> result) {
-    Trip trip = result.result;
-    tripRepository.save(trip);
-    tripDomainEventPublisher.publish(trip, result.events);
+  private void saveAndPublishEvents(
+      final ResultWithDomainEvents<Trip, TripDomainEvent> result) {
+    final Trip trip = result.result;
+    this.tripRepository.save(trip);
+    this.eventPublisher.publish(trip, result.events);
   }
 }

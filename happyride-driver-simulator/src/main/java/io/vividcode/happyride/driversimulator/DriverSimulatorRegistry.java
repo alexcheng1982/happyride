@@ -2,9 +2,7 @@ package io.vividcode.happyride.driversimulator;
 
 import io.vividcode.happyride.driversimulator.web.AddDriverRequest;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,48 +14,52 @@ public class DriverSimulatorRegistry {
   @Autowired
   DriverSimulatorFactory driverSimulatorFactory;
 
-  private ConcurrentHashMap<String, DriverSimulator> simulators = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<String, DriverSimulator> simulators = new ConcurrentHashMap<>();
 
-  public DriverSimulator add(AddDriverRequest request) {
-    DriverSimulator simulator = driverSimulatorFactory
-        .create(request.getDriverId(), "default_vehicle", request.getPosLng(), request.getPosLat());
-    simulators.put(simulator.getId(), simulator);
+  public DriverSimulator add(final AddDriverRequest request) {
+    final DriverSimulator simulator = this.driverSimulatorFactory
+        .create(request.getDriverId(), "default_vehicle", request.getPosLng(),
+            request.getPosLat());
+    this.simulators.put(simulator.getId(), simulator);
     if (request.isStartSimulation()) {
       simulator.startSimulation();
     }
     return simulator;
   }
 
-  public DriverSimulator get(String driverSimulatorId) {
-    return simulators.get(driverSimulatorId);
+  public DriverSimulator get(final String driverSimulatorId) {
+    return this.simulators.get(driverSimulatorId);
   }
 
   public Collection<DriverSimulator> list() {
-    return simulators.values();
+    return this.simulators.values();
   }
 
-  public void stop(String driverSimulatorId) {
-    withDriverSimulator(driverSimulatorId, DriverSimulator::stopSimulation);
+  public void stop(final String driverSimulatorId) {
+    this.withDriverSimulator(driverSimulatorId, DriverSimulator::stopSimulation);
   }
 
-  public void start(String driverSimulatorId) {
-    withDriverSimulator(driverSimulatorId, DriverSimulator::startSimulation);
+  public void start(final String driverSimulatorId) {
+    this.withDriverSimulator(driverSimulatorId, DriverSimulator::startSimulation);
   }
 
-  public void resetPosition(String driverSimulatorId, BigDecimal lng, BigDecimal lat) {
-    withDriverSimulator(driverSimulatorId, simulator -> simulator.resetPosition(lng, lat));
+  public void resetPosition(final String driverSimulatorId, final BigDecimal lng,
+      final BigDecimal lat) {
+    this.withDriverSimulator(driverSimulatorId,
+        simulator -> simulator.resetPosition(lng, lat));
   }
 
-  public void markAsAvailable(String driverSimulatorId) {
-    withDriverSimulator(driverSimulatorId, DriverSimulator::markAsAvailable);
+  public void markAsAvailable(final String driverSimulatorId) {
+    this.withDriverSimulator(driverSimulatorId, DriverSimulator::markAsAvailable);
   }
 
-  public void markAsNotAvailable(String driverSimulatorId) {
-    withDriverSimulator(driverSimulatorId, DriverSimulator::markAsNotAvailable);
+  public void markAsNotAvailable(final String driverSimulatorId) {
+    this.withDriverSimulator(driverSimulatorId, DriverSimulator::markAsNotAvailable);
   }
 
-  private void withDriverSimulator(String driverSimulatorId, Consumer<DriverSimulator> action) {
-    DriverSimulator simulator = simulators.get(driverSimulatorId);
+  private void withDriverSimulator(final String driverSimulatorId,
+      final Consumer<DriverSimulator> action) {
+    final DriverSimulator simulator = this.simulators.get(driverSimulatorId);
     if (simulator != null) {
       action.accept(simulator);
     } else {

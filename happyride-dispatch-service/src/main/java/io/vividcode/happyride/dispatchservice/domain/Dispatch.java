@@ -2,6 +2,7 @@ package io.vividcode.happyride.dispatchservice.domain;
 
 import com.google.common.collect.Lists;
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
+import io.vavr.collection.Stream;
 import io.vividcode.happyride.common.EntityWithGeneratedId;
 import io.vividcode.happyride.common.PositionVO;
 import io.vividcode.happyride.dispatchservice.AvailableDriver;
@@ -73,32 +74,41 @@ public class Dispatch extends EntityWithGeneratedId {
   @JoinColumn(name = "dispatch_id", referencedColumnName = "id", nullable = false)
   private List<TripAcceptance> tripAcceptances = Lists.newArrayList();
 
-  public static ResultWithDomainEvents<Dispatch, DispatchDomainEvent> createDispatch(String tripId,
-      TripDetails tripDetails, Set<AvailableDriver> drivers) {
-    PositionVO startPos = tripDetails.getStartPos();
-    Dispatch dispatch = new Dispatch(tripId, startPos.getLng(), startPos.getLat());
-    List<TripAcceptance> tripAcceptances = drivers.stream()
-        .map(driver -> new TripAcceptance(driver.getDriverId(), driver.getPosLng(),
+  public static ResultWithDomainEvents<Dispatch, DispatchDomainEvent> createDispatch(
+      final String tripId,
+      final TripDetails tripDetails,
+      final Set<AvailableDriver> drivers) {
+    final PositionVO startPos = tripDetails.getStartPos();
+    final Dispatch dispatch = new Dispatch(tripId, startPos.getLng(),
+        startPos.getLat());
+    final List<TripAcceptance> tripAcceptances = drivers.stream()
+        .map(driver -> new TripAcceptance(driver.getDriverId(),
+            driver.getPosLng(),
             driver.getPosLat()))
         .collect(Collectors.toList());
     dispatch.setTripAcceptances(tripAcceptances);
-    DispatchDomainEvent event;
+    final DispatchDomainEvent event;
     if (drivers.isEmpty()) {
       dispatch.setState(DispatchState.FAILED);
       dispatch.setFailedReason(TripDispatchFailedReason.NO_DRIVERS_AVAILABLE);
-      event = new TripDispatchFailedEvent(tripId, TripDispatchFailedReason.NO_DRIVERS_AVAILABLE);
+      event = new TripDispatchFailedEvent(tripId,
+          TripDispatchFailedReason.NO_DRIVERS_AVAILABLE);
     } else {
-      Set<String> driversId = drivers.stream().map(AvailableDriver::getDriverId)
+      final Set<String> driversId = drivers.stream()
+          .map(AvailableDriver::getDriverId)
           .collect(Collectors.toSet());
       event = new TripDispatchedEvent(tripId, tripDetails, driversId);
     }
     return new ResultWithDomainEvents<>(dispatch, event);
   }
 
-  public Dispatch submitTripAcceptance(DriverAcceptTripDetails acceptTripDetails) {
-    tripAcceptances.stream().filter(tripAcceptance -> Objects
-        .equals(tripAcceptance.getDriverId(), acceptTripDetails.getDriverId()))
-        .findFirst()
+  public Dispatch submitTripAcceptance(
+      final DriverAcceptTripDetails acceptTripDetails) {
+    Stream.ofAll(this.tripAcceptances)
+        .find(tripAcceptance -> Objects
+            .equals(tripAcceptance.getDriverId(),
+                acceptTripDetails.getDriverId()))
+        .toJavaOptional()
         .ifPresent(tripAcceptance -> {
           tripAcceptance.setState(TripAcceptanceState.SUBMITTED);
           tripAcceptance.setCurrentPosLng(acceptTripDetails.getPosLng());
@@ -108,33 +118,41 @@ public class Dispatch extends EntityWithGeneratedId {
   }
 
   public ResultWithDomainEvents<Dispatch, DispatchDomainEvent> selectTripAcceptance(
-      String driverId) {
-    setState(DispatchState.ACCEPTANCE_SELECTED);
-    Map<Boolean, List<TripAcceptance>> acceptances = tripAcceptances.stream()
+      final String driverId) {
+    this.setState(DispatchState.ACCEPTANCE_SELECTED);
+    final Map<Boolean, List<TripAcceptance>> acceptances = this.tripAcceptances
+        .stream()
         .collect(Collectors.groupingBy(tripAcceptance -> Objects
             .equals(tripAcceptance.getDriverId(), driverId)));
-    List<TripAcceptance> toAccept = acceptances
+    final List<TripAcceptance> toAccept = acceptances
         .getOrDefault(Boolean.TRUE, Collections.emptyList());
-    toAccept.forEach(acceptance -> acceptance.setState(TripAcceptanceState.SELECTED));
-    List<TripAcceptance> toDecline = acceptances
+    toAccept.forEach(
+        acceptance -> acceptance.setState(TripAcceptanceState.SELECTED));
+    final List<TripAcceptance> toDecline = acceptances
         .getOrDefault(Boolean.FALSE, Collections.emptyList());
-    toDecline.forEach(acceptance -> acceptance.setState(TripAcceptanceState.DECLINED));
-    List<DispatchDomainEvent> events = Lists.newArrayList();
+    toDecline.forEach(
+        acceptance -> acceptance.setState(TripAcceptanceState.DECLINED));
+    final List<DispatchDomainEvent> events = Lists.newArrayList();
     events.addAll(toAccept.stream()
-        .map(acceptance -> new TripAcceptanceSelectedEvent(tripId, acceptance.getDriverId()))
+        .map(acceptance -> new TripAcceptanceSelectedEvent(this.tripId,
+            acceptance.getDriverId()))
         .collect(Collectors.toList()));
     events.addAll(toDecline.stream()
-        .map(acceptance -> new TripAcceptanceDeclinedEvent(tripId, acceptance.getDriverId(),
+        .map(acceptance -> new TripAcceptanceDeclinedEvent(this.tripId,
+            acceptance.getDriverId(),
             TripAcceptanceDeclinedReason.OTHER_SELECTED))
         .collect(Collectors.toList()));
-    return new ResultWithDomainEvents<>(this, events.toArray(new DispatchDomainEvent[0]));
+    return new ResultWithDomainEvents<>(this,
+        events.toArray(new DispatchDomainEvent[0]));
   }
 
-  public ResultWithDomainEvents<Dispatch, DispatchDomainEvent> markAsFailed(String tripId,
-      TripDispatchFailedReason reason) {
-    setState(DispatchState.FAILED);
-    setFailedReason(reason);
-    TripDispatchFailedEvent event = new TripDispatchFailedEvent(tripId, reason);
+  public ResultWithDomainEvents<Dispatch, DispatchDomainEvent> markAsFailed(
+      final String tripId,
+      final TripDispatchFailedReason reason) {
+    this.setState(DispatchState.FAILED);
+    this.setFailedReason(reason);
+    final TripDispatchFailedEvent event = new TripDispatchFailedEvent(tripId,
+        reason);
     return new ResultWithDomainEvents<>(this, event);
   }
 }

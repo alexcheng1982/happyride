@@ -73,6 +73,8 @@ public class DriverSimulator {
         this.vehicleId);
     this.state = DriverState.OFFLINE;
     this.stop.onNext(true);
+    this.stop.onComplete();
+    this.stop = null;
   }
 
   public void resetPosition(final BigDecimal lng, final BigDecimal lat) {
@@ -97,7 +99,7 @@ public class DriverSimulator {
 
   private void updateLocation() {
     final ThreadLocalRandom random = ThreadLocalRandom.current();
-    final boolean shouldTurn = random.nextInt(3) > 1;
+    final boolean shouldTurn = random.nextInt(3) > 0;
     if (shouldTurn) {
       final boolean turnLeft = random.nextBoolean();
       if (turnLeft) {

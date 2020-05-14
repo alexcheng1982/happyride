@@ -19,33 +19,39 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DriverLocationService {
+
   @Autowired
   RedisTemplate<String, String> redisTemplate;
 
   private final String key = "available_drivers";
-  public static final Distance searchRadius = new Distance(10, DistanceUnit.KILOMETERS);
+  public static final Distance searchRadius = new Distance(10,
+      DistanceUnit.KILOMETERS);
 
-  public void addAvailableDriver(DriverLocation location) {
-    redisTemplate.opsForGeo()
-        .add(key, new Point(location.getLng().doubleValue(), location.getLat().doubleValue()),
+  public void addAvailableDriver(final DriverLocation location) {
+    this.redisTemplate.opsForGeo()
+        .add(this.key, new Point(location.getLng().doubleValue(),
+                location.getLat().doubleValue()),
             location.getDriverId());
   }
 
-  public void removeAvailableDriver(String driverId) {
-    redisTemplate.opsForGeo().remove(key, driverId);
+  public void removeAvailableDriver(final String driverId) {
+    this.redisTemplate.opsForGeo().remove(this.key, driverId);
   }
 
-  public Set<AvailableDriver> findAvailableDrivers(BigDecimal lng, BigDecimal lat) {
-    GeoResults<GeoLocation<String>> results = redisTemplate.opsForGeo()
-        .radius(key, new Circle(new Point(lng.doubleValue(), lat.doubleValue()), searchRadius),
+  public Set<AvailableDriver> findAvailableDrivers(final BigDecimal lng,
+      final BigDecimal lat) {
+    final GeoResults<GeoLocation<String>> results = this.redisTemplate.opsForGeo()
+        .radius(this.key, new Circle(new Point(lng.doubleValue(), lat.doubleValue()),
+                searchRadius),
             GeoRadiusCommandArgs.newGeoRadiusArgs().includeCoordinates());
     if (results != null) {
       return results.getContent().stream().filter(Objects::nonNull)
           .map(result -> {
-            GeoLocation<String> content = result.getContent();
-            Point point = content.getPoint();
+            final GeoLocation<String> content = result.getContent();
+            final Point point = content.getPoint();
             return new AvailableDriver(content.getName(),
-                BigDecimal.valueOf(point.getX()), BigDecimal.valueOf(point.getY()));
+                BigDecimal.valueOf(point.getX()),
+                BigDecimal.valueOf(point.getY()));
           })
           .collect(Collectors.toSet());
     }
