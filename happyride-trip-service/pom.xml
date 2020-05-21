@@ -32,6 +32,11 @@
       <groupId>io.vividcode.happyride</groupId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <artifactId>happyride-payment-service-api</artifactId>
+      <groupId>io.vividcode.happyride</groupId>
+      <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -44,7 +49,6 @@
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
       <artifactId>eventuate-tram-aggregate-domain-events</artifactId>
-      <version>${eventuate-tram.version}</version>
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.core</groupId>
@@ -52,7 +56,8 @@
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.sagas</groupId>
-      <artifactId>eventuate-tram-sagas-spring-orchestration-simple-dsl</artifactId>
+      <artifactId>eventuate-tram-sagas-spring-orchestration-simple-dsl
+      </artifactId>
     </dependency>
     <dependency>
       <groupId>io.eventuate.tram.sagas</groupId>

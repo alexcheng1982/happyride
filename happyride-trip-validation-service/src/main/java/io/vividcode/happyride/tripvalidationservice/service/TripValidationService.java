@@ -1,9 +1,8 @@
 package io.vividcode.happyride.tripvalidationservice.service;
 
-import io.vividcode.happyride.common.PositionVO;
+import io.vividcode.happyride.common.Utils;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripvalidationservice.AppConfig;
-import org.locationtech.spatial4j.distance.DistanceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,24 +10,22 @@ import org.springframework.stereotype.Service;
 public class TripValidationService {
 
   @Autowired
-  private AppConfig appConfig;
+  AppConfig appConfig;
 
-  public void validateTrip(TripDetails tripDetails) {
-    if (appConfig.isPassengerBlocked(tripDetails.getPassengerId())) {
+  public void validateTrip(final TripDetails tripDetails) {
+    if (this.appConfig.isPassengerBlocked(tripDetails.getPassengerId())) {
       throw new PassengerBlockedException(tripDetails.getPassengerId());
     }
 
-    double distance = calculateDistance(tripDetails);
-    if (distance > appConfig.getTripDistanceLimit()) {
-      throw new TripDistanceTooLongException(distance, appConfig.getTripDistanceLimit());
+    final double distance = this.calculateDistance(tripDetails);
+    if (distance > this.appConfig.getTripDistanceLimit()) {
+      throw new TripDistanceTooLongException(distance,
+          this.appConfig.getTripDistanceLimit());
     }
   }
 
-  private double calculateDistance(TripDetails tripDetails) {
-    PositionVO startPos = tripDetails.getStartPos();
-    PositionVO endPos = tripDetails.getEndPos();
-    return DistanceUtils
-        .distHaversineRAD(startPos.getLat().doubleValue(), startPos.getLng().doubleValue(),
-            endPos.getLat().doubleValue(), endPos.getLng().doubleValue());
+  private double calculateDistance(final TripDetails tripDetails) {
+    return Utils.calculateDistance(tripDetails.getStartPos(),
+        tripDetails.getEndPos());
   }
 }

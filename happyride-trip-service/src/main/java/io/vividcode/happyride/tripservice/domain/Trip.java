@@ -16,6 +16,7 @@ import io.vividcode.happyride.tripservice.api.events.TripFinishedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripRejectedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripStartedEvent;
 import io.vividcode.happyride.tripservice.api.web.TripVO;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.AttributeOverride;
@@ -26,6 +27,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,17 +41,21 @@ import lombok.ToString;
 @ToString
 public class Trip extends BaseEntityWithGeneratedId {
 
-  public static ResultWithDomainEvents<Trip, TripDomainEvent> createTrip(String passengerId,
-      PositionVO startPos, PositionVO endPos) {
-    Trip trip = new Trip(passengerId, startPos, endPos);
-    TripCreatedEvent event = new TripCreatedEvent(new TripDetails(passengerId, startPos, endPos));
+  public static ResultWithDomainEvents<Trip, TripDomainEvent> createTrip(
+      final String passengerId,
+      final PositionVO startPos, final PositionVO endPos) {
+    final Trip trip = new Trip(passengerId, startPos, endPos);
+    final TripCreatedEvent event = new TripCreatedEvent(
+        new TripDetails(passengerId, startPos, endPos));
     return new ResultWithDomainEvents<>(trip, event);
   }
 
   @Column(name = "passenger_id")
+  @Size(max = 36)
   private String passengerId;
 
   @Column(name = "driver_id")
+  @Size(max = 36)
   private String driverId;
 
   @Embedded
@@ -68,11 +74,16 @@ public class Trip extends BaseEntityWithGeneratedId {
   })
   private Position endPos;
 
+  @Column(name = "fare")
+  private BigDecimal fare;
+
   @Column(name = "state")
   @Enumerated(EnumType.STRING)
   private TripState state;
 
-  public Trip(String passengerId, PositionVO startPos, PositionVO endPos) {
+  public Trip(
+      final String passengerId, final PositionVO startPos,
+      final PositionVO endPos) {
     this.passengerId = passengerId;
     this.startPos = startPos.deserialize();
     this.endPos = endPos.deserialize();
@@ -80,96 +91,103 @@ public class Trip extends BaseEntityWithGeneratedId {
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> markAsDispatched() {
-    assertTripState(TripState.CONFIRMED);
-    setState(TripState.DISPATCHED);
+    this.assertTripState(TripState.CONFIRMED);
+    this.setState(TripState.DISPATCHED);
     return new ResultWithDomainEvents<>(this);
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> markAsFailed() {
-    setState(TripState.FAILED);
+    this.setState(TripState.FAILED);
     return new ResultWithDomainEvents<>(this);
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> rejectTrip() {
-    setState(TripState.REJECTED);
+    this.setState(TripState.REJECTED);
     return new ResultWithDomainEvents<>(this, new TripRejectedEvent());
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> confirmTrip() {
-    setState(TripState.CONFIRMED);
-    TripDetails tripDetails = new TripDetails(passengerId, startPos.serialize(), endPos.serialize());
-    return new ResultWithDomainEvents<>(this, new TripConfirmedEvent(tripDetails));
+    this.setState(TripState.CONFIRMED);
+    final TripDetails tripDetails = new TripDetails(this.passengerId,
+        this.startPos.serialize(),
+        this.endPos.serialize());
+    return new ResultWithDomainEvents<>(this,
+        new TripConfirmedEvent(tripDetails));
   }
 
-  public ResultWithDomainEvents<Trip, TripDomainEvent> acceptByDriver(String driverId) {
-    setDriverId(driverId);
-    setState(TripState.ACCEPTED);
+  public ResultWithDomainEvents<Trip, TripDomainEvent> acceptByDriver(
+      final String driverId) {
+    this.setDriverId(driverId);
+    this.setState(TripState.ACCEPTED);
     return new ResultWithDomainEvents<>(this);
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> shouldCancel(
-      CancellationParty initiator) {
-    List<TripDomainEvent> events = new ArrayList<>();
+      final CancellationParty initiator) {
+    final List<TripDomainEvent> events = new ArrayList<>();
     if (initiator == CancellationParty.DRIVER) {
-      if (state == TripState.CANCELLED_BY_PASSENGER) {
-        setState(TripState.CANCELLED);
+      if (this.state == TripState.CANCELLED_BY_PASSENGER) {
+        this.setState(TripState.CANCELLED);
         events.add(new TripCancelledEvent());
       } else {
-        setState(TripState.CANCELLED_BY_DRIVER);
+        this.setState(TripState.CANCELLED_BY_DRIVER);
       }
     } else {
-      if (state == TripState.CANCELLED_BY_DRIVER) {
-        setState(TripState.CANCELLED);
+      if (this.state == TripState.CANCELLED_BY_DRIVER) {
+        this.setState(TripState.CANCELLED);
         events.add(new TripCancelledEvent());
       } else {
-        setState(TripState.CANCELLED_BY_PASSENGER);
+        this.setState(TripState.CANCELLED_BY_PASSENGER);
       }
     }
-    return new ResultWithDomainEvents<>(this, events.toArray(new TripDomainEvent[0]));
+    return new ResultWithDomainEvents<>(this,
+        events.toArray(new TripDomainEvent[0]));
   }
 
-  public ResultWithDomainEvents<Trip, TripDomainEvent> shouldNotCancel(CancellationParty initiator) {
-    List<TripDomainEvent> events = new ArrayList<>();
+  public ResultWithDomainEvents<Trip, TripDomainEvent> shouldNotCancel(
+      final CancellationParty initiator) {
+    final List<TripDomainEvent> events = new ArrayList<>();
     if (initiator == CancellationParty.DRIVER) {
-      if (state == TripState.CANCELLED_BY_PASSENGER) {
-        setState(TripState.CANCELLATION_REJECTED_BY_DRIVER);
+      if (this.state == TripState.CANCELLED_BY_PASSENGER) {
+        this.setState(TripState.CANCELLATION_REJECTED_BY_DRIVER);
         events.add(new TripCancellationResolutionRequiredEvent(initiator));
       }
     } else {
-      if (state == TripState.CANCELLED_BY_DRIVER) {
-        setState(TripState.CANCELLATION_REJECTED_BY_PASSENGER);
+      if (this.state == TripState.CANCELLED_BY_DRIVER) {
+        this.setState(TripState.CANCELLATION_REJECTED_BY_PASSENGER);
         events.add(new TripCancellationResolutionRequiredEvent(initiator));
       }
     }
-    return new ResultWithDomainEvents<>(this, events.toArray(new TripDomainEvent[0]));
+    return new ResultWithDomainEvents<>(this,
+        events.toArray(new TripDomainEvent[0]));
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> startTrip() {
-    assertTripState(TripState.ACCEPTED);
-    setState(TripState.STARTED);
+    this.assertTripState(TripState.ACCEPTED);
+    this.setState(TripState.STARTED);
     return new ResultWithDomainEvents<>(this, new TripStartedEvent());
   }
 
   public ResultWithDomainEvents<Trip, TripDomainEvent> finishTrip() {
-    assertTripState(TripState.STARTED);
-    setState(TripState.FINISHED);
+    this.assertTripState(TripState.STARTED);
+    this.setState(TripState.FINISHED);
     return new ResultWithDomainEvents<>(this, new TripFinishedEvent());
   }
 
-  private void assertTripState(TripState requiredState) {
-    if (state != requiredState) {
+  private void assertTripState(final TripState requiredState) {
+    if (this.state != requiredState) {
       throw new IllegalTripStateException(requiredState);
     }
   }
 
   public TripVO toTripVO() {
-    TripVO tripVO = new TripVO();
-    tripVO.setId(getId());
-    tripVO.setPassengerId(getPassengerId());
-    tripVO.setDriverId(getDriverId());
-    tripVO.setStartPos(getStartPos().serialize());
-    tripVO.setEndPos(getEndPos().serialize());
-    tripVO.setState(getState().name());
+    final TripVO tripVO = new TripVO();
+    tripVO.setId(this.getId());
+    tripVO.setPassengerId(this.getPassengerId());
+    tripVO.setDriverId(this.getDriverId());
+    tripVO.setStartPos(this.getStartPos().serialize());
+    tripVO.setEndPos(this.getEndPos().serialize());
+    tripVO.setState(this.getState().name());
     return tripVO;
   }
 }

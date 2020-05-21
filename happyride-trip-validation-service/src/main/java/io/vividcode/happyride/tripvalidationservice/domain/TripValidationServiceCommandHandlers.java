@@ -25,16 +25,16 @@ public class TripValidationServiceCommandHandlers {
 
   public CommandHandlers commandHandlers() {
     return SagaCommandHandlersBuilder
-        .fromChannel(TripValidationServiceChannels.tripValidationServiceChannel)
-        .onMessage(ValidateTripCommand.class, this::validateOrderForConsumer)
+        .fromChannel(TripValidationServiceChannels.tripValidation)
+        .onMessage(ValidateTripCommand.class, this::validateTrip)
         .build();
   }
 
-  private Message validateOrderForConsumer(CommandMessage<ValidateTripCommand> cm) {
+  private Message validateTrip(final CommandMessage<ValidateTripCommand> cm) {
     try {
-      tripValidationService.validateTrip(cm.getCommand().getTripDetails());
+      this.tripValidationService.validateTrip(cm.getCommand().getTripDetails());
       return withSuccess();
-    } catch (TripValidationException e) {
+    } catch (final TripValidationException e) {
       log.warn("Trip is not valid", e);
       return withFailure(new InvalidTripReply());
     }

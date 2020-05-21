@@ -10,11 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("app")
 public class AppConfig {
+
   private List<String> blockedPassengers = new ArrayList<>();
 
-  private double tripDistanceLimit = 50000;
+  private double tripDistanceLimit = 100;
 
-  public boolean isPassengerBlocked(String passengerId) {
-    return blockedPassengers.contains(passengerId);
+  public boolean isPassengerBlocked(final String passengerId) {
+    return this.blockedPassengers.contains(passengerId);
   }
 }

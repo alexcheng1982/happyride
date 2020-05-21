@@ -2,5 +2,5 @@ package io.vividcode.happyride.tripvalidationservice.api;
 
 public class TripValidationServiceChannels {
 
-  public static final String tripValidationServiceChannel = "io.vividcode.happyride.tripvalidationservice";
+  public static final String tripValidation = "io.vividcode.happyride.tripvalidationservice";
 }

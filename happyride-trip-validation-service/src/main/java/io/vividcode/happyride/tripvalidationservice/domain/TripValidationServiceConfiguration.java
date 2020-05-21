@@ -16,9 +16,11 @@ import org.springframework.context.annotation.Import;
 public class TripValidationServiceConfiguration {
 
   @Bean
-  public CommandDispatcher commandDispatcher(TripValidationServiceCommandHandlers commandHandlers,
-      SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
+  public CommandDispatcher commandDispatcher(
+      final TripValidationServiceCommandHandlers commandHandlers,
+      final SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
     return sagaCommandDispatcherFactory
-        .make("tripValidationServiceDispatcher", commandHandlers.commandHandlers());
+        .make("tripValidationServiceDispatcher",
+            commandHandlers.commandHandlers());
   }
 }

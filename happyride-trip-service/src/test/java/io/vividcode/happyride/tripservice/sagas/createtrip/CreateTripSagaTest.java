@@ -8,7 +8,7 @@ import io.vividcode.happyride.dispatchservice.api.events.VerifyDispatchCommand;
 import io.vividcode.happyride.tripservice.api.TripServiceChannels;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.sagaparticipants.ConfirmTripCommand;
-import io.vividcode.happyride.tripservice.sagaparticipants.DispatchServiceProxy;
+import io.vividcode.happyride.tripservice.sagaparticipants.PaymentServiceProxy;
 import io.vividcode.happyride.tripservice.sagaparticipants.RejectTripCommand;
 import io.vividcode.happyride.tripservice.sagaparticipants.TripServiceProxy;
 import io.vividcode.happyride.tripservice.sagaparticipants.TripValidationServiceProxy;
@@ -38,16 +38,17 @@ public class CreateTripSagaTest {
   TripValidationServiceProxy tripValidationService;
 
   @Autowired
-  DispatchServiceProxy dispatchService;
+  PaymentServiceProxy paymentService;
 
   @Test
   @DisplayName("Create trip")
   public void shouldCreateTrip() {
-    String tripId = uuid();
-    TripDetails tripDetails = tripDetails0();
-    given().saga(makeCreateTripSaga(), new CreateTripSagaState(tripId, tripDetails))
+    final String tripId = this.uuid();
+    final TripDetails tripDetails = this.tripDetails0();
+    given().saga(this.makeCreateTripSaga(),
+        new CreateTripSagaState(tripId, tripDetails, BigDecimal.valueOf(50)))
         .expect().command(new ValidateTripCommand(tripDetails))
-        .to(TripValidationServiceChannels.tripValidationServiceChannel)
+        .to(TripValidationServiceChannels.tripValidation)
         .andGiven().successReply()
         .expect()
         .command(new VerifyDispatchCommand(tripDetails))
@@ -61,11 +62,12 @@ public class CreateTripSagaTest {
   @Test
   @DisplayName("Reject trip due to validation failed")
   public void shouldRejectTripDueToTripValidationFailed() {
-    String tripId = uuid();
-    TripDetails tripDetails = tripDetails0();
-    given().saga(makeCreateTripSaga(), new CreateTripSagaState(tripId, tripDetails))
+    final String tripId = this.uuid();
+    final TripDetails tripDetails = this.tripDetails0();
+    given().saga(this.makeCreateTripSaga(),
+        new CreateTripSagaState(tripId, tripDetails, BigDecimal.valueOf(50)))
         .expect().command(new ValidateTripCommand(tripDetails))
-        .to(TripValidationServiceChannels.tripValidationServiceChannel)
+        .to(TripValidationServiceChannels.tripValidation)
         .andGiven().failureReply()
         .expect().command(new RejectTripCommand(tripId))
         .to(TripServiceChannels.tripServiceChannel);
@@ -74,25 +76,29 @@ public class CreateTripSagaTest {
   @Test
   @DisplayName("Reject trip due to dispatch verification failed")
   public void shouldRejectTripDueToDispatchVerificationFailed() {
-    String tripId = uuid();
-    TripDetails tripDetails = tripDetails0();
-    given().saga(makeCreateTripSaga(), new CreateTripSagaState(tripId, tripDetails))
+    final String tripId = this.uuid();
+    final TripDetails tripDetails = this.tripDetails0();
+    given().saga(this.makeCreateTripSaga(),
+        new CreateTripSagaState(tripId, tripDetails, BigDecimal.valueOf(50)))
         .expect().command(new ValidateTripCommand(tripDetails))
-        .to(TripValidationServiceChannels.tripValidationServiceChannel)
+        .to(TripValidationServiceChannels.tripValidation)
         .andGiven().successReply()
         .expect().command(new VerifyDispatchCommand(tripDetails))
         .to(DispatchServiceChannels.dispatchServiceChannel)
         .andGiven().failureReply()
         .expect()
-        .command(new RejectTripCommand(tripId)).to(TripServiceChannels.tripServiceChannel);
+        .command(new RejectTripCommand(tripId))
+        .to(TripServiceChannels.tripServiceChannel);
   }
 
   private CreateTripSaga makeCreateTripSaga() {
-    return new CreateTripSaga(tripService, tripValidationService, dispatchService);
+    return new CreateTripSaga(this.tripService, this.tripValidationService,
+        this.paymentService);
   }
 
   private TripDetails tripDetails0() {
-    return new TripDetails(uuid(), new PositionVO(BigDecimal.ZERO, BigDecimal.ZERO),
+    return new TripDetails(this.uuid(),
+        new PositionVO(BigDecimal.ZERO, BigDecimal.ZERO),
         new PositionVO(BigDecimal.ZERO, BigDecimal.ZERO));
   }
 

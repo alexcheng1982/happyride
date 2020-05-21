@@ -29,6 +29,9 @@ public class TripService {
   TripRepository tripRepository;
 
   @Autowired
+  TripFareService tripFareService;
+
+  @Autowired
   TripDomainEventPublisher eventPublisher;
 
   @Autowired
@@ -41,14 +44,16 @@ public class TripService {
       final PositionVO endPos) {
     final ResultWithDomainEvents<Trip, TripDomainEvent> tripAndEvents = Trip
         .createTrip(passengerId, startPos, endPos);
+    final BigDecimal fare = this.tripFareService.calculate(startPos, endPos);
     final Trip trip = tripAndEvents.result;
+    trip.setFare(fare);
     this.tripRepository.save(trip);
     this.eventPublisher.publish(trip, tripAndEvents.events);
 
     final TripDetails tripDetails = new TripDetails(passengerId, startPos,
         endPos);
     final CreateTripSagaState data = new CreateTripSagaState(trip.getId(),
-        tripDetails);
+        tripDetails, fare);
     this.sagaInstanceFactory.create(this.createTripSaga, data);
     return trip.toTripVO();
   }
