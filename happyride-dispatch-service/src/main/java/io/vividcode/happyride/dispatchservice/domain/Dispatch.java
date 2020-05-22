@@ -155,4 +155,14 @@ public class Dispatch extends EntityWithGeneratedId {
         reason);
     return new ResultWithDomainEvents<>(this, event);
   }
+
+  public ResultWithDomainEvents<Dispatch, DispatchDomainEvent> markAsCancelled() {
+    this.setState(DispatchState.CANCELLED);
+    this.tripAcceptances.forEach(tripAcceptance -> {
+      tripAcceptance.setState(TripAcceptanceState.DECLINED);
+      tripAcceptance
+          .setDeclinedReason(TripAcceptanceDeclinedReason.TRIP_CANCELLED);
+    });
+    return new ResultWithDomainEvents<>(this);
+  }
 }

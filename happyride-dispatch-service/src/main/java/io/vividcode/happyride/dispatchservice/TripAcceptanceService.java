@@ -5,8 +5,11 @@ import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripDetails;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ScheduledFuture;
 import java.util.function.BiConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,7 @@ public class TripAcceptanceService {
       DistanceUnit.KILOMETERS);
   private final String passenger = "__passenger__";
   private final int acceptanceCheckMaxTimes = 3;
+  private final Map<String, ScheduledFuture<?>> tasks = new HashMap<>();
 
   public void startTripAcceptanceCheck(final String tripId,
       final TripDetails tripDetails,
@@ -55,11 +59,18 @@ public class TripAcceptanceService {
       final BiConsumer<String, String> successCallback,
       final BiConsumer<String, TripDispatchFailedReason> failureCallback,
       final int attempt) {
-    this.taskScheduler
-        .schedule(new CheckTripAcceptanceTask(tripId, interval, successCallback,
-                failureCallback,
-                attempt),
-            Instant.now().plusMillis(interval.toMillis()));
+    this.tasks.put(tripId,
+        this.taskScheduler
+            .schedule(
+                new CheckTripAcceptanceTask(tripId, interval, successCallback,
+                    failureCallback,
+                    attempt),
+                Instant.now().plusMillis(interval.toMillis())));
+  }
+
+  public void cancelTripAcceptanceCheck(final String tripId) {
+    Optional.ofNullable(this.tasks.get(tripId))
+        .ifPresent(future -> future.cancel(true));
   }
 
   public void addDriverToAcceptTrip(final String tripId,

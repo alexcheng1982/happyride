@@ -8,11 +8,11 @@ import io.eventuate.tram.commands.consumer.CommandHandlers;
 import io.eventuate.tram.commands.consumer.CommandMessage;
 import io.eventuate.tram.messaging.common.Message;
 import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
+import io.vividcode.happyride.dispatchservice.DispatchService;
 import io.vividcode.happyride.dispatchservice.DispatchVerificationException;
 import io.vividcode.happyride.dispatchservice.api.DispatchServiceChannels;
 import io.vividcode.happyride.dispatchservice.api.events.InvalidDispatchRequestReply;
 import io.vividcode.happyride.dispatchservice.api.events.VerifyDispatchCommand;
-import io.vividcode.happyride.dispatchservice.DispatchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,11 +31,11 @@ public class DispatchCommandHandlers {
         .build();
   }
 
-  private Message verifyDispatch(CommandMessage<VerifyDispatchCommand> cm) {
+  private Message verifyDispatch(final CommandMessage<VerifyDispatchCommand> cm) {
     try {
-      dispatchService.verifyDispatch(cm.getCommand().getTripDetails());
+      this.dispatchService.verifyDispatch(cm.getCommand().getTripDetails());
       return withSuccess();
-    } catch (DispatchVerificationException e) {
+    } catch (final DispatchVerificationException e) {
       log.warn("Dispatch is not valid", e);
       return withFailure(new InvalidDispatchRequestReply());
     }

@@ -1,5 +1,6 @@
 package io.vividcode.happyride.dispatchservice.api.events;
 
 public enum TripAcceptanceDeclinedReason {
-  OTHER_SELECTED
+  OTHER_SELECTED,
+  TRIP_CANCELLED
 }

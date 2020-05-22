@@ -5,8 +5,8 @@ import io.eventuate.tram.events.subscriber.DomainEventHandlers;
 import io.eventuate.tram.events.subscriber.DomainEventHandlersBuilder;
 import io.vividcode.happyride.dispatchservice.DispatchService;
 import io.vividcode.happyride.tripservice.api.events.DriverAcceptTripEvent;
+import io.vividcode.happyride.tripservice.api.events.TripCancelledEvent;
 import io.vividcode.happyride.tripservice.api.events.TripConfirmedEvent;
-import io.vividcode.happyride.tripservice.api.events.TripCreatedEvent;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,20 +25,28 @@ public class DispatchServiceEventConsumer {
         .forAggregateType("io.vividcode.happyride.tripservice.domain.Trip")
         .onEvent(TripConfirmedEvent.class, this::onTripConfirmed)
         .onEvent(DriverAcceptTripEvent.class, this::onDriverAcceptTrip)
+        .onEvent(TripCancelledEvent.class, this::onTripCancelled)
         .build();
   }
 
-  private void onTripConfirmed(DomainEventEnvelope<TripConfirmedEvent> envelope) {
-    TripDetails tripDetails = envelope.getEvent().getTripDetails();
+  private void onTripConfirmed(
+      final DomainEventEnvelope<TripConfirmedEvent> envelope) {
+    final TripDetails tripDetails = envelope.getEvent().getTripDetails();
     try {
-      dispatchService.dispatchTrip(envelope.getAggregateId(), tripDetails);
-    } catch (Exception e) {
+      this.dispatchService.dispatchTrip(envelope.getAggregateId(), tripDetails);
+    } catch (final Exception e) {
       LOGGER.warn("Failed to dispatch trip {}", envelope.getAggregateId(), e);
     }
   }
 
-  private void onDriverAcceptTrip(DomainEventEnvelope<DriverAcceptTripEvent> envelope) {
-    dispatchService.submitTripAcceptance(envelope.getAggregateId(),
+  private void onDriverAcceptTrip(
+      final DomainEventEnvelope<DriverAcceptTripEvent> envelope) {
+    this.dispatchService.submitTripAcceptance(envelope.getAggregateId(),
         envelope.getEvent().getAcceptTripDetails());
+  }
+
+  private void onTripCancelled(
+      final DomainEventEnvelope<TripCancelledEvent> envelope) {
+    this.dispatchService.cancelDispatch(envelope.getAggregateId());
   }
 }

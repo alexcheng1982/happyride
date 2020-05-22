@@ -115,6 +115,13 @@ public class DispatchService {
             dispatch.markAsFailed(tripId, reason)));
   }
 
+  @Transactional
+  public void cancelDispatch(final String tripId) {
+    this.withCurrentDispatch(tripId,
+        dispatch -> this.saveAndPublishEvents(dispatch.markAsCancelled()));
+    this.tripAcceptanceService.cancelTripAcceptanceCheck(tripId);
+  }
+
   private void saveAndPublishEvents(
       final ResultWithDomainEvents<Dispatch, DispatchDomainEvent> result) {
     final Dispatch dispatch = result.result;
