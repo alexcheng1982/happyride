@@ -11,13 +11,13 @@ public class TripServiceProxy {
 
   public final CommandEndpoint<RejectTripCommand> reject = CommandEndpointBuilder
       .forCommand(RejectTripCommand.class)
-      .withChannel(TripServiceChannels.tripServiceChannel)
+      .withChannel(TripServiceChannels.trip)
       .withReply(Success.class)
       .build();
 
   public final CommandEndpoint<ConfirmTripCommand> confirm = CommandEndpointBuilder
       .forCommand(ConfirmTripCommand.class)
-      .withChannel(TripServiceChannels.tripServiceChannel)
+      .withChannel(TripServiceChannels.trip)
       .withReply(Success.class)
       .build();
 }

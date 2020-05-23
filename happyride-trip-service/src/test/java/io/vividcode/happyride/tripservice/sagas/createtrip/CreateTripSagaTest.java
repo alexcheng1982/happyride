@@ -1,22 +1,16 @@
 package io.vividcode.happyride.tripservice.sagas.createtrip;
 
-import static io.eventuate.tram.sagas.testing.SagaUnitTestSupport.given;
-
 import io.vividcode.happyride.common.PositionVO;
-import io.vividcode.happyride.dispatchservice.api.DispatchServiceChannels;
-import io.vividcode.happyride.dispatchservice.api.events.VerifyDispatchCommand;
+import io.vividcode.happyride.paymentservice.api.PaymentServiceChannels;
+import io.vividcode.happyride.paymentservice.api.events.CreatePaymentCommand;
+import io.vividcode.happyride.paymentservice.api.events.MakePaymentCommand;
+import io.vividcode.happyride.paymentservice.api.events.PaymentFailedReply;
 import io.vividcode.happyride.tripservice.api.TripServiceChannels;
 import io.vividcode.happyride.tripservice.api.events.TripDetails;
-import io.vividcode.happyride.tripservice.sagaparticipants.ConfirmTripCommand;
-import io.vividcode.happyride.tripservice.sagaparticipants.PaymentServiceProxy;
-import io.vividcode.happyride.tripservice.sagaparticipants.RejectTripCommand;
-import io.vividcode.happyride.tripservice.sagaparticipants.TripServiceProxy;
-import io.vividcode.happyride.tripservice.sagaparticipants.TripValidationServiceProxy;
+import io.vividcode.happyride.tripservice.sagaparticipants.*;
 import io.vividcode.happyride.tripservice.sagas.createtrip.CreateTripSagaTest.TestConfig;
 import io.vividcode.happyride.tripvalidationservice.api.TripValidationServiceChannels;
 import io.vividcode.happyride.tripvalidationservice.api.ValidateTripCommand;
-import java.math.BigDecimal;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +19,11 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import static io.eventuate.tram.sagas.testing.SagaUnitTestSupport.given;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -45,18 +44,17 @@ public class CreateTripSagaTest {
   public void shouldCreateTrip() {
     final String tripId = this.uuid();
     final TripDetails tripDetails = this.tripDetails0();
+    final BigDecimal fare = BigDecimal.valueOf(50);
     given().saga(this.makeCreateTripSaga(),
-        new CreateTripSagaState(tripId, tripDetails, BigDecimal.valueOf(50)))
+        new CreateTripSagaState(tripId, tripDetails, fare))
         .expect().command(new ValidateTripCommand(tripDetails))
         .to(TripValidationServiceChannels.tripValidation)
         .andGiven().successReply()
-        .expect()
-        .command(new VerifyDispatchCommand(tripDetails))
-        .to(DispatchServiceChannels.dispatchServiceChannel)
-        .andGiven().successReply()
+        .expect().command(new CreatePaymentCommand(tripId, fare))
+        .to(PaymentServiceChannels.payment).andGiven().successReply()
         .expect()
         .command(new ConfirmTripCommand(tripId))
-        .to(TripServiceChannels.tripServiceChannel);
+        .to(TripServiceChannels.trip);
   }
 
   @Test
@@ -70,25 +68,29 @@ public class CreateTripSagaTest {
         .to(TripValidationServiceChannels.tripValidation)
         .andGiven().failureReply()
         .expect().command(new RejectTripCommand(tripId))
-        .to(TripServiceChannels.tripServiceChannel);
+        .to(TripServiceChannels.trip);
   }
 
   @Test
-  @DisplayName("Reject trip due to dispatch verification failed")
-  public void shouldRejectTripDueToDispatchVerificationFailed() {
+  @DisplayName("Reject trip due to payment failed")
+  public void shouldRejectTripDueToPaymentFailed() {
     final String tripId = this.uuid();
     final TripDetails tripDetails = this.tripDetails0();
+    final BigDecimal fare = BigDecimal.valueOf(250);
     given().saga(this.makeCreateTripSaga(),
-        new CreateTripSagaState(tripId, tripDetails, BigDecimal.valueOf(50)))
+        new CreateTripSagaState(tripId, tripDetails, fare))
         .expect().command(new ValidateTripCommand(tripDetails))
         .to(TripValidationServiceChannels.tripValidation)
         .andGiven().successReply()
-        .expect().command(new VerifyDispatchCommand(tripDetails))
-        .to(DispatchServiceChannels.dispatchServiceChannel)
-        .andGiven().failureReply()
+        .expect().command(new CreatePaymentCommand(tripId, fare))
+        .to(PaymentServiceChannels.payment)
+        .andGiven().successReply()
+        .expect().command(new MakePaymentCommand(tripId))
+        .to(PaymentServiceChannels.payment)
+        .andGiven().failureReply(new PaymentFailedReply("error"))
         .expect()
         .command(new RejectTripCommand(tripId))
-        .to(TripServiceChannels.tripServiceChannel);
+        .to(TripServiceChannels.trip);
   }
 
   private CreateTripSaga makeCreateTripSaga() {

@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class TripCancellationResolutionRequiredEvent implements
-        TripDomainEvent {
+    TripDomainEvent {
 
-    @NonNull
-    private CancellationParty rejectedParty;
+  @NonNull
+  private CancellationParty rejectedParty;
 }
