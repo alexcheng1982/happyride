@@ -79,6 +79,14 @@ services:
       POSTGRES_DB: happyride-payment
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+  postgres-trip-history:
+    image: eventuateio/eventuate-postgres:0.9.0.RELEASE
+    ports:
+      - 8436:5432
+    environment:
+      POSTGRES_DB: happyride-trip-history
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
   cdc-service:
     image: eventuateio/eventuate-cdc-service:0.6.0.RELEASE
     ports:
@@ -140,3 +148,14 @@ services:
       EVENTUATE_CDC_READER_PAYMENT_DATASOURCEPASSWORD: postgres
       EVENTUATE_CDC_READER_PAYMENT_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
       EVENTUATE_CDC_READER_PAYMENT_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/payment
+
+      EVENTUATE_CDC_PIPELINE_PIPELINE5_TYPE: eventuate-tram
+      EVENTUATE_CDC_PIPELINE_PIPELINE5_READER: Passenger
+      EVENTUATE_CDC_PIPELINE_PIPELINE5_EVENTUATEDATABASESCHEMA: eventuate
+
+      EVENTUATE_CDC_READER_PASSENGER_TYPE: postgres-wal
+      EVENTUATE_CDC_READER_PASSENGER_DATASOURCEURL: jdbc:postgresql://postgres-passenger/happyride-passenger
+      EVENTUATE_CDC_READER_PASSENGER_DATASOURCEUSERNAME: postgres
+      EVENTUATE_CDC_READER_PASSENGER_DATASOURCEPASSWORD: postgres
+      EVENTUATE_CDC_READER_PASSENGER_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
+      EVENTUATE_CDC_READER_PASSENGER_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/passenger

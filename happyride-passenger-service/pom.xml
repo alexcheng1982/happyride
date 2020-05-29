@@ -33,6 +33,10 @@
       <groupId>org.springframework.boot</groupId>
     </dependency>
     <dependency>
+      <groupId>io.eventuate.tram.core</groupId>
+      <artifactId>eventuate-tram-spring-jdbc-kafka</artifactId>
+    </dependency>
+    <dependency>
       <artifactId>guava</artifactId>
       <groupId>com.google.guava</groupId>
     </dependency>
