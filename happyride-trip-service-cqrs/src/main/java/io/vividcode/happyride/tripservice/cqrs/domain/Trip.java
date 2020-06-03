@@ -16,46 +16,47 @@ import org.axonframework.spring.stereotype.Aggregate;
 
 @Aggregate
 public class Trip {
+
   @AggregateIdentifier
   private String id;
 
   private TripState state;
 
   @CommandHandler
-  public Trip(CreateTripCommand command) {
+  public Trip(final CreateTripCommand command) {
     apply(new TripCreatedEvent(command.getTripId(), command.getTripDetails()));
   }
 
   @CommandHandler
-  public void handle(CancelTripCommand command) {
-    if (state != TripState.CREATED) {
-      throw new IllegalTripStateException(state, TripState.CANCELLED);
+  public void handle(final CancelTripCommand command) {
+    if (this.state != TripState.CREATED) {
+      throw new IllegalTripStateException(this.state, TripState.CANCELLED);
     }
     apply(new TripCancelledEvent(command.getTripId()));
   }
 
   @CommandHandler
-  public void handle(ConfirmTripCommand command) {
-    if (state != TripState.CREATED) {
-      throw new IllegalTripStateException(state, TripState.CONFIRMED);
+  public void handle(final ConfirmTripCommand command) {
+    if (this.state != TripState.CREATED) {
+      throw new IllegalTripStateException(this.state, TripState.CONFIRMED);
     }
     apply(new TripConfirmedEvent(command.getTripId()));
   }
 
   @EventSourcingHandler
-  public void on(TripCreatedEvent event) {
-    id = event.getTripId();
-    state = TripState.CREATED;
+  public void on(final TripCreatedEvent event) {
+    this.id = event.getTripId();
+    this.state = TripState.CREATED;
   }
 
   @EventSourcingHandler
-  public void on(TripCancelledEvent event) {
-    state = TripState.CANCELLED;
+  public void on(final TripCancelledEvent event) {
+    this.state = TripState.CANCELLED;
   }
 
   @EventSourcingHandler
-  public void on(TripConfirmedEvent event) {
-    state = TripState.CONFIRMED;
+  public void on(final TripConfirmedEvent event) {
+    this.state = TripState.CONFIRMED;
   }
 
   protected Trip() {

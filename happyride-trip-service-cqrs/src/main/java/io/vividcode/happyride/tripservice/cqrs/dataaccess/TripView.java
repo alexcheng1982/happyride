@@ -14,6 +14,7 @@ import lombok.Data;
 @Table(name = "trip_view")
 @Data
 public class TripView {
+
   @Id
   private String id;
 
@@ -29,6 +30,7 @@ public class TripView {
   @Column(name = "ent_pos_lat")
   private BigDecimal endPosLat;
 
+  @Column(name = "state")
   @Enumerated(EnumType.STRING)
   private TripState state;
 }

@@ -6,8 +6,7 @@ public class IllegalTripStateException extends RuntimeException {
 
   private final TripState fromState;
   private final TripState toState;
-
-
+  
   public IllegalTripStateException(TripState fromState,
       TripState toState) {
     this.fromState = fromState;
@@ -16,6 +15,7 @@ public class IllegalTripStateException extends RuntimeException {
 
   @Override
   public String getMessage() {
-    return String.format("Cannot change trip state from %s to %s", fromState, toState);
+    return String
+        .format("Cannot change trip state from %s to %s", fromState, toState);
   }
 }

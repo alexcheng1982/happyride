@@ -4,7 +4,6 @@ import io.vividcode.happyride.tripservice.api.web.CreateTripRequest;
 import io.vividcode.happyride.tripservice.cqrs.api.FetchTripQuery;
 import io.vividcode.happyride.tripservice.cqrs.api.TripSummary;
 import io.vividcode.happyride.tripservice.cqrs.domain.TripService;
-import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 public class TripController {
@@ -26,24 +27,36 @@ public class TripController {
 
   @PostMapping
   public CompletableFuture<ResponseEntity<Void>> createTrip(
-      @RequestBody CreateTripRequest request) {
-    return tripService
-        .createTrip(request.getPassengerId(), request.getStartPos(), request.getEndPos())
-        .thenApply(tripId -> ResponseEntity.created(URI.create("/" + tripId)).build());
+      @RequestBody final CreateTripRequest request) {
+    final UriComponentsBuilder builder = ServletUriComponentsBuilder
+        .fromCurrentRequest()
+        .path("/{id}");
+    return this.tripService
+        .createTrip(request.getPassengerId(), request.getStartPos(),
+            request.getEndPos())
+        .thenApply(
+            tripId -> ResponseEntity
+                .created(builder.buildAndExpand(tripId).toUri())
+                .build());
   }
 
   @PostMapping("{id}/cancel")
-  public CompletableFuture<Void> cancelTrip(@PathVariable("id") String tripId) {
-    return tripService.cancelTrip(tripId);
+  public CompletableFuture<Void> cancelTrip(
+      @PathVariable("id") final String tripId) {
+    return this.tripService.cancelTrip(tripId);
   }
 
   @PostMapping("{id}/confirm")
-  public CompletableFuture<Void> confirmTrip(@PathVariable("id") String tripId) {
-    return tripService.confirmTrip(tripId);
+  public CompletableFuture<Void> confirmTrip(
+      @PathVariable("id") final String tripId) {
+    return this.tripService.confirmTrip(tripId);
   }
 
   @GetMapping("{id}")
-  public CompletableFuture<TripSummary> getTrip(@PathVariable("id") String tripId) {
-    return queryGateway.query(new FetchTripQuery(tripId), TripSummary.class);
+  public CompletableFuture<TripSummary> getTrip(
+      @PathVariable("id") final String tripId) {
+    return this.queryGateway
+        .query(new FetchTripQuery(tripId), TripSummary.class);
   }
+
 }

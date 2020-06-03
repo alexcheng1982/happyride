@@ -24,33 +24,38 @@ public class TripService {
   @Autowired
   TripViewRepository tripViewRepository;
 
-  public CompletableFuture<String> createTrip(String passengerId, PositionVO startPos,
-      PositionVO endPos) {
-    String tripId = UUID.randomUUID().toString();
-    TripDetails tripDetails = new TripDetails(passengerId, startPos, endPos);
-    CreateTripCommand command = new CreateTripCommand(tripId, tripDetails);
-    return commandGateway.send(command);
+  public CompletableFuture<String> createTrip(final String passengerId,
+      final PositionVO startPos,
+      final PositionVO endPos) {
+    final String tripId = UUID.randomUUID().toString();
+    final TripDetails tripDetails = new TripDetails(passengerId, startPos,
+        endPos);
+    final CreateTripCommand command = new CreateTripCommand(tripId,
+        tripDetails);
+    return this.commandGateway.send(command);
   }
 
-  public CompletableFuture<Void> cancelTrip(String tripId) {
-    CancelTripCommand command = new CancelTripCommand(tripId);
-    return commandGateway.send(command);
+  public CompletableFuture<Void> cancelTrip(final String tripId) {
+    final CancelTripCommand command = new CancelTripCommand(tripId);
+    return this.commandGateway.send(command);
   }
 
-  public CompletableFuture<Void> confirmTrip(String tripId) {
-    ConfirmTripCommand command = new ConfirmTripCommand(tripId);
-    return commandGateway.send(command);
+  public CompletableFuture<Void> confirmTrip(final String tripId) {
+    final ConfirmTripCommand command = new ConfirmTripCommand(tripId);
+    return this.commandGateway.send(command);
   }
 
   @QueryHandler
-  public TripSummary handle(FetchTripQuery query) {
-    return tripViewRepository.findById(query.getTripId())
+  public TripSummary queryTrip(final FetchTripQuery query) {
+    return this.tripViewRepository.findById(query.getTripId())
         .map(tripView -> {
-          TripSummary tripSummary = new TripSummary();
+          final TripSummary tripSummary = new TripSummary();
           tripSummary.setId(tripView.getId());
           tripSummary
-              .setStartPos(new PositionVO(tripView.getStartPosLng(), tripView.getStartPosLat()));
-          tripSummary.setEndPos(new PositionVO(tripView.getEndPosLng(), tripView.getEndPosLat()));
+              .setStartPos(new PositionVO(tripView.getStartPosLng(),
+                  tripView.getStartPosLat()));
+          tripSummary.setEndPos(
+              new PositionVO(tripView.getEndPosLng(), tripView.getEndPosLat()));
           tripSummary.setState(tripView.getState());
           return tripSummary;
         })

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class TripServiceProxy {
 
-  private TripApi tripApi = new TripApi();
+  private final TripApi tripApi = new TripApi();
 
-  public void createTrip(CreateTripRequest request) throws ApiException {
-    tripApi.createTrip(request);
+  public void createTrip(final CreateTripRequest request) throws ApiException {
+    this.tripApi.createTrip(request);
   }
 }
