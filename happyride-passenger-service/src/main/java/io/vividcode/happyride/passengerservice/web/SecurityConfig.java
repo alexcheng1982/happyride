@@ -1,6 +1,5 @@
 package io.vividcode.happyride.passengerservice.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,19 +15,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  JWTFilter jwtFilter;
-
   @Override
   protected void configure(final HttpSecurity http) throws Exception {
     http.csrf().disable()
-        .formLogin().successHandler(new JWTSuccessHandler())
-        .and()
         .authorizeRequests()
         .antMatchers("/login").permitAll()
         .anyRequest().authenticated()
         .and()
-        .addFilterBefore(this.jwtFilter,
+        .addFilter(new JWTAuthenticationFilter(this.authenticationManager()))
+        .addFilterBefore(new JWTFilter(this.authenticationManager()),
             UsernamePasswordAuthenticationFilter.class)
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -41,7 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .withUser("admin")
         .password(this.passwordEncoder().encode("password"))
         .roles("ADMIN")
-        .and().withUser("user")
+        .and()
+        .withUser("user")
         .password(this.passwordEncoder().encode("password"))
         .roles("USER");
   }

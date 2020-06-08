@@ -2,47 +2,50 @@ package io.vividcode.happyride.passengerservice.web;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import java.io.IOException;
-import java.util.Objects;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.util.StringUtils;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
+import java.util.Objects;
 
-@Component
-public class JWTFilter extends OncePerRequestFilter {
+import static io.vividcode.happyride.passengerservice.web.SecurityConstants.AUTHORIZATION_HEADER;
+import static io.vividcode.happyride.passengerservice.web.SecurityConstants.TOKEN_PREFIX;
 
-  @Autowired
-  UserDetailsService userDetailsService;
+public class JWTFilter extends BasicAuthenticationFilter {
+
+
+  public JWTFilter(final AuthenticationManager authenticationManager) {
+    super(authenticationManager);
+  }
 
   @Override
   protected void doFilterInternal(final HttpServletRequest request,
-      final HttpServletResponse response, final FilterChain filterChain)
+                                  final HttpServletResponse response, final FilterChain filterChain)
       throws ServletException, IOException {
     final String token = this.getToken(request);
-    if (token != null) {
+    if (StringUtils.hasText(token)) {
       try {
         final Claims claims = Jwts.parserBuilder()
             .setSigningKey(JWTKeyHolder.KEY)
             .build()
             .parseClaimsJws(token)
             .getBody();
-        final UserDetails userDetails = this.userDetailsService
-            .loadUserByUsername(claims.getSubject());
         SecurityContextHolder.getContext()
             .setAuthentication(new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities()
+                claims.getSubject(), null
             ));
       } catch (final Exception e) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+        SecurityContextHolder.clearContext();
+        response.addCookie(new Cookie(SecurityConstants.AUTH_COOKIE, ""));
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
       }
     } else {
       filterChain.doFilter(request, response);
@@ -52,10 +55,14 @@ public class JWTFilter extends OncePerRequestFilter {
   private String getToken(final HttpServletRequest request) {
     if (request.getCookies() != null) {
       for (final Cookie cookie : request.getCookies()) {
-        if (Objects.equals(cookie.getName(), "auth")) {
+        if (Objects.equals(cookie.getName(), SecurityConstants.AUTH_COOKIE)) {
           return cookie.getValue();
         }
       }
+    }
+    final String header = request.getHeader(AUTHORIZATION_HEADER);
+    if (header != null && header.startsWith(TOKEN_PREFIX)) {
+      return header;
     }
     return null;
   }
