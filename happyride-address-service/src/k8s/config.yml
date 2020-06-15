@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: address-config
+data:
+  db_host: address-postgres
+  db_port: '5432'
+  db_name: happyride-address
+  spring.yml: |-
+    server:
+      port: 8080
+  app.yml: |-    

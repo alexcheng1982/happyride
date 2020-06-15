@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: address-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: address-postgres
+      app.kubernetes.io/version: '0.9.0.RELEASE'
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: address-postgres
+        app.kubernetes.io/version: '0.9.0.RELEASE'
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:10
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "125m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: address-config
+                  key: db_name
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: address-postgres
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: address-postgres
+                  key: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: address-postgres
+spec:
+  clusterIP: None
+  ports:
+    - port: 5432
+      name: db
+      targetPort: 5432
+  selector:
+    app.kubernetes.io/name: address-postgres

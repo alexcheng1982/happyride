@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: address
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: address
+      app.kubernetes.io/version: '1.0.0'
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: address
+        app.kubernetes.io/version: '1.0.0'
+    spec:
+      containers:
+        - name: address
+          image: happyride/happyride-address-service:1.0.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: address-config
+                  key: db_host
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: address-config
+                  key: db_port
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: address-config
+                  key: db_name
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: address-postgres
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: address-postgres
+                  key: password
+            - name: SPRING_CONFIG_LOCATION
+              value: classpath:/application.yml,/etc/config/*/
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: address-config
+            items:
+              - key: spring.yml
+                path: spring/application.yml
+              - key: app.yml
+                path: app/application.yml                
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: address-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      name: api
+      targetPort: 8080
+  selector:
+    app.kubernetes.io/name: address                  

@@ -34,14 +34,14 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
 })
-@DisplayName("地址服务测试")
+@DisplayName("Address Service")
 public class AddressServiceTest {
 
   @Autowired
   AddressService addressService;
 
   @Test
-  @DisplayName("查找地址")
+  @DisplayName("Search address")
   public void testSearchAddress() {
     List<AddressView> result = addressService.search(110101001015L, "王府井社区居委会");
     assertTrue(result.size() > 0);
