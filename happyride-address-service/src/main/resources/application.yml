@@ -1,5 +1,3 @@
-server:
-  port: 8502
 spring:
   jpa:
     open-in-view: false
@@ -15,3 +13,12 @@ spring:
   flyway:
     schemas:
       - happyride
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    prometheus:
+      enabled: true

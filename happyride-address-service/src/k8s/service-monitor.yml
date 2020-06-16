@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: address-service-monitor
+  labels:
+    release: prom-o
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: address  
+  namespaceSelector:
+    matchNames:
+      - monitoring
+  endpoints:
+    - port: api
+      interval: 10s
+      path: "/actuator/prometheus"
+      honorLabels: true  
