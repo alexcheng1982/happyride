@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: address-service-monitor
+  name: address-service
   labels:
     release: prom-o
 spec:
@@ -10,7 +10,7 @@ spec:
       app.kubernetes.io/name: address  
   namespaceSelector:
     matchNames:
-      - monitoring
+      - default
   endpoints:
     - port: api
       interval: 10s
