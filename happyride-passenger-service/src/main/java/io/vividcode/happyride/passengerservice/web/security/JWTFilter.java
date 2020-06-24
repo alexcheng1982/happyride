@@ -1,17 +1,7 @@
-package io.vividcode.happyride.passengerservice.web;
-
-import static io.vividcode.happyride.passengerservice.web.SecurityConstants.AUTHORIZATION_HEADER;
-import static io.vividcode.happyride.passengerservice.web.SecurityConstants.TOKEN_PREFIX;
+package io.vividcode.happyride.passengerservice.web.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import java.io.IOException;
-import java.util.Objects;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,19 +10,30 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Objects;
+
+import static io.vividcode.happyride.passengerservice.web.security.SecurityConstants.AUTHORIZATION_HEADER;
+import static io.vividcode.happyride.passengerservice.web.security.SecurityConstants.TOKEN_PREFIX;
+
 public class JWTFilter extends BasicAuthenticationFilter {
 
   private final UserDetailsService userDetailsService;
 
   public JWTFilter(final AuthenticationManager authenticationManager,
-      final UserDetailsService userDetailsService) {
+                   final UserDetailsService userDetailsService) {
     super(authenticationManager);
     this.userDetailsService = userDetailsService;
   }
 
   @Override
   protected void doFilterInternal(final HttpServletRequest request,
-      final HttpServletResponse response, final FilterChain filterChain)
+                                  final HttpServletResponse response, final FilterChain filterChain)
       throws ServletException, IOException {
     final String token = this.getToken(request);
     if (!StringUtils.hasText(token)) {

@@ -1,10 +1,8 @@
 package io.vividcode.happyride.passengerservice;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
+import io.eventuate.tram.spring.consumer.jdbc.TramConsumerJdbcAutoConfiguration;
 import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
 import io.vividcode.happyride.passengerservice.client.ApiClient;
 import io.vividcode.happyride.passengerservice.client.ApiException;
@@ -18,17 +16,24 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration
-@ComponentScan
-@Import(EmbeddedPostgresConfiguration.class)
+@EnableAutoConfiguration(exclude = {TramConsumerJdbcAutoConfiguration.class, SecurityAutoConfiguration.class})
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ContextConfiguration(classes = {
+    EmbeddedPostgresConfiguration.class,
+    PassengerTestApplication.class
+})
 @ImportAutoConfiguration(classes = {
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
     EmbeddedPostgreSQLBootstrapConfiguration.class
@@ -41,22 +46,22 @@ public class PassengerControllerClientTest {
 
   private final PassengerApi passengerApi;
 
-  public PassengerControllerClientTest(@LocalServerPort int serverPort) {
-    ApiClient apiClient = Configuration.getDefaultApiClient();
-    apiClient.setBasePath("http://localhost:" + serverPort + "/api/v1");
-    passengerApi = new PassengerApi(apiClient);
+  public PassengerControllerClientTest(@LocalServerPort final int serverPort) {
+    final ApiClient apiClient = Configuration.getDefaultApiClient();
+    apiClient.setBasePath("http://localhost:" + serverPort);
+    this.passengerApi = new PassengerApi(apiClient);
   }
 
   @Test
   @DisplayName("Create a new passenger")
   void testCreatePassenger() {
     try {
-      ApiResponse<Void> response = passengerApi
+      final ApiResponse<Void> response = this.passengerApi
           .createPassengerWithHttpInfo(
               PassengerUtils.buildCreatePassengerRequest(1));
       assertThat(response.getStatusCode()).isEqualTo(201);
       assertThat(response.getHeaders()).containsKey("Location");
-    } catch (ApiException e) {
+    } catch (final ApiException e) {
       fail(e);
     }
   }
@@ -65,12 +70,12 @@ public class PassengerControllerClientTest {
   @DisplayName("Add a new address")
   public void testAddUserAddress() {
     try {
-      String passengerId = createPassenger(1);
-      PassengerVO passenger = passengerApi
+      final String passengerId = this.createPassenger(1);
+      final PassengerVO passenger = this.passengerApi
           .createAddress(PassengerUtils.buildCreateUserAddressRequest(),
               passengerId);
       assertThat(passenger.getUserAddresses()).hasSize(2);
-    } catch (ApiException e) {
+    } catch (final ApiException e) {
       fail(e);
     }
   }
@@ -79,23 +84,23 @@ public class PassengerControllerClientTest {
   @DisplayName("Remove an address")
   public void testRemoveAddress() {
     try {
-      String passengerId = createPassenger(3);
-      PassengerVO passenger = passengerApi.getPassenger(passengerId);
-      String addressId = passenger.getUserAddresses().get(0).getId();
-      passengerApi.deleteAddress(passengerId, addressId);
-      passenger = passengerApi.getPassenger(passengerId);
+      final String passengerId = this.createPassenger(3);
+      PassengerVO passenger = this.passengerApi.getPassenger(passengerId);
+      final String addressId = passenger.getUserAddresses().get(0).getId();
+      this.passengerApi.deleteAddress(passengerId, addressId);
+      passenger = this.passengerApi.getPassenger(passengerId);
       assertThat(passenger.getUserAddresses()).hasSize(2);
-    } catch (ApiException e) {
+    } catch (final ApiException e) {
       fail(e);
     }
   }
 
-  private String createPassenger(int numberOfAddresses) throws ApiException {
-    ApiResponse<Void> response = passengerApi
+  private String createPassenger(final int numberOfAddresses) throws ApiException {
+    final ApiResponse<Void> response = this.passengerApi
         .createPassengerWithHttpInfo(
             PassengerUtils.buildCreatePassengerRequest(numberOfAddresses));
     assertThat(response.getHeaders()).containsKey("Location");
-    String location = response.getHeaders().get("Location").get(0);
+    final String location = response.getHeaders().get("Location").get(0);
     return StringUtils.substringAfterLast(location, "/");
   }
 }

@@ -22,7 +22,7 @@ public class PassengerClient {
 
   public PassengerClient(@LocalServerPort int serverPort) {
     ApiClient apiClient = Configuration.getDefaultApiClient();
-    apiClient.setBasePath("http://localhost:" + serverPort + "/api/v1");
+    apiClient.setBasePath("http://localhost:" + serverPort);
     passengerApi = new PassengerApi(apiClient);
   }
 

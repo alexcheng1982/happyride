@@ -1,4 +1,4 @@
-package io.vividcode.happyride.passengerservice.web;
+package io.vividcode.happyride.passengerservice.web.security;
 
 public interface SecurityConstants {
   String AUTHORIZATION_HEADER = "Authorization";

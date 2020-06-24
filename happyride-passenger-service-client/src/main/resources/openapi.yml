@@ -3,7 +3,7 @@ info:
   title: Passenger management service
   version: '1.0'
 servers:
-  - url: http://localhost:8500/api/v1
+  - url: http://localhost:8500
 tags:
   - name: passenger
     description: Passenger

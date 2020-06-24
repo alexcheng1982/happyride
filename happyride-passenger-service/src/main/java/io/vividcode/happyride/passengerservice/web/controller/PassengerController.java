@@ -1,0 +1,60 @@
+package io.vividcode.happyride.passengerservice.web.controller;
+
+import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
+import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
+import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
+import io.vividcode.happyride.passengerservice.domain.PassengerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+
+@RestController
+public class PassengerController {
+
+  @Autowired
+  PassengerService passengerService;
+
+  @GetMapping
+  public List<PassengerVO> findAll() {
+    return this.passengerService.findAll();
+  }
+
+  @GetMapping("{id}")
+  public ResponseEntity<PassengerVO> getPassenger(@PathVariable("id") final String passengerId) {
+    return this.passengerService.getPassenger(passengerId)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
+
+  @PostMapping
+  public ResponseEntity<PassengerVO> createPassenger(
+      @RequestBody final CreatePassengerRequest request) {
+    final PassengerVO passenger = this.passengerService.createPassenger(request);
+    return ResponseEntity.created(this.resourceCreated(passenger.getId())).body(passenger);
+  }
+
+  @PostMapping("{id}/addresses")
+  public ResponseEntity<PassengerVO> createAddress(@PathVariable("id") final String passengerId,
+                                                   @RequestBody final CreateUserAddressRequest request) {
+    final PassengerVO passenger = this.passengerService.addAddress(passengerId, request);
+    return ResponseEntity.ok(passenger);
+  }
+
+  @DeleteMapping("{passengerId}/addresses/{addressId}")
+  public ResponseEntity<Void> deleteAddress(@PathVariable("passengerId") final String passengerId,
+                                            @PathVariable("addressId") final String addressId) {
+    this.passengerService.deleteAddress(passengerId, addressId);
+    return ResponseEntity.noContent().build();
+  }
+
+  private URI resourceCreated(final String resourceId) {
+    return ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(resourceId)
+        .toUri();
+  }
+}

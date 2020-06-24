@@ -35,7 +35,7 @@ public class DriverControllerTest {
   @DisplayName("创建司机")
   public void testCreateDriver(@Autowired WebTestClient webClient) {
     webClient.post()
-        .uri("/api/v1")
+        .uri("/")
         .bodyValue(DriverTestUtils.buildCreateDriverRequest(1))
         .accept(MediaType.APPLICATION_JSON)
         .exchange()

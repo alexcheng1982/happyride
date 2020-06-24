@@ -1,14 +1,12 @@
 package io.vividcode.happyride.addressservice;
 
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
+import io.vividcode.happyride.addressservice.dataaccess.AddressRepository;
 import io.vividcode.happyride.addressservice.service.AddressService;
 import io.vividcode.happyride.addressservice.service.AddressView;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +19,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @DataJpaTest
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@ComponentScan
+@ComponentScan(basePackageClasses = {AddressRepository.class, AddressService.class})
 @ContextConfiguration(classes = {
     EmbeddedPostgresConfiguration.class}
 )
@@ -43,7 +45,7 @@ public class AddressServiceTest {
   @Test
   @DisplayName("Search address")
   public void testSearchAddress() {
-    List<AddressView> result = addressService.search(110101001015L, "王府井社区居委会");
+    final List<AddressView> result = this.addressService.search(110101001015L, "王府井社区居委会");
     assertTrue(result.size() > 0);
   }
 }

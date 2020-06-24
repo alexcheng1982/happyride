@@ -3,7 +3,7 @@ info:
   title: 行程服务
   version: '1.0'
 servers:
-  - url: http://localhost:8501/api/v1
+  - url: http://localhost:8501
 tags:
   - name: trip
     description: 行程相关

@@ -1,34 +1,40 @@
 package io.vividcode.happyride.passengerservice;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
+import io.eventuate.tram.spring.consumer.jdbc.TramConsumerJdbcAutoConfiguration;
 import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
 import io.vividcode.happyride.passengerservice.domain.PassengerUtils;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
-import java.net.URI;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
+
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration
-@ComponentScan
-@Import(EmbeddedPostgresConfiguration.class)
+@EnableAutoConfiguration(exclude = {TramConsumerJdbcAutoConfiguration.class, SecurityAutoConfiguration.class})
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ContextConfiguration(classes = {
+    EmbeddedPostgresConfiguration.class,
+    PassengerTestApplication.class
+})
 @ImportAutoConfiguration(classes = {
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
     EmbeddedPostgreSQLBootstrapConfiguration.class
@@ -39,7 +45,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @DisplayName("Passenger controller test")
 public class PassengerControllerTest {
 
-  private final String baseUri = "/api/v1";
+  private final String baseUri = "/";
 
   @Autowired
   WebTestClient webClient;
@@ -50,8 +56,8 @@ public class PassengerControllerTest {
   @Test
   @DisplayName("Create a new passenger")
   public void testCreatePassenger() {
-    webClient.post()
-        .uri(baseUri)
+    this.webClient.post()
+        .uri(this.baseUri)
         .bodyValue(PassengerUtils.buildCreatePassengerRequest(1))
         .accept(MediaType.APPLICATION_JSON)
         .exchange()
@@ -62,12 +68,12 @@ public class PassengerControllerTest {
   @Test
   @DisplayName("Add a new address")
   public void testAddUserAddress() {
-    URI passengerUri = restTemplate
-        .postForLocation(baseUri,
+    final URI passengerUri = this.restTemplate
+        .postForLocation(this.baseUri,
             PassengerUtils.buildCreatePassengerRequest(1));
-    URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
+    final URI addressesUri = ServletUriComponentsBuilder.fromUri(passengerUri)
         .path("/addresses").build().toUri();
-    webClient.post().uri(addressesUri)
+    this.webClient.post().uri(addressesUri)
         .bodyValue(PassengerUtils.buildCreateUserAddressRequest())
         .exchange()
         .expectStatus().isOk()
@@ -78,18 +84,18 @@ public class PassengerControllerTest {
   @Test
   @DisplayName("Remove an address")
   public void testRemoveAddress() {
-    URI passengerUri = restTemplate
-        .postForLocation(baseUri,
+    final URI passengerUri = this.restTemplate
+        .postForLocation(this.baseUri,
             PassengerUtils.buildCreatePassengerRequest(3));
-    PassengerVO passenger = restTemplate
+    final PassengerVO passenger = this.restTemplate
         .getForObject(passengerUri, PassengerVO.class);
-    String addressId = passenger.getUserAddresses().get(0).getId();
-    URI addressUri = ServletUriComponentsBuilder.fromUri(passengerUri)
+    final String addressId = passenger.getUserAddresses().get(0).getId();
+    final URI addressUri = ServletUriComponentsBuilder.fromUri(passengerUri)
         .path("/addresses/" + addressId).build().toUri();
-    webClient.delete().uri(addressUri)
+    this.webClient.delete().uri(addressUri)
         .exchange()
         .expectStatus().isNoContent();
-    webClient.get().uri(passengerUri)
+    this.webClient.get().uri(passengerUri)
         .exchange()
         .expectStatus().isOk()
         .expectBody(PassengerVO.class)
