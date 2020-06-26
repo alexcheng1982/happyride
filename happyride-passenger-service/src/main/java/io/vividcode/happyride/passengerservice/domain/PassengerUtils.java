@@ -15,13 +15,13 @@ public class PassengerUtils {
 
   private static final Faker faker = new Faker(Locale.CHINA);
 
-  public static CreatePassengerRequest buildCreatePassengerRequest(int numberOfAddresses) {
-    CreatePassengerRequest request = new CreatePassengerRequest();
+  public static CreatePassengerRequest buildCreatePassengerRequest(final int numberOfAddresses) {
+    final CreatePassengerRequest request = new CreatePassengerRequest();
     request.setName(faker.name().name());
     request.setEmail(faker.internet().emailAddress());
     request.setMobilePhoneNumber(faker.phoneNumber().phoneNumber());
-    int count = Math.max(0, numberOfAddresses);
-    List<CreateUserAddressRequest> addresses = new ArrayList<>(count);
+    final int count = Math.max(0, numberOfAddresses);
+    final List<CreateUserAddressRequest> addresses = new ArrayList<>(count);
     for (int i = 0; i < count; i++) {
       addresses.add(buildCreateUserAddressRequest());
     }
@@ -30,14 +30,13 @@ public class PassengerUtils {
   }
 
   public static CreateUserAddressRequest buildCreateUserAddressRequest() {
-    CreateUserAddressRequest request = new CreateUserAddressRequest();
+    final CreateUserAddressRequest request = new CreateUserAddressRequest();
     request.setName(faker.pokemon().name());
     request.setAddressId(UUID.randomUUID().toString());
-    request.setAddressName(faker.address().fullAddress());
     return request;
   }
 
-  public static PassengerVO createPassengerVO(Passenger passenger) {
+  public static PassengerVO createPassengerVO(final Passenger passenger) {
     return new PassengerVO(passenger.getId(),
         passenger.getName(),
         passenger.getEmail(),
@@ -46,10 +45,9 @@ public class PassengerUtils {
             .collect(Collectors.toList()));
   }
 
-  public static UserAddressVO createUserAddressVO(UserAddress userAddress) {
+  public static UserAddressVO createUserAddressVO(final UserAddress userAddress) {
     return new UserAddressVO(userAddress.getId(),
         userAddress.getName(),
-        userAddress.getAddressId(),
-        userAddress.getAddressName());
+        userAddress.getAddressId());
   }
 }

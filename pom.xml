@@ -26,6 +26,7 @@
     <module>happyride-driver-simulator-ui</module>
     <module>happyride-payment-service</module>
     <module>happyride-payment-service-api</module>
+    <module>happyride-passenger-web-api</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>

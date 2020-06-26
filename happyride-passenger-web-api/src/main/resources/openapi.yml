@@ -1,12 +1,16 @@
 openapi: '3.0.3'
 info:
-  title: Passenger management service
+  title: Passenger service for web
   version: '1.0'
 servers:
-  - url: http://localhost:8500
+  - url: http://localhost:8510
 tags:
   - name: passenger
     description: Passenger
+  - name: address
+    description: Address
+  - name: trip
+    description: Trip    
 paths:
   /:
     post:
@@ -42,13 +46,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PassengerVO"
+                $ref: "#/components/schemas/Passenger"
         '404':
           description: Passenger not found
   /{passengerId}/addresses:
     post:
       tags:
-        - passenger
+        - address
       summary: Create a new address
       operationId: createAddress
       parameters:
@@ -70,11 +74,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PassengerVO"
+                $ref: "#/components/schemas/Passenger"
   /{passengerId}/addresses/{addressId}:
     delete:
       tags:
-        - passenger
+        - address
       summary: Delete an address
       operationId: deleteAddress
       parameters:
@@ -93,6 +97,28 @@ paths:
       responses:
         '204':
           description: Successful
+  /{passengerId}/trip:
+    post:
+      tags:
+        - trip
+      summary: Create a trip
+      operationId: createTrip
+      parameters:
+        - name: passengerId
+          in: path
+          description: Passenger id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTripRequest"
+        required: true      
+      responses:
+        '201':
+          description: Successful   
 
 components:
   schemas:
@@ -122,7 +148,7 @@ components:
       required:
         - name
         - addressId
-    PassengerVO:
+    Passenger:
       type: object
       properties:
         id:
@@ -136,12 +162,12 @@ components:
         userAddresses:
           type: array
           items:
-            $ref: "#/components/schemas/UserAddressVO"
+            $ref: "#/components/schemas/UserAddress"
       required:
         - id
         - name
         - mobilePhoneNumber
-    UserAddressVO:
+    UserAddress:
       type: object
       properties:
         id:
@@ -150,7 +176,21 @@ components:
           type: string
         addressId:
           type: string
+        addressLine:
+          type: string
+        lat:
+          type: number
+        lng:
+          type: number
+        areaId:
+          type: number
+    CreateTripRequest:
+      type: object
+      properties:
+        startAddressId:
+          type: string   
+        endAddressId:
+          type: string
       required:
-        - id
-        - name
-        - addressId
+        - startAddressId
+        - endAddressId

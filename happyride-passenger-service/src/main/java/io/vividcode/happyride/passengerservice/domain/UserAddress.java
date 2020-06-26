@@ -26,9 +26,4 @@ public class UserAddress extends EntityWithGeneratedId {
   @Size(max = 36)
   @NonNull
   private String addressId;
-
-  @Column(name = "address_name")
-  @Size(max = 50)
-  @NonNull
-  private String addressName;
 }

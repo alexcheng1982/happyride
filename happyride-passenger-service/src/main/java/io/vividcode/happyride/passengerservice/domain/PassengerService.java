@@ -24,60 +24,56 @@ public class PassengerService {
   PassengerRepository passengerRepository;
 
   public List<PassengerVO> findAll() {
-    return Streams.stream(passengerRepository.findAll())
+    return Streams.stream(this.passengerRepository.findAll())
         .map(PassengerUtils::createPassengerVO)
         .collect(Collectors.toList());
   }
 
-  public Optional<PassengerVO> getPassenger(String passengerId) {
-    return passengerRepository.findById(passengerId)
+  public Optional<PassengerVO> getPassenger(final String passengerId) {
+    return this.passengerRepository.findById(passengerId)
         .map(PassengerUtils::createPassengerVO);
   }
 
-  public PassengerVO createPassenger(CreatePassengerRequest request) {
-    Passenger passenger = new Passenger();
+  public PassengerVO createPassenger(final CreatePassengerRequest request) {
+    final Passenger passenger = new Passenger();
     passenger.setName(request.getName());
     passenger.setEmail(request.getEmail());
     passenger.setMobilePhoneNumber(request.getMobilePhoneNumber());
-    List<UserAddress> userAddresses = Optional.ofNullable(request.getUserAddresses())
+    final List<UserAddress> userAddresses = Optional.ofNullable(request.getUserAddresses())
         .map(requests -> requests.stream()
             .map(this::createUserAddress)
             .collect(Collectors.toList())
         ).orElse(new ArrayList<>());
     passenger.setUserAddresses(userAddresses);
-    return createPassengerVO(passengerRepository.save(passenger));
+    return createPassengerVO(this.passengerRepository.save(passenger));
   }
 
-  public PassengerVO addAddress(String passengerId, CreateUserAddressRequest request) {
-    Passenger passenger = passengerRepository.findById(passengerId)
+  public PassengerVO addAddress(final String passengerId, final CreateUserAddressRequest request) {
+    final Passenger passenger = this.passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
-    UserAddress userAddress = createUserAddress(request);
+    final UserAddress userAddress = this.createUserAddress(request);
     passenger.addUserAddress(userAddress);
     return createPassengerVO(passenger);
   }
 
-  public Optional<UserAddressVO> getAddress(String passengerId, String addressId) {
-    return passengerRepository.findById(passengerId)
+  public Optional<UserAddressVO> getAddress(final String passengerId, final String addressId) {
+    return this.passengerRepository.findById(passengerId)
         .flatMap(passenger -> passenger.getUserAddress(addressId))
         .map(PassengerUtils::createUserAddressVO);
   }
 
-  public PassengerVO deleteAddress(String passengerId, String addressId) {
-    Passenger passenger = passengerRepository.findById(passengerId)
+  public PassengerVO deleteAddress(final String passengerId, final String addressId) {
+    final Passenger passenger = this.passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
     passenger.getUserAddress(addressId).ifPresent(passenger::removeUserAddress);
     return createPassengerVO(passenger);
   }
-
-
-  private UserAddress createUserAddress(CreateUserAddressRequest request) {
-    UserAddress address = new UserAddress();
+  
+  private UserAddress createUserAddress(final CreateUserAddressRequest request) {
+    final UserAddress address = new UserAddress();
     address.generateId();
     address.setName(request.getName());
     address.setAddressId(request.getAddressId());
-    address.setAddressName(request.getAddressName());
     return address;
   }
-
-
 }
