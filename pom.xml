@@ -27,6 +27,8 @@
     <module>happyride-payment-service</module>
     <module>happyride-payment-service-api</module>
     <module>happyride-passenger-web-api</module>
+    <module>happyride-address-service-client</module>
+    <module>happyride-address-service-api</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -50,7 +52,7 @@
     <eventuate-tram-sagas.version>0.13.0.RELEASE</eventuate-tram-sagas.version>
     <lombok.version>1.18.10</lombok.version>
     <testcontainers.version>1.44</testcontainers.version>
-    <guava.version>28.2-jre</guava.version>
+    <guava.version>29.0-jre</guava.version>
     <axon.version>4.3.3</axon.version>
     <javafaker.version>1.0.2</javafaker.version>
     <vaadin.version>14.1.18</vaadin.version>
@@ -58,6 +60,7 @@
     <vavr.version>0.10.2</vavr.version>
     <spatial4j.version>0.7</spatial4j.version>
     <jjwt.version>0.11.1</jjwt.version>
+    <openapi-generator.version>4.3.1</openapi-generator.version>
   </properties>
 
   <dependencyManagement>
@@ -258,6 +261,11 @@
               </goals>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.openapitools</groupId>
+          <artifactId>openapi-generator-maven-plugin</artifactId>
+          <version>${openapi-generator.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

@@ -1,0 +1,139 @@
+openapi: '3.0.3'
+info:
+  title: Address management service
+  version: '1.0'
+servers:
+  - url: http://localhost:8502
+tags:
+  - name: address
+    description: Address
+paths:
+  /search:
+    get:
+      tags:
+        - address
+      summary: Search addresses
+      operationId: searchAddress
+      parameters:
+        - name: areaCode
+          in: query
+          required: true
+          description: Area code
+          schema:
+            type: number
+        - name: query
+          required: true
+          in: query
+          description: Search query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sucessful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Address"
+  /address/{addressId}:
+    get:
+      tags:
+        - address
+      summary: Get an address
+      operationId: getAddress
+      parameters:
+        - name: addressId
+          in: path
+          required: true
+          description: Address id
+          schema:
+            type: string
+        - name: areaLevel
+          in: query
+          required: false
+          description: Level of areas
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Address"
+        '404':
+          description: Address not found
+  /area/{areaCode}:
+    get:
+      tags:
+        - address
+      summary: Get an area
+      operationId: getArea
+      parameters:
+        - name: areaCode
+          in: path
+          required: true
+          description: Area code
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Area"
+        '404':
+          description: Area not found
+
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        id:
+          type: string
+        areaId:
+          type: number
+        addressLine:
+          type: string
+        lat:
+          type: number
+        lng:
+          type: number
+        areas:
+          type: array
+          items:
+            $ref: "#/components/schemas/Area"
+    Area:
+      type: object
+      properties:
+        id:
+          type: number
+        level:
+          type: number
+        parentCode:
+          type: number
+        areaCode:
+          type: number
+        zipCode:
+          type: string
+        cityCode:
+          type: string
+        name:
+          type: string
+        shortName:
+          type: string
+        mergerName:
+          type: string
+        pinyin:
+          type: string
+        lat:
+          type: number
+        lng:
+          type: number
+        ancestors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Area"

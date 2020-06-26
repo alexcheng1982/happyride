@@ -1,6 +1,8 @@
 package io.vividcode.happyride.addressservice.service;
 
 import io.micrometer.core.annotation.Timed;
+import io.vividcode.happyride.addressservice.api.AddressVO;
+import io.vividcode.happyride.addressservice.api.AreaVO;
 import io.vividcode.happyride.addressservice.dataaccess.AddressRepository;
 import java.util.List;
 import java.util.Optional;
@@ -20,21 +22,29 @@ public class AddressService {
   AreaService areaService;
 
   @Timed(value = "happyride.address.search", percentiles = {0.5, 0.75, 0.9})
-  public List<AddressView> search(final Long areaCode, final String query) {
+  public List<AddressVO> search(final Long areaCode, final String query) {
     return this.addressRepository
         .findByAreaAreaCodeAndAddressLineContains(areaCode, query)
         .stream()
-        .map(AddressView::fromAddress)
+        .map(AddressHelper::fromAddress)
         .collect(Collectors.toList());
   }
 
   @Timed(value = "happyride.address.get", percentiles = {0.5, 0.75, 0.9})
-  public Optional<AddressView> getAddress(final String addressId, final int level) {
+  public Optional<AddressVO> getAddress(final String addressId, final int level) {
     return this.addressRepository.findById(addressId)
         .map(address -> {
-          final List<AreaView> areas = this.areaService
+          final List<AreaVO> areas = this.areaService
               .getAreaWithHierarchy(address.getArea(), level);
-          return AddressView.fromAddress(address, areas);
+          return AddressHelper.fromAddress(address, areas);
         });
+  }
+
+  public List<AddressVO> getAddresses(final List<String> addressIds) {
+    return addressIds.stream().map(addressId -> this.addressRepository.findById(addressId))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(AddressHelper::fromAddress)
+        .collect(Collectors.toList());
   }
 }

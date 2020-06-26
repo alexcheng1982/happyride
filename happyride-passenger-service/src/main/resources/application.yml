@@ -1,5 +1,3 @@
-server:
-  port: 8500
 spring:
   jpa:
     open-in-view: false
@@ -11,9 +9,7 @@ spring:
         default_schema: happyride
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:8431/happyride-passenger
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:${DB_PORT:8431}/${DB_NAME:happyride-passenger}
   flyway:
     schemas:
       - happyride

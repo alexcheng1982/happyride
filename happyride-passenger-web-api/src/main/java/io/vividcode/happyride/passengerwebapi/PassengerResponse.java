@@ -1,26 +1,23 @@
-package io.vividcode.happyride.passengerservice.api.web;
+package io.vividcode.happyride.passengerwebapi;
 
+import io.vividcode.happyride.addressservice.api.AddressVO;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PassengerVO {
+public class PassengerResponse {
 
-  @NonNull
   private String id;
 
-  @NonNull
   private String name;
 
   private String email;
 
-  @NonNull
   private String mobilePhoneNumber;
 
-  private List<UserAddressVO> userAddresses;
+  private List<AddressVO> userAddresses;
 }
