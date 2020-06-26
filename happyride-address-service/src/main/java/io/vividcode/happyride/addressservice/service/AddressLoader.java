@@ -21,30 +21,30 @@ public class AddressLoader {
   @Autowired
   AddressRepository addressRepository;
 
-  private ThreadLocalRandom random = ThreadLocalRandom.current();
+  private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
   @EventListener
-  public void onApplicationStarted(ApplicationStartedEvent event) {
-    loadAddresses();
+  public void onApplicationStarted(final ApplicationStartedEvent event) {
+    this.loadAddresses();
   }
 
   @Transactional
   public void loadAddresses() {
-    addressRepository.deleteAll();
-    areaRepository.findAll().forEach(area -> {
-      int num = random.nextInt(1, 5);
+    this.addressRepository.deleteAll();
+    this.areaRepository.findAll().forEach(area -> {
+      final int num = this.random.nextInt(2, 5);
       for (int i = 0; i < num; i++) {
-        Address address = createInArea(area, i);
-        addressRepository.save(address);
+        final Address address = this.createInArea(area, i);
+        this.addressRepository.save(address);
       }
     });
   }
 
-  private Address createInArea(Area area, int seq) {
-    BigDecimal lat = adjustValue(area.getLat());
-    BigDecimal lng = adjustValue(area.getLng());
-    String addressLine = area.getName() + "-" + seq;
-    Address address = new Address();
+  private Address createInArea(final Area area, final int seq) {
+    final BigDecimal lat = this.adjustValue(area.getLat());
+    final BigDecimal lng = this.adjustValue(area.getLng());
+    final String addressLine = area.getName() + "-" + seq;
+    final Address address = new Address();
     address.setArea(area);
     address.setAddressLine(addressLine);
     address.setLat(lat);
@@ -52,7 +52,7 @@ public class AddressLoader {
     return address;
   }
 
-  private BigDecimal adjustValue(BigDecimal location) {
-    return location.add(BigDecimal.valueOf(random.nextInt(-100, 100) * 0.000001));
+  private BigDecimal adjustValue(final BigDecimal location) {
+    return location.add(BigDecimal.valueOf(this.random.nextInt(-100, 100) * 0.000001));
   }
 }
