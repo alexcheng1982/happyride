@@ -1,4 +1,4 @@
-package io.vividcode.happyride.passengerservice.web;
+package io.vividcode.happyride.security;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;

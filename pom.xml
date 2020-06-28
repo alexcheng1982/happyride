@@ -29,6 +29,7 @@
     <module>happyride-passenger-web-api</module>
     <module>happyride-address-service-client</module>
     <module>happyride-address-service-api</module>
+    <module>happyride-security-jwt</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -61,6 +62,7 @@
     <spatial4j.version>0.7</spatial4j.version>
     <jjwt.version>0.11.1</jjwt.version>
     <openapi-generator.version>4.3.1</openapi-generator.version>
+    <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
   </properties>
 
   <dependencyManagement>
@@ -135,6 +137,14 @@
         <groupId>io.jsonwebtoken</groupId>
         <artifactId>jjwt-jackson</artifactId>
         <version>${jjwt.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>runtime</scope>
       </dependency>
 
       <dependency>

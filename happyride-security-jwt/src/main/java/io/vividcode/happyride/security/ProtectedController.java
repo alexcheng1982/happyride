@@ -1,4 +1,4 @@
-package io.vividcode.happyride.passengerservice.web;
+package io.vividcode.happyride.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

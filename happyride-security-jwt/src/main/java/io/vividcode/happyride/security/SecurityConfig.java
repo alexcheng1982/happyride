@@ -1,4 +1,4 @@
-package io.vividcode.happyride.passengerservice.web.security;
+package io.vividcode.happyride.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package io.vividcode.happyride.passengerservice.web;
+package io.vividcode.happyride.security;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;

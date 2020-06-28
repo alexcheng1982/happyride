@@ -1,4 +1,4 @@
-package io.vividcode.happyride.passengerservice.web;
+package io.vividcode.happyride.security;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class LoginRequest {
+
   @NonNull
   private String username;
   @NonNull

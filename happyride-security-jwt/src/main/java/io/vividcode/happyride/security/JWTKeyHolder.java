@@ -1,7 +1,6 @@
-package io.vividcode.happyride.passengerservice.web.security;
+package io.vividcode.happyride.security;
 
 import io.jsonwebtoken.impl.crypto.MacProvider;
-
 import java.security.Key;
 
 public class JWTKeyHolder {

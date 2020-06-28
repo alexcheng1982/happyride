@@ -1,16 +1,20 @@
-package io.vividcode.happyride.passengerservice.web.controller;
+package io.vividcode.happyride.passengerservice.web;
 
 import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
 import io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest;
 import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
 import io.vividcode.happyride.passengerservice.domain.PassengerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class PassengerController {
@@ -24,7 +28,8 @@ public class PassengerController {
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<PassengerVO> getPassenger(@PathVariable("id") final String passengerId) {
+  public ResponseEntity<PassengerVO> getPassenger(
+      @PathVariable("id") final String passengerId) {
     return this.passengerService.getPassenger(passengerId)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
@@ -33,20 +38,25 @@ public class PassengerController {
   @PostMapping
   public ResponseEntity<PassengerVO> createPassenger(
       @RequestBody final CreatePassengerRequest request) {
-    final PassengerVO passenger = this.passengerService.createPassenger(request);
-    return ResponseEntity.created(this.resourceCreated(passenger.getId())).body(passenger);
+    final PassengerVO passenger = this.passengerService
+        .createPassenger(request);
+    return ResponseEntity.created(this.resourceCreated(passenger.getId()))
+        .body(passenger);
   }
 
   @PostMapping("{id}/addresses")
-  public ResponseEntity<PassengerVO> createAddress(@PathVariable("id") final String passengerId,
-                                                   @RequestBody final CreateUserAddressRequest request) {
-    final PassengerVO passenger = this.passengerService.addAddress(passengerId, request);
+  public ResponseEntity<PassengerVO> createAddress(
+      @PathVariable("id") final String passengerId,
+      @RequestBody final CreateUserAddressRequest request) {
+    final PassengerVO passenger = this.passengerService
+        .addAddress(passengerId, request);
     return ResponseEntity.ok(passenger);
   }
 
   @DeleteMapping("{passengerId}/addresses/{addressId}")
-  public ResponseEntity<Void> deleteAddress(@PathVariable("passengerId") final String passengerId,
-                                            @PathVariable("addressId") final String addressId) {
+  public ResponseEntity<Void> deleteAddress(
+      @PathVariable("passengerId") final String passengerId,
+      @PathVariable("addressId") final String addressId) {
     this.passengerService.deleteAddress(passengerId, addressId);
     return ResponseEntity.noContent().build();
   }
