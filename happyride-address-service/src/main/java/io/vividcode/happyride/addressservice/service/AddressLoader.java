@@ -30,7 +30,9 @@ public class AddressLoader {
 
   @Transactional
   public void loadAddresses() {
-    this.addressRepository.deleteAll();
+    if (this.addressRepository.count() > 0) {
+      return;
+    }
     this.areaRepository.findAll().forEach(area -> {
       final int num = this.random.nextInt(2, 5);
       for (int i = 0; i < num; i++) {
@@ -53,6 +55,7 @@ public class AddressLoader {
   }
 
   private BigDecimal adjustValue(final BigDecimal location) {
-    return location.add(BigDecimal.valueOf(this.random.nextInt(-100, 100) * 0.000001));
+    return location
+        .add(BigDecimal.valueOf(this.random.nextInt(-100, 100) * 0.000001));
   }
 }

@@ -3,6 +3,7 @@ package io.vividcode.happyride.passengerwebapi;
 import com.google.common.collect.ImmutableMap;
 import io.vividcode.happyride.addressservice.api.AddressVO;
 import io.vividcode.happyride.addressservice.api.AreaVO;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,10 +28,12 @@ public class AddressServiceProxy {
             .build())
         .retrieve()
         .bodyToMono(new ParameterizedTypeReference<List<AddressVO>>() {
-        });
+        })
+        .onErrorReturn(Collections.emptyList());
   }
 
-  public Mono<AddressVO> getAddress(final String addressId, final int areaLevel) {
+  public Mono<AddressVO> getAddress(final String addressId,
+      final int areaLevel) {
     return WebClient.create(this.destinationConfig.getAddress())
         .get()
         .uri(uriBuilder -> uriBuilder.path("/address/{addressId}")
@@ -39,7 +42,8 @@ public class AddressServiceProxy {
         .retrieve()
         .bodyToMono(AddressVO.class)
         .onErrorResume(WebClientResponseException.class, ex ->
-            ex.getStatusCode() == HttpStatus.NOT_FOUND ? Mono.empty() : Mono.error(ex)
+            ex.getStatusCode() == HttpStatus.NOT_FOUND ? Mono.empty()
+                : Mono.error(ex)
         );
   }
 
@@ -50,7 +54,8 @@ public class AddressServiceProxy {
             .build(ImmutableMap.of("addressIds", addressIds)))
         .retrieve()
         .bodyToMono(new ParameterizedTypeReference<List<AddressVO>>() {
-        });
+        })
+        .onErrorReturn(Collections.emptyList());
   }
 
   public Mono<AreaVO> getArea(final Long areaCode, final int ancestorLevel) {
@@ -62,7 +67,8 @@ public class AddressServiceProxy {
         .retrieve()
         .bodyToMono(AreaVO.class)
         .onErrorResume(WebClientResponseException.class, ex ->
-            ex.getStatusCode() == HttpStatus.NOT_FOUND ? Mono.empty() : Mono.error(ex)
+            ex.getStatusCode() == HttpStatus.NOT_FOUND ? Mono.empty()
+                : Mono.error(ex)
         );
   }
 }

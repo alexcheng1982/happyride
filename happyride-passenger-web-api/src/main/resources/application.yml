@@ -1,0 +1,16 @@
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: address_service
+          uri: ${destination.address}
+          predicates:
+            - Path=/address/**
+          filters:
+            - StripPrefix=1

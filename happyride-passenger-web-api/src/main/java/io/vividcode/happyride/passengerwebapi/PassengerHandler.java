@@ -29,16 +29,12 @@ public class PassengerHandler {
               .map(UserAddressVO::getAddressId)
               .collect(Collectors.joining(","));
           return this.addressServiceProxy.getAddresses(addressIds)
-              .flatMap(addresses -> Mono.just(
-                  new PassengerResponse(
-                      passenger.getId(),
-                      passenger.getName(),
-                      passenger.getEmail(),
-                      passenger.getMobilePhoneNumber(),
-                      addresses
-                  )));
+              .map(addresses -> PassengerResponse
+                  .fromPassengerAndAddresses(passenger, addresses));
         })
-        .flatMap(passengerResponse -> ok().contentType(MediaType.APPLICATION_JSON).bodyValue(passengerResponse))
+        .flatMap(
+            passengerResponse -> ok().contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(passengerResponse))
         .switchIfEmpty(ServerResponse.notFound().build());
   }
 }
