@@ -30,6 +30,7 @@
     <module>happyride-address-service-client</module>
     <module>happyride-address-service-api</module>
     <module>happyride-security-jwt</module>
+    <module>happyride-passenger-web-api-falcor</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>

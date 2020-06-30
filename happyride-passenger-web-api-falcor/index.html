@@ -1,0 +1,18 @@
+<html>
+<head>
+    <script src="//netflix.github.io/falcor/build/falcor.browser.js"></script>
+    <script>
+      var model = new falcor.Model({source: new falcor.HttpDataSource('/model.json') });
+
+      model.get(
+        ["passengersById", "54d4dd20-09dd-4105-b9aa-48560c841ca1", ["name", "email"]],
+        ["passengersById", "54d4dd20-09dd-4105-b9aa-48560c841ca1", "userAddresses", 0, "address", "addressLine"],
+      ["addressesById", "585d747e-8605-442f-93bb-043aac15ea7e", ["addressLine", "lat", "lng"]]).
+      then(function(response) {
+        document.write(JSON.stringify(response.json, null, 4));
+      });
+    </script>
+</head>
+<body>
+</body>
+</html>
