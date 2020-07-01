@@ -1,0 +1,34 @@
+{
+  "passengersById": {
+    "p1": {
+      "name": "Passenger 1",
+      "email": "passenger1@test.com",
+      "userAddresses": [
+        {
+          "id": "ua1",
+          "name": "Home",
+          "address": {
+            "$type": "ref",
+            "value": ["addressesById", "a1"]
+          }
+        }
+      ]
+    },
+    "p2": {
+      "name": "Passenger 2",
+      "email": "passenger2@test.com"
+    }
+  },
+  "addressesById": {
+    "a1": {
+      "addressLine": "Address 1",
+      "lat": 0,
+      "lng": 0
+    },
+    "a2": {
+      "addressLine": "Address 2",
+      "lat": 1,
+      "lng": 1
+    }
+  }
+}

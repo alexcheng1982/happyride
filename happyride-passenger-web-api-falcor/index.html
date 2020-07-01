@@ -1,18 +1,89 @@
 <html>
-<head>
+  <head>
+    <title>Falcor Test Page</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <style>
+      #response {
+        height: 300px;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="//netflix.github.io/falcor/build/falcor.browser.js"></script>
     <script>
-      var model = new falcor.Model({source: new falcor.HttpDataSource('/model.json') });
-
-      model.get(
-        ["passengersById", "54d4dd20-09dd-4105-b9aa-48560c841ca1", ["name", "email"]],
-        ["passengersById", "54d4dd20-09dd-4105-b9aa-48560c841ca1", "userAddresses", 0, "address", "addressLine"],
-      ["addressesById", "585d747e-8605-442f-93bb-043aac15ea7e", ["addressLine", "lat", "lng"]]).
-      then(function(response) {
-        document.write(JSON.stringify(response.json, null, 4));
+      var model = new falcor.Model({
+        source: new falcor.HttpDataSource("/model.json"),
       });
+
+      function setResponse(data) {
+        $("#response").text(data);
+      }
+
+      function successCallback(response) {
+        setResponse(JSON.stringify(response, null, 4));
+      }
+
+      function errorCallback(error) {
+        setResponse(error.message);
+      }
+
+      function get() {
+        $("#response").val("");
+        model.get($("#path").val()).then(successCallback).catch(errorCallback);
+      }
+
+      function addAddress() {
+        $("#response").val("");
+        const passengerId = $("#passengerId").val();
+        model
+          .call(
+            ["passengersById", "addUserAddress"],
+            [passengerId, $("#addressName").val(), $("#addressId").val()],
+            [],
+            [[passengerId, "userAddresses"]]
+          )
+          .then(successCallback)
+          .catch(errorCallback);
+      }
     </script>
-</head>
-<body>
-</body>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-group">
+        <label for="path">Path</label>
+        <input id="path" class="form-control" />
+        <button onclick="get()" class="btn btn-primary mt-2">Get</button>
+      </div>
+      <div class="form-inline mb-2">
+        <input
+          type="text"
+          class="form-control mr-2"
+          id="passengerId"
+          placeholder="Passenger Id"
+        />
+        <input
+          type="text"
+          class="form-control mr-2"
+          id="addressName"
+          placeholder="Address Name"
+        />
+        <input
+          type="text"
+          class="form-control mr-2"
+          id="addressId"
+          placeholder="Address Id"
+        />
+        <button onclick="addAddress()" class="btn btn-secondary mt-2">
+          Add Address
+        </button>
+      </div>
+      <div class="form-group">
+        <pre id="response" class="form-control"></pre>
+      </div>
+    </div>
+  </body>
 </html>

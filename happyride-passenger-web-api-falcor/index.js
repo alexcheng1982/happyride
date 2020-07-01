@@ -3,8 +3,11 @@ const Router = require("falcor-router");
 const jsong = require("falcor-json-graph");
 const axios = require("axios").default;
 const Promise = require("bluebird");
+const get = require("lodash.get");
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const passengerServiceClient = axios.create({
   baseURL: process.env.PASSENGER_SERVICE_URL,
@@ -23,6 +26,15 @@ function getPassenger(passengerId) {
 function getAddress(addressId) {
   return addressServiceClient
     .get("/address/" + addressId)
+    .then((response) => response.data);
+}
+
+function addUserAddress(passengerId, addressName, addressId) {
+  return passengerServiceClient
+    .post(`/${passengerId}/addresses`, {
+      name: addressName,
+      addressId: addressId,
+    })
     .then((response) => response.data);
 }
 
@@ -67,7 +79,7 @@ app.use(
       },
       {
         route:
-          "passengersById[{keys:ids}]['name', 'email', 'mobilePhoneNumber']",
+          "passengersById[{keys:ids}]['name', 'email', 'mobilePhoneNumber', 'userAddresses']",
         get: function (pathSet) {
           return toEntityJsonGraph(
             "passengersById",
@@ -79,16 +91,29 @@ app.use(
       },
       {
         route: "passengersById[{keys}].userAddresses[{integers}]['address']",
-        get: function (pathSet) {
-          return getPassenger(pathSet[1]).then((passenger) => {
-            return {
-              path: pathSet,
-              value: jsong.ref([
-                "addressesById",
-                passenger.userAddresses[pathSet[3]].addressId,
-              ]),
-            };
-          });
+        get: async function (pathSet) {
+          const passenger = await getPassenger(pathSet[1]);
+          return {
+            path: pathSet,
+            value: jsong.ref([
+              "addressesById",
+              get(passenger, ["userAddresses", pathSet[3], "addressId"], null),
+            ]),
+          };
+        },
+      },
+      {
+        route: "passengersById.addUserAddress",
+        call: function (callPath, args) {
+          return addUserAddress(args[0], args[1], args[2]).then(
+            (response) => {
+              return {
+                jsonGraph: {},
+                paths: [],
+                invalidated: [["passengersById", response.id, "userAddresses"]],
+              };
+            }
+          );
         },
       },
     ]);
