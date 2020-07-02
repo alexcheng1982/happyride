@@ -53,34 +53,34 @@
   </head>
   <body>
     <div class="container">
+      <h1>Falcor Test</h1>
+      <h4>Get path</h4>
       <div class="form-group">
         <label for="path">Path</label>
         <input id="path" class="form-control" />
-        <button onclick="get()" class="btn btn-primary mt-2">Get</button>
+        <button onclick="get()" class="btn btn-primary mt-2">Get path</button>
       </div>
-      <div class="form-inline mb-2">
-        <input
-          type="text"
-          class="form-control mr-2"
-          id="passengerId"
-          placeholder="Passenger Id"
-        />
-        <input
-          type="text"
-          class="form-control mr-2"
-          id="addressName"
-          placeholder="Address Name"
-        />
-        <input
-          type="text"
-          class="form-control mr-2"
-          id="addressId"
-          placeholder="Address Id"
-        />
-        <button onclick="addAddress()" class="btn btn-secondary mt-2">
+      <hr />
+      <h4>Call function</h4>
+      <div class="form-group">
+        <label for="passengerId">Passenger Id</label>
+        <input type="text" class="form-control" id="passengerId" />
+      </div>
+      <div class="form-group">
+        <label for="addressName">Address Name</label>
+        <input type="text" class="form-control" id="addressName" />
+        <div class="form-group">
+          <label for="addressId">Address Id</label>
+          <input type="text" class="form-control" id="addressId" />
+        </div>
+      </div>
+      <div class="form-group">
+        <button onclick="addAddress()" class="btn btn-secondary">
           Add Address
         </button>
       </div>
+      <hr />
+      <h4>Response</h4>
       <div class="form-group">
         <pre id="response" class="form-control"></pre>
       </div>
