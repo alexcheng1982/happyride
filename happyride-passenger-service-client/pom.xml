@@ -3,22 +3,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>happyride</artifactId>
     <groupId>io.vividcode.happyride</groupId>
+    <artifactId>happyride</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>happyride-passenger-service-client</artifactId>
-
-  <properties>
-    <swagger-core-version>2.0.10</swagger-core-version>
-    <okhttp-version>2.7.5</okhttp-version>
-    <gson-version>2.8.6</gson-version>
-    <gson-fire-version>1.8.3</gson-fire-version>
-    <threetenbp-version>1.3.8</threetenbp-version>
-    <junit-version>4.12</junit-version>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -27,65 +18,38 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>io.swagger.core.v3</groupId>
-      <artifactId>swagger-annotations</artifactId>
-      <version>${swagger-core-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>${okhttp-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp</groupId>
-      <artifactId>logging-interceptor</artifactId>
-      <version>${okhttp-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>${gson-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.gsonfire</groupId>
-      <artifactId>gson-fire</artifactId>
-      <version>${gson-fire-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.threeten</groupId>
-      <artifactId>threetenbp</artifactId>
-      <version>${threetenbp-version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit-version}</version>
-      <scope>test</scope>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>happyride-api-client-parent</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <groupId>io.swagger.codegen.v3</groupId>
-        <artifactId>swagger-codegen-maven-plugin</artifactId>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
         <executions>
           <execution>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/src/main/resources/openapi.yml</inputSpec>
-              <language>java</language>
               <apiPackage>io.vividcode.happyride.passengerservice.client.api</apiPackage>
-              <generateModels>false</generateModels>
-              <generateApiTests>false</generateApiTests>
               <importMappings>
-                <importMapping>CreatePassengerRequest=io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest</importMapping>
-                <importMapping>CreateUserAddressRequest=io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest</importMapping>
-                <importMapping>PassengerVO=io.vividcode.happyride.passengerservice.api.web.PassengerVO</importMapping>
-                <importMapping>UserAddressVO=io.vividcode.happyride.passengerservice.api.web.UserAddressVO</importMapping>
+                <importMapping>
+                  CreatePassengerRequest=io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest
+                </importMapping>
+                <importMapping>
+                  CreateUserAddressRequest=io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest
+                </importMapping>
+                <importMapping>
+                  PassengerVO=io.vividcode.happyride.passengerservice.api.web.PassengerVO
+                </importMapping>
+                <importMapping>
+                  UserAddressVO=io.vividcode.happyride.passengerservice.api.web.UserAddressVO
+                </importMapping>
               </importMappings>
               <configOptions>
               </configOptions>

@@ -10,4 +10,47 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>happyride-address-service-client</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>happyride-address-service-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>happyride-api-client-parent</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <apiPackage>io.vividcode.happyride.addressservice.client.api</apiPackage>
+              <importMappings>
+                <importMapping>
+                  Address=io.vividcode.happyride.addressservice.api.AddressVO
+                </importMapping>
+                <importMapping>
+                  Area=io.vividcode.happyride.addressservice.api.AreaVO
+                </importMapping>
+              </importMappings>
+              <configOptions>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

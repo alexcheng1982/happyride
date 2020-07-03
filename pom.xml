@@ -31,6 +31,7 @@
     <module>happyride-address-service-api</module>
     <module>happyride-security-jwt</module>
     <module>happyride-passenger-web-api-falcor</module>
+    <module>happyride-api-client-parent</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -257,11 +258,6 @@
           </configuration>
         </plugin>
         <plugin>
-          <groupId>io.swagger.codegen.v3</groupId>
-          <artifactId>swagger-codegen-maven-plugin</artifactId>
-          <version>3.0.19</version>
-        </plugin>
-        <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
           <configuration>
@@ -283,6 +279,14 @@
           <groupId>org.openapitools</groupId>
           <artifactId>openapi-generator-maven-plugin</artifactId>
           <version>${openapi-generator.version}</version>
+          <configuration>
+            <inputSpec>${project.basedir}/src/main/resources/openapi.yml</inputSpec>
+            <generatorName>java</generatorName>
+            <generateModels>false</generateModels>
+            <generateApiTests>false</generateApiTests>
+            <generateModelDocumentation>false</generateModelDocumentation>
+            <generateApiDocumentation>false</generateApiDocumentation>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>

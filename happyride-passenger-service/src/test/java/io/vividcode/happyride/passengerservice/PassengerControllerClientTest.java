@@ -1,5 +1,8 @@
 package io.vividcode.happyride.passengerservice;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.eventuate.tram.spring.consumer.jdbc.TramConsumerJdbcAutoConfiguration;
@@ -24,11 +27,10 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration(exclude = {TramConsumerJdbcAutoConfiguration.class, SecurityAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {
+    TramConsumerJdbcAutoConfiguration.class,
+    SecurityAutoConfiguration.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(classes = {
     EmbeddedPostgresConfiguration.class,
@@ -72,8 +74,7 @@ public class PassengerControllerClientTest {
     try {
       final String passengerId = this.createPassenger(1);
       final PassengerVO passenger = this.passengerApi
-          .createAddress(PassengerUtils.buildCreateUserAddressRequest(),
-              passengerId);
+          .createAddress(passengerId, PassengerUtils.buildCreateUserAddressRequest());
       assertThat(passenger.getUserAddresses()).hasSize(2);
     } catch (final ApiException e) {
       fail(e);
