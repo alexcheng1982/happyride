@@ -1,5 +1,6 @@
 package io.vividcode.happyride.addressservice.service;
 
+import com.google.common.collect.Streams;
 import io.micrometer.core.annotation.Timed;
 import io.vividcode.happyride.addressservice.api.AddressVO;
 import io.vividcode.happyride.addressservice.api.AreaVO;
@@ -31,7 +32,8 @@ public class AddressService {
   }
 
   @Timed(value = "happyride.address.get", percentiles = {0.5, 0.75, 0.9})
-  public Optional<AddressVO> getAddress(final String addressId, final int level) {
+  public Optional<AddressVO> getAddress(final String addressId,
+      final int level) {
     return this.addressRepository.findById(addressId)
         .map(address -> {
           final List<AreaVO> areas = this.areaService
@@ -41,9 +43,7 @@ public class AddressService {
   }
 
   public List<AddressVO> getAddresses(final List<String> addressIds) {
-    return addressIds.stream().map(addressId -> this.addressRepository.findById(addressId))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+    return Streams.stream(this.addressRepository.findAllById(addressIds))
         .map(AddressHelper::fromAddress)
         .collect(Collectors.toList());
   }

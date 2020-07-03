@@ -36,13 +36,17 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <apiPackage>io.vividcode.happyride.addressservice.client.api</apiPackage>
+              <apiPackage>io.vividcode.happyride.addressservice.client.api
+              </apiPackage>
               <importMappings>
                 <importMapping>
                   Address=io.vividcode.happyride.addressservice.api.AddressVO
                 </importMapping>
                 <importMapping>
                   Area=io.vividcode.happyride.addressservice.api.AreaVO
+                </importMapping>
+                <importMapping>
+                  AddressBatchRequest=io.vividcode.happyride.addressservice.api.web.AddressBatchRequest
                 </importMapping>
               </importMappings>
               <configOptions>

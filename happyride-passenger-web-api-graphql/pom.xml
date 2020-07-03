@@ -14,7 +14,12 @@
   <dependencies>
     <dependency>
       <groupId>io.vividcode.happyride</groupId>
-      <artifactId>happyride-address-service-api</artifactId>
+      <artifactId>happyride-address-service-client</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>happyride-passenger-service-client</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

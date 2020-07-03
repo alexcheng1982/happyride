@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "service.destination")
+@ConfigurationProperties(prefix = "destination")
 @Data
 @NoArgsConstructor
 public class ServiceDestinationConfig {

@@ -59,7 +59,6 @@
     <guava.version>29.0-jre</guava.version>
     <axon.version>4.3.3</axon.version>
     <javafaker.version>1.0.2</javafaker.version>
-    <vaadin.version>14.1.18</vaadin.version>
     <cucumber.version>5.6.0</cucumber.version>
     <vavr.version>0.10.2</vavr.version>
     <spatial4j.version>0.7</spatial4j.version>
@@ -160,7 +159,6 @@
         <scope>runtime</scope>
       </dependency>
 
-
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
@@ -230,14 +228,6 @@
         <version>${lombok.version}</version>
         <scope>provided</scope>
       </dependency>
-
-      <dependency>
-        <groupId>com.vaadin</groupId>
-        <artifactId>vaadin-bom</artifactId>
-        <version>${vaadin.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -294,7 +284,8 @@
           <artifactId>openapi-generator-maven-plugin</artifactId>
           <version>${openapi-generator.version}</version>
           <configuration>
-            <inputSpec>${project.basedir}/src/main/resources/openapi.yml</inputSpec>
+            <inputSpec>${project.basedir}/src/main/resources/openapi.yml
+            </inputSpec>
             <generatorName>java</generatorName>
             <generateModels>false</generateModels>
             <generateApiTests>false</generateApiTests>

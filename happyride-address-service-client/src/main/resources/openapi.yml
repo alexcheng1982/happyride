@@ -20,7 +20,8 @@ paths:
           required: true
           description: Area code
           schema:
-            type: number
+            type: integer
+            format: int64
         - name: query
           required: true
           in: query
@@ -64,6 +65,28 @@ paths:
                 $ref: "#/components/schemas/Address"
         '404':
           description: Address not found
+  /addresses:
+    post:
+      tags:
+        - address
+      summary: Get a list of addresses
+      operationId: getAddresses
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/AddressBatchRequest"
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Address"
+        '404':
+          description: Address not found
   /area/{areaCode}:
     get:
       tags:
@@ -77,6 +100,7 @@ paths:
           description: Area code
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: Successful
@@ -95,7 +119,7 @@ components:
         id:
           type: string
         areaId:
-          type: number
+          type: integer
         addressLine:
           type: string
         lat:
@@ -110,13 +134,15 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
         level:
-          type: number
+          type: integer
         parentCode:
-          type: number
+          type: integer
+          format: int64
         areaCode:
-          type: number
+          type: integer
+          format: int64
         zipCode:
           type: string
         cityCode:
@@ -137,3 +163,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Area"
+    AddressBatchRequest:
+      type: object
+      properties:
+        addressIds:
+          type: array
+          items:
+            type: string

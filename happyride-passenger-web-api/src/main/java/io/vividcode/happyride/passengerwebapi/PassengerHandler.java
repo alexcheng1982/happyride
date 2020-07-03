@@ -3,6 +3,7 @@ package io.vividcode.happyride.passengerwebapi;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 import io.vividcode.happyride.passengerservice.api.web.UserAddressVO;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -24,10 +25,10 @@ public class PassengerHandler {
     final String passengerId = request.pathVariable("passengerId");
     return this.passengerServiceProxy.getPassenger(passengerId)
         .flatMap(passenger -> {
-          final String addressIds = passenger.getUserAddresses()
+          final List<String> addressIds = passenger.getUserAddresses()
               .stream()
               .map(UserAddressVO::getAddressId)
-              .collect(Collectors.joining(","));
+              .collect(Collectors.toList());
           return this.addressServiceProxy.getAddresses(addressIds)
               .map(addresses -> PassengerResponse
                   .fromPassengerAndAddresses(passenger, addresses));

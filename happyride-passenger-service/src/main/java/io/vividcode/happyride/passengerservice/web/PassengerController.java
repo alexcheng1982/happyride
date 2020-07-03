@@ -7,12 +7,14 @@ import io.vividcode.happyride.passengerservice.domain.PassengerService;
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,8 +25,10 @@ public class PassengerController {
   PassengerService passengerService;
 
   @GetMapping
-  public List<PassengerVO> findAll() {
-    return this.passengerService.findAll();
+  public List<PassengerVO> findAll(
+      @RequestParam(value = "page", required = false, defaultValue = "0") final int page,
+      @RequestParam(value = "size", required = false, defaultValue = "10") final int size) {
+    return this.passengerService.findAll(PageRequest.of(page, size));
   }
 
   @GetMapping("{id}")

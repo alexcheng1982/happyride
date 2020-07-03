@@ -1,8 +1,8 @@
 package io.vividcode.happyride.addressservice.web;
 
-import com.google.common.base.Splitter;
 import io.vividcode.happyride.addressservice.api.AddressVO;
 import io.vividcode.happyride.addressservice.api.AreaVO;
+import io.vividcode.happyride.addressservice.api.web.AddressBatchRequest;
 import io.vividcode.happyride.addressservice.service.AddressService;
 import io.vividcode.happyride.addressservice.service.AreaService;
 import java.util.List;
@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,14 +40,11 @@ public class AddressController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  @GetMapping("/addresses/{addressIds}")
-  public List<AddressVO> getAddresses(@PathVariable("addressIds") final String addressIds) {
-    return this.addressService.getAddresses(
-        Splitter.on(",")
-            .omitEmptyStrings()
-            .trimResults()
-            .splitToList(addressIds)
-    );
+  @PostMapping("/addresses")
+  public List<AddressVO> getAddresses(
+      @RequestBody final AddressBatchRequest addressBatchRequest) {
+    return this.addressService
+        .getAddresses(addressBatchRequest.getAddressIds());
   }
 
   @GetMapping("/area/{areaCode}")
