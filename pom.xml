@@ -32,6 +32,7 @@
     <module>happyride-security-jwt</module>
     <module>happyride-passenger-web-api-falcor</module>
     <module>happyride-api-client-parent</module>
+    <module>happyride-passenger-web-api-graphql</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -66,6 +67,7 @@
     <openapi-generator.version>4.3.1</openapi-generator.version>
     <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
     <commons-lang3.version>3.10</commons-lang3.version>
+    <graphql-java-kickstart.version>7.1.0</graphql-java-kickstart.version>
   </properties>
 
   <dependencyManagement>
@@ -146,6 +148,18 @@
         <artifactId>commons-lang3</artifactId>
         <version>${commons-lang3.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.graphql-java-kickstart</groupId>
+        <artifactId>graphql-spring-boot-starter</artifactId>
+        <version>${graphql-java-kickstart.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.graphql-java-kickstart</groupId>
+        <artifactId>graphiql-spring-boot-starter</artifactId>
+        <version>${graphql-java-kickstart.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+
 
       <dependency>
         <groupId>org.springframework.cloud</groupId>
