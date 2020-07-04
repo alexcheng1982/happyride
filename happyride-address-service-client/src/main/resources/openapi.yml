@@ -1,9 +1,10 @@
-openapi: '3.0.3'
+openapi: 3.0.3
 info:
   title: Address management service
+  description: Service to manage addresses of a passenger
   version: '1.0'
 servers:
-  - url: http://localhost:8502
+  - url: 'http://localhost:8502'
 tags:
   - name: address
     description: Address
@@ -12,7 +13,7 @@ paths:
     get:
       tags:
         - address
-      summary: Search addresses
+      description: Search addresses
       operationId: searchAddress
       parameters:
         - name: areaCode
@@ -36,12 +37,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Address"
-  /address/{addressId}:
+                  $ref: '#/components/schemas/Address'
+  '/address/{addressId}':
     get:
       tags:
         - address
-      summary: Get an address
+      description: Get an address
       operationId: getAddress
       parameters:
         - name: addressId
@@ -62,20 +63,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Address"
+                $ref: '#/components/schemas/Address'
         '404':
           description: Address not found
   /addresses:
     post:
       tags:
         - address
-      summary: Get a list of addresses
+      description: Get a list of addresses
       operationId: getAddresses
       requestBody:
         content:
-          "application/json":
+          application/json:
             schema:
-              $ref: "#/components/schemas/AddressBatchRequest"
+              $ref: '#/components/schemas/AddressBatchRequest'
       responses:
         '200':
           description: Successful
@@ -84,14 +85,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Address"
+                  $ref: '#/components/schemas/Address'
         '404':
           description: Address not found
-  /area/{areaCode}:
+  '/area/{areaCode}':
     get:
       tags:
         - address
-      summary: Get an area
+      description: Get an area
       operationId: getArea
       parameters:
         - name: areaCode
@@ -101,16 +102,21 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: ancestorLevel
+          in: query
+          required: false
+          description: Ancestor level
+          schema:
+            type: integer
       responses:
         '200':
           description: Successful
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Area"
+                $ref: '#/components/schemas/Area'
         '404':
           description: Area not found
-
 components:
   schemas:
     Address:
@@ -129,7 +135,7 @@ components:
         areas:
           type: array
           items:
-            $ref: "#/components/schemas/Area"
+            $ref: '#/components/schemas/Area'
     Area:
       type: object
       properties:
@@ -162,7 +168,7 @@ components:
         ancestors:
           type: array
           items:
-            $ref: "#/components/schemas/Area"
+            $ref: '#/components/schemas/Area'
     AddressBatchRequest:
       type: object
       properties:
@@ -170,3 +176,5 @@ components:
           type: array
           items:
             type: string
+      required:
+        - addressIds

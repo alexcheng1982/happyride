@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.Session;
 import javax.websocket.server.HandshakeRequest;
-import org.dataloader.DataLoader;
 import org.dataloader.DataLoaderRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,18 +18,18 @@ public class CustomGraphQLContextBuilder implements
     GraphQLServletContextBuilder {
 
   @Autowired
-  UserAddressLoader userAddressLoader;
+  DataLoaderRegistry dataLoaderRegistry;
 
   @Override
   public GraphQLContext build() {
-    return new DefaultGraphQLContext(this.buildDataLoaderRegistry(), null);
+    return new DefaultGraphQLContext(this.dataLoaderRegistry, null);
   }
 
   @Override
   public GraphQLContext build(final HttpServletRequest httpServletRequest,
       final HttpServletResponse httpServletResponse) {
     return DefaultGraphQLServletContext
-        .createServletContext(this.buildDataLoaderRegistry(), null)
+        .createServletContext(this.dataLoaderRegistry, null)
         .with(httpServletRequest)
         .with(httpServletResponse)
         .build();
@@ -40,16 +39,9 @@ public class CustomGraphQLContextBuilder implements
   public GraphQLContext build(final Session session,
       final HandshakeRequest handshakeRequest) {
     return DefaultGraphQLWebSocketContext
-        .createWebSocketContext(this.buildDataLoaderRegistry(), null)
+        .createWebSocketContext(this.dataLoaderRegistry, null)
         .with(session)
         .with(handshakeRequest)
         .build();
-  }
-
-  private DataLoaderRegistry buildDataLoaderRegistry() {
-    final DataLoaderRegistry dataLoaderRegistry = new DataLoaderRegistry();
-    dataLoaderRegistry
-        .register("userAddress", new DataLoader<>(this.userAddressLoader));
-    return dataLoaderRegistry;
   }
 }

@@ -5,8 +5,6 @@ import io.vividcode.happyride.addressservice.api.AddressVO;
 import io.vividcode.happyride.addressservice.client.api.AddressApi;
 import io.vividcode.happyride.passengerservice.client.ApiException;
 import io.vividcode.happyride.passengerservice.client.api.PassengerApi;
-import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,14 +44,4 @@ public class Query implements GraphQLQueryResolver {
     return this.addressApi.searchAddress(Long.valueOf(areaCode), query);
   }
 
-  public static AddressVO createNew(final String id) {
-    final AddressVO result = new AddressVO();
-    result.setId(id);
-    result.setAreaId(1);
-    result.setAddressLine("test");
-    result.setLat(BigDecimal.ZERO);
-    result.setLng(BigDecimal.ZERO);
-    result.setAreas(Collections.emptyList());
-    return result;
-  }
 }
