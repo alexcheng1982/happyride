@@ -1,0 +1,4 @@
+releases:
+  - name: common
+    namespace: {{ env "NAMESPACE" | default "happyride" }}     
+    chart: charts/common

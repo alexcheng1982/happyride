@@ -2,7 +2,7 @@ repositories:
 - name: bitnami
   url: https://charts.bitnami.com/bitnami
 releases:
-  - name: postgresql-address
+  - name: postgresql-passenger
     namespace: {{ env "NAMESPACE" | default "happyride" }} 
     chart: bitnami/postgresql
     version: ~8.10.13   
@@ -10,9 +10,9 @@ releases:
     values:
       - ../postgresql-config.yaml
       - config.yaml
-  - name: address-service
+  - name: passenger-service
     namespace: {{ env "NAMESPACE" | default "happyride" }}     
-    chart: charts/address-service
+    chart: charts/passenger-service
     values:
       - config.yaml
       - resources:

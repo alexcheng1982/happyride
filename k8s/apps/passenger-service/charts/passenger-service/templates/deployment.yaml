@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "address-service.fullname" . }}
+  name: {{ include "passenger-service.fullname" . }}
   labels:
-    {{- include "address-service.labels" . | nindent 4 }}
+    {{- include "passenger-service.labels" . | nindent 4 }}
 spec:
 {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
 {{- end }}
   selector:
     matchLabels:
-      {{- include "address-service.selectorLabels" . | nindent 6 }}
+      {{- include "passenger-service.selectorLabels" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -18,13 +18,13 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "address-service.selectorLabels" . | nindent 8 }}
+        {{- include "passenger-service.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "address-service.serviceAccountName" . }}
+      serviceAccountName: {{ include "passenger-service.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -39,7 +39,7 @@ spec:
               protocol: TCP
           env:
             - name: DB_HOST
-              value: postgresql-address
+              value: postgresql-passenger
             - name: DB_PORT
               value: "5432"
             - name: DB_NAME
@@ -49,13 +49,17 @@ spec:
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgresql-address
+                  name: postgresql-passenger
                   key: postgresql-password
+            - name: EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+            - name: EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING
+              value: kafka-zookeeper:2181  
             - name: SPRING_CONFIG_LOCATION
               value: classpath:/application.yml,/etc/config/*/
           volumeMounts:
             - name: config-volume
-              mountPath: /etc/config              
+              mountPath: /etc/config    
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
@@ -74,7 +78,7 @@ spec:
             name: common-spring-config
             items:
               - key: management.yml
-                path: management/application.yml 
+                path: management/application.yml
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

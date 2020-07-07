@@ -1,0 +1,17 @@
+management:
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: prometheus, health
+  endpoint:
+    health:
+      enabled: true
+      show-components: always
+    prometheus:
+      enabled: true

@@ -1,0 +1,9 @@
+apiVersion: v2
+name: common
+description: Common
+
+type: application
+
+version: 0.0.1
+
+appVersion: 1.0.0

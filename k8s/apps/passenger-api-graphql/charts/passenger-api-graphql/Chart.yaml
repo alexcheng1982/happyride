@@ -1,0 +1,9 @@
+apiVersion: v2
+name: passenger-api-graphql
+description: GraphQL API for passenger UI
+
+type: application
+
+version: 0.0.1
+
+appVersion: 1.0.0

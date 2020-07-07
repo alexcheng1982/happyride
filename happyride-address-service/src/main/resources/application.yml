@@ -15,7 +15,9 @@ spring:
       - happyride
 management:
   health:
-    defaults:
+    livenessState:
+      enabled: true
+    readinessState:
       enabled: true
   endpoints:
     enabled-by-default: false
@@ -25,7 +27,6 @@ management:
   endpoint:
     health:
       enabled: true
-      show-details: always
       show-components: always
     prometheus:
       enabled: true
