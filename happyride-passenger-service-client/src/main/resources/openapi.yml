@@ -9,6 +9,33 @@ tags:
     description: Passenger
 paths:
   /:
+    get:
+      tags:
+        - passenger
+      summary: List passengers
+      operationId: listPassengers
+      parameters:
+        - name: page
+          in: query
+          description: Current page
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Size of page
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PassengerVO"
     post:
       tags:
         - passenger

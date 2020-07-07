@@ -3,6 +3,7 @@ package io.vividcode.happyride.passengerwebapi;
 import com.google.common.collect.ImmutableMap;
 import io.vividcode.happyride.addressservice.api.AddressVO;
 import io.vividcode.happyride.addressservice.api.AreaVO;
+import io.vividcode.happyride.addressservice.api.web.AddressBatchRequest;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +48,11 @@ public class AddressServiceProxy {
         );
   }
 
-  public Mono<List<AddressVO>> getAddresses(final String addressIds) {
+  public Mono<List<AddressVO>> getAddresses(final List<String> addressIds) {
     return WebClient.create(this.destinationConfig.getAddress())
-        .get()
-        .uri(uriBuilder -> uriBuilder.path("/addresses/{addressIds}")
-            .build(ImmutableMap.of("addressIds", addressIds)))
+        .post()
+        .uri(uriBuilder -> uriBuilder.path("/addresses").build())
+        .bodyValue(new AddressBatchRequest(addressIds))
         .retrieve()
         .bodyToMono(new ParameterizedTypeReference<List<AddressVO>>() {
         })

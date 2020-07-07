@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,8 +24,8 @@ public class PassengerService {
   @Autowired
   PassengerRepository passengerRepository;
 
-  public List<PassengerVO> findAll() {
-    return Streams.stream(this.passengerRepository.findAll())
+  public List<PassengerVO> findAll(final Pageable pageable) {
+    return Streams.stream(this.passengerRepository.findAll(pageable))
         .map(PassengerUtils::createPassengerVO)
         .collect(Collectors.toList());
   }
@@ -39,7 +40,8 @@ public class PassengerService {
     passenger.setName(request.getName());
     passenger.setEmail(request.getEmail());
     passenger.setMobilePhoneNumber(request.getMobilePhoneNumber());
-    final List<UserAddress> userAddresses = Optional.ofNullable(request.getUserAddresses())
+    final List<UserAddress> userAddresses = Optional
+        .ofNullable(request.getUserAddresses())
         .map(requests -> requests.stream()
             .map(this::createUserAddress)
             .collect(Collectors.toList())
@@ -48,7 +50,8 @@ public class PassengerService {
     return createPassengerVO(this.passengerRepository.save(passenger));
   }
 
-  public PassengerVO addAddress(final String passengerId, final CreateUserAddressRequest request) {
+  public PassengerVO addAddress(final String passengerId,
+      final CreateUserAddressRequest request) {
     final Passenger passenger = this.passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
     final UserAddress userAddress = this.createUserAddress(request);
@@ -56,20 +59,23 @@ public class PassengerService {
     return createPassengerVO(passenger);
   }
 
-  public Optional<UserAddressVO> getAddress(final String passengerId, final String addressId) {
+  public Optional<UserAddressVO> getAddress(final String passengerId,
+      final String addressId) {
     return this.passengerRepository.findById(passengerId)
         .flatMap(passenger -> passenger.getUserAddress(addressId))
         .map(PassengerUtils::createUserAddressVO);
   }
 
-  public PassengerVO deleteAddress(final String passengerId, final String addressId) {
+  public PassengerVO deleteAddress(final String passengerId,
+      final String addressId) {
     final Passenger passenger = this.passengerRepository.findById(passengerId)
         .orElseThrow(() -> new PassengerNotFoundException(passengerId));
     passenger.getUserAddress(addressId).ifPresent(passenger::removeUserAddress);
     return createPassengerVO(passenger);
   }
-  
-  private UserAddress createUserAddress(final CreateUserAddressRequest request) {
+
+  private UserAddress createUserAddress(
+      final CreateUserAddressRequest request) {
     final UserAddress address = new UserAddress();
     address.generateId();
     address.setName(request.getName());
