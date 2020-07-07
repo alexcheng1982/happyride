@@ -1,0 +1,24 @@
+repositories:
+- name: bitnami
+  url: https://charts.bitnami.com/bitnami
+releases:
+  - name: postgresql-address
+    namespace: {{ env "NAMESPACE" | default "happyride" }} 
+    chart: bitnami/postgresql
+    version: ~8.10.13   
+    wait: false
+    values:
+      - ../postgresql-config.yaml
+      - config.yaml
+  - name: address-service
+    namespace: {{ env "NAMESPACE" | default "happyride" }}     
+    chart: charts/address-service
+    values:
+      - config.yaml
+      - resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"  

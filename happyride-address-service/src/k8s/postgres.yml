@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:10
+          image: eventuateio/eventuate-postgres:0.9.0.RELEASE
           imagePullPolicy: IfNotPresent
           resources:
             requests:

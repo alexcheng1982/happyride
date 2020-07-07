@@ -1,0 +1,3 @@
+image: 
+  repository: eventuateio/eventuate-postgres
+  tag: 0.9.0.RELEASE

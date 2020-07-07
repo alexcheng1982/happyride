@@ -1,0 +1,9 @@
+apiVersion: v2
+name: address-service
+description: Address service
+
+type: application
+
+version: 0.0.1
+
+appVersion: 1.0.0

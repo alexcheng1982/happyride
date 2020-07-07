@@ -1,0 +1,13 @@
+repositories:
+- name: bitnami
+  url: https://charts.bitnami.com/bitnami
+
+releases:
+  - name: redis
+    namespace: {{ env "NAMESPACE" | default "happyride" }}
+    chart: bitnami/redis  
+    version: ~10.7.9
+    wait: true
+    values:
+      - cluster:
+          enabled: false
