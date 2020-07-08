@@ -1,5 +1,5 @@
 server:
-  port: 8502
+  port: 8503
 spring:
   jpa:
     open-in-view: false
