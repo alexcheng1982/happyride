@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: address-service
+spec:
+  hosts:
+    - address-service
+  http:
+    - name: "address-service-http"
+      route:
+        - destination:
+            host: address-service
+          headers:
+            response:
+              add:
+                x-hello: world
