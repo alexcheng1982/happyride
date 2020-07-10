@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "address-service.name" -}}
+{{- define "address-service-common.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "address-service.fullname" -}}
+{{- define "address-service-common.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -27,19 +27,18 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "address-service.chart" -}}
+{{- define "address-service-common.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "address-service.labels" -}}
-helm.sh/chart: {{ include "address-service.chart" . }}
-{{ include "address-service.selectorLabelsWithVersion" . }}
-{{- $appVersion := default .Chart.AppVersion .Values.appVersion }}
-{{- if $appVersion }}
-app.kubernetes.io/version: {{ $appVersion | quote }}
+{{- define "address-service-common.labels" -}}
+helm.sh/chart: {{ include "address-service-common.chart" . }}
+{{ include "address-service-common.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -47,40 +46,24 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "address-service.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "address-service.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "address-service.selectorLabelsWithVersion" -}}
-{{ include "address-service.selectorLabels" . }}
-app.vividcode.io/service-version: {{ .Values.serviceVersion | quote }}
+{{- define "address-service-common.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "address-service-common.serviceName" . }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "address-service.serviceAccountName" -}}
+{{- define "address-service-common.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "address-service.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "address-service-common.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
 {{/*
-Create the service version
+Create the service name
 */}}
-{{- define "address-service.serviceVersion" -}}
-{{- .Values.serviceVersion | replace "." "-" }}
-{{- end }}
-
-{{/*
-Create the service name with version
-*/}}
-{{- define "address-service.nameWithVersion" -}}
-{{- printf "%s-v%s" (include "address-service.name" .) (include "address-service.serviceVersion" .) }}
+{{- define "address-service-common.serviceName" -}}
+{{- default (include "address-service-common.fullname" .) .Values.service.name }}
 {{- end }}

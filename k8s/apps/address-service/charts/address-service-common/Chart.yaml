@@ -1,0 +1,10 @@
+apiVersion: v2
+name: address-service-common
+description: Address service common
+
+type: application
+
+
+version: 0.0.1
+
+appVersion: 1.0.0

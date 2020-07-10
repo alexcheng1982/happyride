@@ -34,7 +34,7 @@ public class AddressController {
   @GetMapping("/address/{addressId}")
   public ResponseEntity<AddressVO> getAddress(
       @PathVariable("addressId") final String addressId,
-      @RequestParam(value = "areaLevel", required = false, defaultValue = "0") final int areaLevel) {
+      @RequestParam(value = "areaLevel", required = false, defaultValue = "1") final int areaLevel) {
     return this.addressService.getAddress(addressId, areaLevel)
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());

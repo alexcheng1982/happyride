@@ -81,6 +81,18 @@ happyride/happyride-passenger-web-api-graphql   1.0.0     566530883004        40
 
 ## 安装
 
+创建名称空间`happyride`，
+
+```sh
+$ kubectl create ns happyride
+```
+
+启用Istio的自动注入，
+
+```sh
+$ kubectl label namespace happyride istio-injection=enabled
+```
+
 通过下面的命令来安装：
 
 ```bash

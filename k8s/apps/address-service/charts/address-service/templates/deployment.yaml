@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "address-service.fullname" . }}
+  name: {{ include "address-service.nameWithVersion" . }}
   labels:
     {{- include "address-service.labels" . | nindent 4 }}
 spec:
@@ -10,7 +10,7 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      {{- include "address-service.selectorLabels" . | nindent 6 }}
+      {{- include "address-service.selectorLabelsWithVersion" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "address-service.selectorLabels" . | nindent 8 }}
+        {{- include "address-service.selectorLabelsWithVersion" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -31,7 +31,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion .Values.appVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

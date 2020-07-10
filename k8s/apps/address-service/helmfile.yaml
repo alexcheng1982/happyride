@@ -10,15 +10,22 @@ releases:
     values:
       - ../postgresql-config.yaml
       - config.yaml
-  - name: address-service
+  - name: address-service-common
+    namespace: {{ env "NAMESPACE" | default "happyride" }}     
+    chart: charts/address-service-common   
+  - name: address-service-v1-0
     namespace: {{ env "NAMESPACE" | default "happyride" }}     
     chart: charts/address-service
     values:
       - config.yaml
-      - resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "1Gi"
-            cpu: "1"  
+      - address-service-config.yaml
+      - serviceVersion: "1"
+        appVersion: "1.0.0"  
+  - name: address-service-v1-1
+    namespace: {{ env "NAMESPACE" | default "happyride" }}     
+    chart: charts/address-service
+    values:
+      - config.yaml
+      - address-service-config.yaml
+      - serviceVersion: "2"
+        appVersion: "1.1.0"           

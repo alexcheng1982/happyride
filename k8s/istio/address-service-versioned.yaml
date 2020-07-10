@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: address-service
+  name: address-service-versioned
 spec:
   hosts:
     - address-service.happyride.svc.cluster.local
@@ -10,7 +10,4 @@ spec:
       route:
         - destination:
             host: address-service.happyride.svc.cluster.local
-          headers:
-            response:
-              add:
-                x-hello: world
+            subset: v1
