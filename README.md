@@ -27,3 +27,12 @@
 | 行程验证服务  |  `happyride-payment-service`  | `8505`  |
 | 历史行程服务  |  `happyride-trip-history-service`  | `8506`  |
 | 乘客管理界面的GraphQL服务  |  `happyride-passenger-web-api-graphql`  | `8610`  |
+
+
+在Minikube中访问服务，首先显示乘客API服务的URL：
+
+```sh
+$ minikube service --url passenger-api-graphql -n happyride
+```
+
+再访问GraphQL提供的GraphiQL的界面 `<url>/graphiql`.

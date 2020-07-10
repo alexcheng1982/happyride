@@ -11,3 +11,8 @@ spec:
         - destination:
             host: address-service.happyride.svc.cluster.local
             subset: v1
+          weight: 50
+        - destination:
+            host: address-service.happyride.svc.cluster.local
+            subset: v2
+          weight: 50    
