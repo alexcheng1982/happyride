@@ -1,0 +1,29 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: passenger-api-graphql-service
+spec:
+  hosts:
+    - happyride.com
+  gateways:
+    - app-gateway  
+  http:
+    - name: "passenger-api-graphql"        
+      route:
+        - destination:
+            host: passenger-api-graphql.happyride.svc.cluster.local    
+---            
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: passenger-api-graphql-service-cb
+spec:
+  host: passenger-api-graphql.happyride.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 2
+      http:
+        http1MaxPendingRequests: 5
+        maxRequestsPerConnection: 5
+        maxRetries: 2

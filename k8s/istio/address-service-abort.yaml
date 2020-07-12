@@ -9,8 +9,9 @@ spec:
     - name: "address-service-http"
       route:
         - destination:
-            host: address-service.happyride.svc.cluster.local
-          headers:
-            response:
-              add:
-                x-hello: world       
+            host: address-service.happyride.svc.cluster.local       
+      fault:
+        abort:
+          httpStatus: 503
+          percentage:
+            value: 50

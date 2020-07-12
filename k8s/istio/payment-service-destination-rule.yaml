@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: rewrite-port-for-alipay
+spec:
+  hosts:
+  - www.alipay.com
+  http:
+  - match:
+    - port: 80
+    route:
+    - destination:
+        host: www.alipay.com
+        port:
+          number: 443
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: payment-service
+spec:
+  host: www.alipay.com
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+      - port:
+          number: 443
+        tls:
+          mode: SIMPLE

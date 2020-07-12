@@ -10,7 +10,7 @@ spec:
       route:
         - destination:
             host: address-service.happyride.svc.cluster.local
-          headers:
-            response:
-              add:
-                x-hello: world       
+      retries:
+        attempts: 3
+        perTryTimeout: 200ms
+        retryOn: gateway-error,connect-failure,refused-stream

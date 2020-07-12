@@ -1,0 +1,27 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: payment-serivce
+spec:
+  hosts:
+    - www.alipay.com
+  exportTo:
+    - "*"
+  gateways:
+    - mesh
+    - app-external
+  http:
+    - match:
+        - port: 80
+          gateways:
+            - mesh
+      route:
+        - destination:
+            host: istio-egressgateway.istio-system.svc.cluster.local
+    - match:
+        - port: 80
+          gateways:
+            - app-external
+      route:
+        - destination:
+            host: www.alipay.com

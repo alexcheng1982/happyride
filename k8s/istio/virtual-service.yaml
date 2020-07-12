@@ -10,10 +10,14 @@ spec:
       match:
         - uri:
             prefix: "/test"
+          headers:
+            x-myheader:
+              exact: "hello"
+        - uri:
+            exact: "/demo"
+          queryParams:
+            from:
+              prefix: "myserver"        
       route:
         - destination:
-            host: address-service
-          headers:
-            response:
-              add:
-                x-from: virtual
+            host: test-service

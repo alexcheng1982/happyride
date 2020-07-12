@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: app-service
+spec:
+  hosts:
+    - happyride.com
+  gateways:
+    - app-gateway  
+  http:
+    - name: "address-service-external"
+      match:
+        - uri:
+            prefix: "/address"
+      rewrite:
+        uri: "/"         
+      route:
+        - destination:
+            host: address-service.happyride.svc.cluster.local
+    - name: "passenger-service-external"
+      match:
+        - uri:
+            prefix: "/passenger"
+      rewrite:
+        uri: "/"         
+      route:
+        - destination:
+            host: passenger-service.happyride.svc.cluster.local        
