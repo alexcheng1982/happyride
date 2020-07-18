@@ -13,14 +13,14 @@ releases:
   - name: address-service-common
     namespace: {{ env "NAMESPACE" | default "happyride" }}     
     chart: charts/address-service-common   
-  - name: address-service-v1-0
-    namespace: {{ env "NAMESPACE" | default "happyride" }}     
-    chart: charts/address-service
-    values:
-      - config.yaml
-      - address-service-config.yaml
-      - serviceVersion: "1"
-        appVersion: "1.0.0"  
+  # - name: address-service-v1-0
+  #   namespace: {{ env "NAMESPACE" | default "happyride" }}     
+  #   chart: charts/address-service
+  #   values:
+  #     - config.yaml
+  #     - address-service-config.yaml
+  #     - serviceVersion: "1"
+  #       appVersion: "1.0.0"  
   - name: address-service-v1-1
     namespace: {{ env "NAMESPACE" | default "happyride" }}     
     chart: charts/address-service
