@@ -18,4 +18,10 @@ public class AddressVO {
   private BigDecimal lat;
 
   private List<AreaVO> areas;
+
+  public static AddressVO nullObject(String id) {
+    AddressVO result = new AddressVO();
+    result.setId(id);
+    return result;
+  }
 }

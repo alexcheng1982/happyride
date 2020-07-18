@@ -16,13 +16,14 @@ public class UserAddress {
   private String addressId;
 
   public CompletableFuture<AddressVO> getAddress(
-      final DataFetchingEnvironment environment) {
-    final GraphQLContext context = environment.getContext();
+      DataFetchingEnvironment environment) {
+    GraphQLContext context = environment.getContext();
     return context.getDataLoaderRegistry()
         .map(
             registry -> registry.
                 <String, AddressVO>getDataLoader(USER_ADDRESS_DATA_LOADER)
                 .load(this.addressId))
-        .orElse(CompletableFuture.completedFuture(null));
+        .orElse(CompletableFuture
+            .completedFuture(AddressVO.nullObject(this.addressId)));
   }
 }

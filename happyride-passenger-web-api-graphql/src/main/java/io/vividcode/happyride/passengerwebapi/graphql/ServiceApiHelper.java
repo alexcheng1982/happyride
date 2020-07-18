@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 public class ServiceApiHelper {
 
-  public static Passenger fromPassengerVO(final PassengerVO passengerVO) {
-    final Passenger passenger = new Passenger();
+  public static Passenger fromPassengerVO(PassengerVO passengerVO) {
+    Passenger passenger = new Passenger();
     passenger.setId(passengerVO.getId());
     passenger.setName(passengerVO.getName());
     passenger.setEmail(passengerVO.getEmail());
@@ -19,9 +19,8 @@ public class ServiceApiHelper {
     return passenger;
   }
 
-  public static UserAddress fromUserAddressVO(
-      final UserAddressVO userAddressVO) {
-    final UserAddress userAddress = new UserAddress();
+  public static UserAddress fromUserAddressVO(UserAddressVO userAddressVO) {
+    UserAddress userAddress = new UserAddress();
     userAddress.setId(userAddressVO.getId());
     userAddress.setName(userAddressVO.getName());
     userAddress.setAddressId(userAddressVO.getAddressId());
