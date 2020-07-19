@@ -20,26 +20,26 @@ public class Query implements GraphQLQueryResolver {
   @Autowired
   AddressApi addressApi;
 
-  public List<Passenger> passengers(final int page, final int size)
+  public List<Passenger> passengers(int page, int size)
       throws ApiException {
     return this.passengerApi.listPassengers(page, size).stream()
         .map(ServiceApiHelper::fromPassengerVO)
         .collect(Collectors.toList());
   }
 
-  public Passenger passenger(final String id) throws ApiException {
+  public Passenger passenger(String id) throws ApiException {
     return Optional.ofNullable(this.passengerApi.getPassenger(id))
         .map(ServiceApiHelper::fromPassengerVO)
         .orElse(null);
   }
 
-  public AddressVO address(final String id, final int areaLevel)
+  public AddressVO address(String id, int areaLevel)
       throws io.vividcode.happyride.addressservice.client.ApiException {
     return this.addressApi.getAddress(id, areaLevel);
   }
 
-  public List<AddressVO> searchAddress(final String areaCode,
-      final String query)
+  public List<AddressVO> searchAddress(String areaCode,
+      String query)
       throws io.vividcode.happyride.addressservice.client.ApiException {
     return this.addressApi.searchAddress(Long.valueOf(areaCode), query);
   }
