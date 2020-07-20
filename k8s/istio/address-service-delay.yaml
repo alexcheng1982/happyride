@@ -12,6 +12,6 @@ spec:
             host: address-service.happyride.svc.cluster.local       
       fault:
         delay:
-          fixedDelay: 1s
+          fixedDelay: 500ms
           percentage:
             value: 100

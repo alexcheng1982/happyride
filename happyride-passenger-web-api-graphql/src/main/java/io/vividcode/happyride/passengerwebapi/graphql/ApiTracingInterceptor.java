@@ -14,28 +14,37 @@ public class ApiTracingInterceptor implements Interceptor {
 
   private final Tracer tracer;
 
-  public ApiTracingInterceptor(Tracer tracer) {
+  public ApiTracingInterceptor(final Tracer tracer) {
     this.tracer = tracer;
   }
 
   @Override
-  public Response intercept(Chain chain) throws IOException {
-    Builder builder = chain.request().newBuilder();
+  public Response intercept(final Chain chain) throws IOException {
+    final Builder builder = chain.request().newBuilder();
     if (this.tracer.activeSpan() != null) {
       this.tracer.inject(this.tracer.activeSpan().context(),
           Format.Builtin.HTTP_HEADERS,
-          new TextMap() {
-            @Override
-            public Iterator<Entry<String, String>> iterator() {
-              throw new UnsupportedOperationException("");
-            }
-
-            @Override
-            public void put(String key, String value) {
-              builder.addHeader(key, value);
-            }
-          });
+          new InjectOnlyTextMap(builder));
     }
     return chain.proceed(builder.build());
+  }
+
+  private static class InjectOnlyTextMap implements TextMap {
+
+    private final Builder builder;
+
+    public InjectOnlyTextMap(final Builder builder) {
+      this.builder = builder;
+    }
+
+    @Override
+    public Iterator<Entry<String, String>> iterator() {
+      throw new UnsupportedOperationException("Only context injection is supported");
+    }
+
+    @Override
+    public void put(final String key, final String value) {
+      this.builder.addHeader(key, value);
+    }
   }
 }

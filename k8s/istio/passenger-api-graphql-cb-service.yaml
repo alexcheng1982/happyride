@@ -22,8 +22,8 @@ spec:
   trafficPolicy:
     connectionPool:
       tcp:
-        maxConnections: 2
+        maxConnections: 1000
       http:
-        http1MaxPendingRequests: 5
-        maxRequestsPerConnection: 5
-        maxRetries: 2
+        http1MaxPendingRequests: 1000
+        maxRequestsPerConnection: 1000
+        maxRetries: 100

@@ -45,6 +45,14 @@ $ brew install helmfile
 $ helm plugin install https://github.com/databus23/helm-diff --version master
 ```
 
+## 安装Istio
+
+使用概要文件`demo`来安装Istio，包含了所需的全部组件。
+
+```bash
+$ istioctl install --set profile=demo
+```
+
 ## 构建容器镜像
 
 首先把开发环境中的Docker客户端指向Minikube中的Docker服务器。
