@@ -1,0 +1,21 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: passenger-service
+  namespace: happyride
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: passenger-service
+  mtls:
+    mode: STRICT
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: passenger-service-mtls
+spec:
+  host: passenger-service.happyride.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL

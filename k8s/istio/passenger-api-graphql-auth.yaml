@@ -1,0 +1,27 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: passenger-api-graphql
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: passenger-api-graphql
+  jwtRules:
+    - issuer: "http://happyride.com/auth/realms/master"
+      audiences:
+        - web
+      jwksUri: http://keycloak.happyride.svc.cluster.local:8080/auth/realms/master/protocol/openid-connect/certs
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: passenger-api-graphql
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: passenger-api-graphql
+  action: DENY
+  rules:
+    - from:
+        - source:
+            notRequestPrincipals: ["*"]

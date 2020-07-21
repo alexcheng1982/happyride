@@ -1,0 +1,19 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: address-service
+spec:
+  action: ALLOW
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: address-service
+  rules:
+    - from:
+        - source:
+            principals:
+              - "cluster.local/ns/happyride/sa/passenger-api-graphql"
+      to:
+        - operation:
+            methods:
+              - GET
+              - POST
