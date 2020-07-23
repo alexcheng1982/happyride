@@ -1,5 +1,4 @@
-FROM adoptopenjdk/openjdk8:jdk8u262-b10-alpine
+FROM adoptopenjdk/openjdk8:jre8u262-b10-alpine
 
-RUN mkdir -p /opt/app
-ADD target/happyride-address-service-1.0.0-SNAPSHOT.jar /opt/app/app.jar
-ENTRYPOINT [ "java", "-jar", "/opt/app/app.jar" ]
+ADD target/happyride-address-service-1.0.0-SNAPSHOT.jar /opt/app.jar
+ENTRYPOINT [ "java", "-jar", "/opt/app.jar" ]
