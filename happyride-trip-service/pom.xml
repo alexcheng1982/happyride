@@ -106,19 +106,4 @@
       <artifactId>eventuate-tram-sagas-spring-testing-support</artifactId>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.google.cloud.tools</groupId>
-        <artifactId>jib-maven-plugin</artifactId>
-        <configuration>
-          <container>
-            <mainClass>io.vividcode.happyride.tripservice.TripApplication
-            </mainClass>
-          </container>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>

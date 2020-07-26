@@ -306,6 +306,28 @@
           </executions>
         </plugin>
         <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.0.0</version>
+          <executions>
+            <execution>
+              <phase>deploy</phase>
+              <goals>
+                <goal>exec</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <executable>docker</executable>
+            <arguments>
+              <argument>push</argument>
+              <argument>
+                docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
+              </argument>
+            </arguments>
+          </configuration>
+        </plugin>
+        <plugin>
           <groupId>org.openapitools</groupId>
           <artifactId>openapi-generator-maven-plugin</artifactId>
           <version>${openapi-generator.version}</version>
@@ -318,33 +340,6 @@
             <generateModelDocumentation>false</generateModelDocumentation>
             <generateApiDocumentation>false</generateApiDocumentation>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>com.google.cloud.tools</groupId>
-          <artifactId>jib-maven-plugin</artifactId>
-          <version>${jib.version}</version>
-          <configuration>
-            <from>
-              <image>adoptopenjdk/openjdk8:jre8u262-b10-alpine</image>
-            </from>
-            <to>
-              <image>
-                docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
-              </image>
-            </to>
-            <allowInsecureRegistries>true</allowInsecureRegistries>
-            <container>
-              <format>OCI</format>
-            </container>
-          </configuration>
-          <executions>
-            <execution>
-              <phase>package</phase>
-              <goals>
-                <goal>build</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
