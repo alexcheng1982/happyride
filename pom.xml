@@ -332,6 +332,7 @@
                 docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
               </image>
             </to>
+            <allowInsecureRegistries>true</allowInsecureRegistries>
             <container>
               <format>OCI</format>
             </container>
