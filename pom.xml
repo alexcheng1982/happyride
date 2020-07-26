@@ -71,6 +71,7 @@
     <opentracing-web-servlet-filter.version>0.4.1
     </opentracing-web-servlet-filter.version>
     <opentracing-concurrent.version>0.4.0</opentracing-concurrent.version>
+    <jib.version>2.4.0</jib.version>
   </properties>
 
   <dependencyManagement>
@@ -315,6 +316,18 @@
             <generateApiTests>false</generateApiTests>
             <generateModelDocumentation>false</generateModelDocumentation>
             <generateApiDocumentation>false</generateApiDocumentation>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.google.cloud.tools</groupId>
+          <artifactId>jib-maven-plugin</artifactId>
+          <version>${jib.version}</version>
+          <configuration>
+            <to>
+              <image>
+                happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+              </image>
+            </to>
           </configuration>
         </plugin>
       </plugins>
