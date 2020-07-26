@@ -72,6 +72,7 @@
     </opentracing-web-servlet-filter.version>
     <opentracing-concurrent.version>0.4.0</opentracing-concurrent.version>
     <jib.version>2.4.0</jib.version>
+    <git-commit-id-plugin.version>4.0.1</git-commit-id-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -292,7 +293,7 @@
           <configuration>
             <image>
               <name>
-                happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+                docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
               </name>
             </image>
           </configuration>
@@ -323,12 +324,26 @@
           <artifactId>jib-maven-plugin</artifactId>
           <version>${jib.version}</version>
           <configuration>
+            <from>
+              <image>adoptopenjdk/openjdk8:jre8u262-b10-alpine</image>
+            </from>
             <to>
               <image>
-                happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+                docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
               </image>
             </to>
+            <container>
+              <format>OCI</format>
+            </container>
           </configuration>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>build</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -342,6 +357,20 @@
             <goals>
               <goal>parse-version</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
+        <version>${git-commit-id-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>get-the-git-infos</id>
+            <goals>
+              <goal>revision</goal>
+            </goals>
+            <phase>initialize</phase>
           </execution>
         </executions>
       </plugin>

@@ -112,6 +112,12 @@
       <plugin>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-maven-plugin</artifactId>
+        <configuration>
+          <container>
+            <mainClass>io.vividcode.happyride.tripservice.TripApplication
+            </mainClass>
+          </container>
+        </configuration>
       </plugin>
     </plugins>
   </build>

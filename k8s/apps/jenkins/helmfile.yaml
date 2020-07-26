@@ -1,0 +1,13 @@
+repositories:
+  - name: stable
+    url: https://kubernetes-charts.storage.googleapis.com
+
+releases:
+  - name: jenkins
+    namespace: {{ env "NAMESPACE" | default "happyride" }}
+    chart: stable/jenkins
+    version: ~2.4.1
+    wait: true
+    values:
+      - master:
+          serviceType: NodePort

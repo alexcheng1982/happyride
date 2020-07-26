@@ -14,7 +14,8 @@
 
   <properties>
     <happyride-common.version>1.0.0-SNAPSHOT</happyride-common.version>
-    <happyride-address-service-api.version>1.0.0-SNAPSHOT</happyride-address-service-api.version>
+    <happyride-address-service-api.version>1.0.0-SNAPSHOT
+    </happyride-address-service-api.version>
   </properties>
 
   <dependencies>
