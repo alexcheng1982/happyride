@@ -395,6 +395,9 @@
             <phase>initialize</phase>
           </execution>
         </executions>
+        <configuration>
+          <verbose>false</verbose>
+        </configuration>
       </plugin>
     </plugins>
   </build>
