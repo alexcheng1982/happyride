@@ -73,6 +73,8 @@
     <opentracing-concurrent.version>0.4.0</opentracing-concurrent.version>
     <jib.version>2.4.0</jib.version>
     <git-commit-id-plugin.version>4.0.1</git-commit-id-plugin.version>
+    <protobuf-java.version>3.12.2</protobuf-java.version>
+    <protoc-jar-maven-plugin.version>3.11.4</protoc-jar-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -183,6 +185,11 @@
         <groupId>io.opentracing.contrib</groupId>
         <artifactId>opentracing-concurrent</artifactId>
         <version>${opentracing-concurrent.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java</artifactId>
+        <version>${protobuf-java.version}</version>
       </dependency>
 
       <dependency>
@@ -339,6 +346,25 @@
             <generateApiTests>false</generateApiTests>
             <generateModelDocumentation>false</generateModelDocumentation>
             <generateApiDocumentation>false</generateApiDocumentation>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.github.os72</groupId>
+          <artifactId>protoc-jar-maven-plugin</artifactId>
+          <version>${protoc-jar-maven-plugin.version}</version>
+          <executions>
+            <execution>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <addProtoSources>inputs</addProtoSources>
+            <inputDirectories>
+              <include>src/main/protobuf</include>
+            </inputDirectories>
           </configuration>
         </plugin>
       </plugins>
