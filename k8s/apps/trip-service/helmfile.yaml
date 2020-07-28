@@ -1,0 +1,26 @@
+repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+releases:
+  - name: postgresql-trip
+    namespace: {{ env "NAMESPACE" | default "happyride" }}
+    chart: bitnami/postgresql
+    version: 8.10.13
+    wait: false
+    values:
+      - ../postgresql-config.yaml
+      - config.yaml
+  - name: trip-service
+    namespace: {{ env "NAMESPACE" | default "happyride" }}
+    chart: charts/trip-service
+    values:
+      - config.yaml
+      - image:
+          tag: "1.0.0-548ae98"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"

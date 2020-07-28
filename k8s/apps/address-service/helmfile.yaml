@@ -5,7 +5,7 @@ releases:
   - name: postgresql-address
     namespace: {{ env "NAMESPACE" | default "happyride" }} 
     chart: bitnami/postgresql
-    version: ~8.10.13   
+    version: 8.10.13   
     wait: false
     values:
       - ../postgresql-config.yaml

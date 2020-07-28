@@ -6,7 +6,7 @@ releases:
   - name: docker-registry
     namespace: {{ env "NAMESPACE" | default "happyride" }}
     chart: stable/docker-registry
-    version: ~1.9.4
+    version: 1.9.4
     wait: true
     values:
       - service:
