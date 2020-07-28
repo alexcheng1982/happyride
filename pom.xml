@@ -444,7 +444,7 @@
               <version>3.0.0</version>
               <executions>
                 <execution>
-                  <phase>deploy</phase>
+                  <phase>package</phase>
                   <goals>
                     <goal>exec</goal>
                   </goals>
