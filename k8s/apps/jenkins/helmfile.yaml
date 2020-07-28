@@ -11,3 +11,5 @@ releases:
     values:
       - master:
           serviceType: NodePort
+          additionalPlugins:
+            - "blueocean:1.23.2"
