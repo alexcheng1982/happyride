@@ -297,42 +297,13 @@
         <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
-          <configuration>
-            <image>
-              <name>
-                docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
-              </name>
-            </image>
-          </configuration>
           <executions>
             <execution>
               <goals>
-                <goal>build-image</goal>
+                <goal>repackage</goal>
               </goals>
             </execution>
           </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>3.0.0</version>
-          <executions>
-            <execution>
-              <phase>deploy</phase>
-              <goals>
-                <goal>exec</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <executable>docker</executable>
-            <arguments>
-              <argument>push</argument>
-              <argument>
-                docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
-              </argument>
-            </arguments>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.openapitools</groupId>
@@ -421,6 +392,79 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <profiles>
+    <profile>
+      <id>build-docker</id>
+      <activation>
+        <property>
+          <name>env.BUILD_DOCKER</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-maven-plugin</artifactId>
+              <configuration>
+                <image>
+                  <name>
+                    docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
+                  </name>
+                </image>
+              </configuration>
+              <executions>
+                <execution>
+                  <goals>
+                    <goal>build-image</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+    <profile>
+      <id>publish-image</id>
+      <activation>
+        <property>
+          <name>env.PUBLISH_IMAGE</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <version>3.0.0</version>
+              <executions>
+                <execution>
+                  <phase>deploy</phase>
+                  <goals>
+                    <goal>exec</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <executable>docker</executable>
+                <arguments>
+                  <argument>push</argument>
+                  <argument>
+                    docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
+                  </argument>
+                </arguments>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 
   <repositories>
     <repository>
