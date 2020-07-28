@@ -406,63 +406,31 @@
         <pluginManagement>
           <plugins>
             <plugin>
-              <groupId>org.springframework.boot</groupId>
-              <artifactId>spring-boot-maven-plugin</artifactId>
+              <groupId>com.google.cloud.tools</groupId>
+              <artifactId>jib-maven-plugin</artifactId>
+              <version>${jib.version}</version>
               <configuration>
-                <image>
-                  <name>
-                    docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
-                  </name>
-                </image>
-              </configuration>
-              <executions>
-                <execution>
-                  <goals>
-                    <goal>build-image</goal>
-                  </goals>
-                </execution>
-              </executions>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-    <profile>
-      <id>publish-image</id>
-      <activation>
-        <property>
-          <name>env.PUBLISH_IMAGE</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>io.fabric8</groupId>
-              <artifactId>docker-maven-plugin</artifactId>
-              <version>0.33.0</version>
-              <executions>
-                <execution>
-                  <id>publish-image</id>
-                  <phase>install</phase>
-                  <goals>
-                    <goal>push</goal>
-                  </goals>
-                </execution>
-              </executions>
-              <configuration>
-                <images>
+                <from>
+                  <image>adoptopenjdk/openjdk8:jre8u262-b10-alpine</image>
+                </from>
+                <to>
                   <image>
-                    <name>
-                      docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
-                    </name>
-                    <build>
-                      <from>java:8</from>
-                    </build>
+                    docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
                   </image>
-                </images>
+                </to>
+                <allowInsecureRegistries>true</allowInsecureRegistries>
+                <container>
+                  <format>OCI</format>
+                </container>
               </configuration>
+              <executions>
+                <execution>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>build</goal>
+                  </goals>
+                </execution>
+              </executions>
             </plugin>
           </plugins>
         </pluginManagement>
