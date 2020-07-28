@@ -439,25 +439,29 @@
         <pluginManagement>
           <plugins>
             <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>exec-maven-plugin</artifactId>
-              <version>3.0.0</version>
+              <groupId>io.fabric8</groupId>
+              <artifactId>docker-maven-plugin</artifactId>
+              <version>0.33.0</version>
               <executions>
                 <execution>
-                  <phase>package</phase>
+                  <id>publish-image</id>
+                  <phase>install</phase>
                   <goals>
-                    <goal>exec</goal>
+                    <goal>push</goal>
                   </goals>
                 </execution>
               </executions>
               <configuration>
-                <executable>docker</executable>
-                <arguments>
-                  <argument>push</argument>
-                  <argument>
-                    docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
-                  </argument>
-                </arguments>
+                <images>
+                  <image>
+                    <name>
+                      docker-registry:5000/happyride/${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${git.commit.id.abbrev}
+                    </name>
+                    <build>
+                      <from>java:8</from>
+                    </build>
+                  </image>
+                </images>
               </configuration>
             </plugin>
           </plugins>
