@@ -1,3 +1,5 @@
+addressServiceImageTag = ''
+
 pipeline {
   agent {
     kubernetes {
@@ -5,6 +7,7 @@ pipeline {
 apiVersion: v1
 kind: Pod
 spec:
+  serviceAccountName: deploy-user
   securityContext:
     fsGroup: 1000
   containers:
@@ -16,14 +19,24 @@ spec:
     - infinity
     resources:
       requests:
-        cpu: 0.5
+        cpu: "0.5"
         memory: 512Mi
       limits:
-        cpu: 1
+        cpu: "1"
         memory: 1Gi  
     volumeMounts:
       - name: dockersock
         mountPath: "/var/run/docker.sock"
+  - name: helmfile
+    image: quay.io/roboll/helmfile:helm3-v0.125.0
+    command:
+    - sleep
+    args:
+    - infinity
+    resources:
+      limits:
+        cpu: "0.5"
+        memory: 256Mi
   volumes:
     - name: dockersock
       hostPath:
@@ -33,21 +46,28 @@ spec:
   }
   stages {
     stage('Build') {
+      environment {
+        BUILD_DOCKER = true
+        CONTAINER_REGISTRY='docker-registry:5000'
+      }
       steps {
         git 'https://github.com/alexcheng1982/happyride'
         container('maven') {
-          sh 'mvn -B -ntp -Dmaven.test.failure.ignore compile'
-          junit '**/target/surefire-reports/TEST-*.xml'
+          sh 'mvn install -B -ntp -DskipTests'
+          script {
+            addressServiceImageTag = readFile("happyride-address-service/target/image_tag.txt")
+          }
         }
       }
     }
-    stage('Publish') {
+    stage('Deploy') {
+      environment {
+        ADDRESS_SERVICE_VERSION = "${addressServiceImageTag}"
+      }
       steps {
         git 'https://github.com/alexcheng1982/happyride'
-        container('maven') {
-          withEnv(['BUILD_DOCKER=true', 'PUBLISH_IMAGE=true']) {
-            sh 'mvn -B -ntp -DskipTests package'
-          }
+        container('helmfile') {
+          sh 'cd k8s/happyride/apps/address-service && helmfile apply'
         }
       }
     }
