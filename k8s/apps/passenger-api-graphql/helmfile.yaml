@@ -1,4 +1,0 @@
-releases:
-  - name: passenger-api-graphql
-    namespace: {{ env "NAMESPACE" | default "happyride" }}     
-    chart: charts/passenger-api-graphql

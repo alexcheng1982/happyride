@@ -28,4 +28,4 @@ releases:
       - config.yaml
       - address-service-config.yaml
       - serviceVersion: "2"
-        appVersion: "1.1.0"           
+        appVersion: {{ requiredEnv "ADDRESS_SERVICE_VERSION" | quote }}        

@@ -99,6 +99,13 @@
       <plugin>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>io.vividcode.happyride.addressservice.AddressServiceApplication</mainClass>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.gmaven</groupId>
+        <artifactId>groovy-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

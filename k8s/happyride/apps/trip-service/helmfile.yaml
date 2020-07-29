@@ -16,7 +16,7 @@ releases:
     values:
       - config.yaml
       - image:
-          tag: "1.0.0-548ae98"
+          tag: {{ requiredEnv "TRIP_SERVICE_VERSION" | quote }} 
         resources:
           requests:
             memory: "512Mi"

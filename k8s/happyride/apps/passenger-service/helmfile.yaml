@@ -15,7 +15,9 @@ releases:
     chart: charts/passenger-service
     values:
       - config.yaml
-      - resources:
+      - image:
+          tag: {{ requiredEnv "PASSENGER_SERVICE_VERSION" | quote }} 
+        resources:
           requests:
             memory: "512Mi"
             cpu: "500m"

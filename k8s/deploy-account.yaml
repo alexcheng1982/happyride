@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deploy-user
+  namespace: happyride
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: deploy-user
+roleRef:
+  apiGroup: ""
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: deploy-user
+    namespace: happyride

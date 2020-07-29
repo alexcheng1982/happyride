@@ -1,0 +1,2 @@
+helmfiles:
+- apps/*/helmfile.yaml

@@ -9,5 +9,6 @@ releases:
     version: 10.7.9
     wait: true
     values:
-      - cluster:
+      - password: redis
+        cluster:
           enabled: false
