@@ -53,7 +53,8 @@ spec:
       steps {
         git 'https://github.com/alexcheng1982/happyride'
         container('maven') {
-          sh 'mvn install -B -ntp -DskipTests'
+          sh 'mvn -B -ntp -Dmaven.test.failure.ignore install'
+          junit '**/target/surefire-reports/TEST-*.xml'
           script {
             addressServiceImageTag = readFile("happyride-address-service/target/image_tag.txt")
           }
