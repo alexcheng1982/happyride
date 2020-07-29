@@ -28,4 +28,6 @@ releases:
       - config.yaml
       - address-service-config.yaml
       - serviceVersion: "2"
-        appVersion: {{ requiredEnv "ADDRESS_SERVICE_VERSION" | quote }}        
+        appVersion: {{ requiredEnv "ADDRESS_SERVICE_VERSION" | quote }}   
+        image:
+          repository: "docker-registry:5000/happyride/happyride-address-service"     
