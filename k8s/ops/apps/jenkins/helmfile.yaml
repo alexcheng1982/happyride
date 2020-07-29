@@ -11,5 +11,7 @@ releases:
     values:
       - master:
           serviceType: NodePort
+          persistence:
+            size: 20Gi
           additionalPlugins:
             - "blueocean:1.23.2"
