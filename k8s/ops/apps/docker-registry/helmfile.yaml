@@ -11,3 +11,4 @@ releases:
     values:
       - service:
           type: NodePort
+          nodePort: 30000

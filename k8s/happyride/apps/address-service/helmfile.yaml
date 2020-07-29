@@ -30,4 +30,4 @@ releases:
       - serviceVersion: "2"
         appVersion: {{ requiredEnv "ADDRESS_SERVICE_VERSION" | quote }}   
         image:
-          repository: "docker-registry:5000/happyride/happyride-address-service"     
+          repository: {{ printf "%s/happyride/happyride-address-service" (requiredEnv "CONTAINER_REGISTRY") | quote }}  
