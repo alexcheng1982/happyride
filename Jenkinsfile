@@ -64,6 +64,7 @@ spec:
     stage('Deploy') {
       environment {
         ADDRESS_SERVICE_VERSION = "${addressServiceImageTag}"
+        CONTAINER_REGISTRY = "localhost:30000"
       }
       steps {
         git 'https://github.com/alexcheng1982/happyride'
