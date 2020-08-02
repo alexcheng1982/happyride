@@ -13,21 +13,13 @@ releases:
   - name: address-service-common
     namespace: {{ env "NAMESPACE" | default "happyride" }}     
     chart: charts/address-service-common   
-  # - name: address-service-v1-0
-  #   namespace: {{ env "NAMESPACE" | default "happyride" }}     
-  #   chart: charts/address-service
-  #   values:
-  #     - config.yaml
-  #     - address-service-config.yaml
-  #     - serviceVersion: "1"
-  #       appVersion: "1.0.0"  
-  - name: address-service-v1-1
+  - name: address-service-{{ requiredEnv "DEPLOYMENT_TYPE" }}  
     namespace: {{ env "NAMESPACE" | default "happyride" }}     
     chart: charts/address-service
     values:
       - config.yaml
       - address-service-config.yaml
-      - serviceVersion: "2"
+      - deploymentType: {{ requiredEnv "DEPLOYMENT_TYPE" | quote }}  
         appVersion: {{ requiredEnv "ADDRESS_SERVICE_VERSION" | quote }}   
         image:
-          repository: {{ printf "%s/happyride/happyride-address-service" (requiredEnv "CONTAINER_REGISTRY") | quote }}  
+          repository: {{ printf "%shappyride/happyride-address-service" (env "CONTAINER_REGISTRY" | default "" ) | quote }}  

@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: address-service
+spec:
+  host: address-service.happyride.svc.cluster.local
+  subsets:
+    - name: blue
+      labels:
+        app.vividcode.io/deployment-type: "blue"
+    - name: green
+      labels:
+        app.vividcode.io/deployment-type: "green"

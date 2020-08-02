@@ -36,7 +36,7 @@ Common labels
 */}}
 {{- define "address-service.labels" -}}
 helm.sh/chart: {{ include "address-service.chart" . }}
-{{ include "address-service.selectorLabelsWithVersion" . }}
+{{ include "address-service.selectorLabelsWithDeploymentType" . }}
 {{- $appVersion := default .Chart.AppVersion .Values.appVersion }}
 {{- if $appVersion }}
 app.kubernetes.io/version: {{ $appVersion | quote }}
@@ -53,11 +53,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Selector labels
+Selector labels with deployment type
 */}}
-{{- define "address-service.selectorLabelsWithVersion" -}}
+{{- define "address-service.selectorLabelsWithDeploymentType" -}}
 {{ include "address-service.selectorLabels" . }}
-app.vividcode.io/service-version: {{ .Values.serviceVersion | quote }}
+app.vividcode.io/deployment-type: {{ .Values.deploymentType | quote }}
 {{- end }}
 
 {{/*
@@ -72,15 +72,8 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Create the service version
+Create the service name with deployment type
 */}}
-{{- define "address-service.serviceVersion" -}}
-{{- .Values.serviceVersion | replace "." "-" }}
-{{- end }}
-
-{{/*
-Create the service name with version
-*/}}
-{{- define "address-service.nameWithVersion" -}}
-{{- printf "%s-v%s" (include "address-service.name" .) (include "address-service.serviceVersion" .) }}
+{{- define "address-service.nameWithDeploymentType" -}}
+{{- printf "%s-%s" (include "address-service.name" .) .Values.deploymentType }}
 {{- end }}

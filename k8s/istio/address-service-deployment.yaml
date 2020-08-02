@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: address-service-deployment
+spec:
+  hosts:
+    - address-service.happyride.svc.cluster.local
+  http:
+    - name: "address-service-http"
+      route:
+        - destination:
+            host: address-service.happyride.svc.cluster.local
+            subset: blue
+          weight: 99
+        - destination:
+            host: address-service.happyride.svc.cluster.local
+            subset: green
+          weight: 1   

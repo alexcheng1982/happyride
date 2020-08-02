@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "address-service.nameWithVersion" . }}
+  name: {{ include "address-service.nameWithDeploymentType" . }}
   labels:
     {{- include "address-service.labels" . | nindent 4 }}
 spec:
@@ -10,7 +10,7 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      {{- include "address-service.selectorLabelsWithVersion" . | nindent 6 }}
+      {{- include "address-service.selectorLabelsWithDeploymentType" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "address-service.selectorLabelsWithVersion" . | nindent 8 }}
+        {{- include "address-service.selectorLabelsWithDeploymentType" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
