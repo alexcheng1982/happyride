@@ -37,7 +37,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.3.1.RELEASE</version>
+    <version>2.3.2.RELEASE</version>
     <relativePath/>
   </parent>
   <groupId>io.vividcode.happyride</groupId>
@@ -297,20 +297,20 @@
         <plugin>
           <groupId>org.codehaus.gmaven</groupId>
           <artifactId>groovy-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>execute</goal>
-                </goals>
-                <configuration>
-                  <source>
-                    def imageTag = properties['parsedVersion.majorVersion'] + '.' + properties['parsedVersion.minorVersion'] + '.' + properties['parsedVersion.incrementalVersion'] + '-' + properties['git.commit.id.abbrev']
-                    def file = new File(project.build.directory, 'image_tag.txt')
-                    file.write imageTag
-                  </source>
-                </configuration>
-              </execution>
+          <executions>
+            <execution>
+              <phase>generate-resources</phase>
+              <goals>
+                <goal>execute</goal>
+              </goals>
+              <configuration>
+                <source>
+                  def imageTag = properties['parsedVersion.majorVersion'] + '.' + properties['parsedVersion.minorVersion'] + '.' + properties['parsedVersion.incrementalVersion'] + '-' + properties['git.commit.id.abbrev']
+                  def file = new File(project.build.directory, 'image_tag.txt')
+                  file.write imageTag
+                </source>
+              </configuration>
+            </execution>
           </executions>
         </plugin>
         <plugin>
