@@ -9,7 +9,9 @@ import io.vividcode.happyride.addressservice.api.web.AddressBatchRequest;
 import io.vividcode.happyride.addressservice.service.AddressService;
 import io.vividcode.happyride.addressservice.service.AreaService;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,34 +31,45 @@ public class AddressController {
   AreaService areaService;
 
   @GetMapping("/search")
-  public List<AddressVO> search(
-      @RequestParam("areaCode") final Long areaCode,
-      @RequestParam("query") final String query) {
-    return this.addressService.search(areaCode, query);
+  public CollectionModel<EntityModel<AddressVO>> search(
+      @RequestParam("areaCode") Long areaCode,
+      @RequestParam("query") String query) {
+    return CollectionModel
+        .of(this.addressService.search(areaCode, query)
+                .stream()
+                .map(address -> EntityModel.of(address,
+                    linkTo(
+                        methodOn(AddressController.class)
+                            .getAddress(address.getId(), 1))
+                        .withSelfRel())
+                ).collect(Collectors.toList()),
+            linkTo(methodOn(AddressController.class).search(areaCode, query))
+                .withSelfRel());
   }
 
   @GetMapping("/address/{addressId}")
   public ResponseEntity<EntityModel<AddressVO>> getAddress(
-      @PathVariable("addressId") final String addressId,
-      @RequestParam(value = "areaLevel", required = false, defaultValue = "1") final int areaLevel) {
+      @PathVariable("addressId") String addressId,
+      @RequestParam(value = "areaLevel", required = false, defaultValue = "1") int areaLevel) {
     return this.addressService.getAddress(addressId, areaLevel)
         .map(address -> EntityModel.of(address,
-            linkTo(methodOn(AddressController.class).getAddress(addressId, areaLevel)).withSelfRel()))
+            linkTo(methodOn(AddressController.class)
+                .getAddress(addressId, areaLevel)).withSelfRel()))
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @PostMapping("/addresses")
   public List<AddressVO> getAddresses(
-      @RequestBody final AddressBatchRequest addressBatchRequest) {
+      @RequestBody AddressBatchRequest addressBatchRequest) {
     return this.addressService
         .getAddresses(addressBatchRequest.getAddressIds());
   }
 
   @GetMapping("/area/{areaCode}")
   public ResponseEntity<AreaVO> getArea(
-      @PathVariable("areaCode") final Long areaCode,
-      @RequestParam(value = "ancestorLevel", required = false, defaultValue = "0") final int ancestorLevel) {
+      @PathVariable("areaCode") Long areaCode,
+      @RequestParam(value = "ancestorLevel", required = false, defaultValue = "0") int ancestorLevel) {
     return this.areaService.getArea(areaCode, ancestorLevel)
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
