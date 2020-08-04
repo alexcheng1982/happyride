@@ -1,5 +1,8 @@
 package io.vividcode.happyride.addressservice.web;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import io.vividcode.happyride.addressservice.api.AddressVO;
 import io.vividcode.happyride.addressservice.api.AreaVO;
 import io.vividcode.happyride.addressservice.api.web.AddressBatchRequest;
@@ -7,6 +10,7 @@ import io.vividcode.happyride.addressservice.service.AddressService;
 import io.vividcode.happyride.addressservice.service.AreaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,10 +36,12 @@ public class AddressController {
   }
 
   @GetMapping("/address/{addressId}")
-  public ResponseEntity<AddressVO> getAddress(
+  public ResponseEntity<EntityModel<AddressVO>> getAddress(
       @PathVariable("addressId") final String addressId,
       @RequestParam(value = "areaLevel", required = false, defaultValue = "1") final int areaLevel) {
     return this.addressService.getAddress(addressId, areaLevel)
+        .map(address -> EntityModel.of(address,
+            linkTo(methodOn(AddressController.class).getAddress(addressId, areaLevel)).withSelfRel()))
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
