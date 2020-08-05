@@ -9,14 +9,16 @@ import java.util.List;
 
 public class AddressHelper {
 
-  public static AddressVO fromAddress(final Address address) {
+  public static AddressVO fromAddress(Address address) {
     return fromAddress(address, Collections.emptyList());
   }
 
-  public static AddressVO fromAddress(final Address address, final List<AreaVO> areas) {
-    final AddressVO addressVO = new AddressVO();
+  public static AddressVO fromAddress(Address address,
+      List<AreaVO> areas) {
+    AddressVO addressVO = new AddressVO();
     addressVO.setId(address.getId());
     addressVO.setAreaId(address.getArea().getId());
+    addressVO.setAreaCode(address.getArea().getAreaCode());
     addressVO.setAddressLine(address.getAddressLine());
     addressVO.setLng(address.getLng());
     addressVO.setLat(address.getLat());
@@ -24,12 +26,12 @@ public class AddressHelper {
     return addressVO;
   }
 
-  public static AreaVO fromArea(final Area area) {
+  public static AreaVO fromArea(Area area) {
     return fromArea(area, Collections.emptyList());
   }
 
-  public static AreaVO fromArea(final Area area, final List<AreaVO> ancestors) {
-    final AreaVO areaVO = new AreaVO();
+  public static AreaVO fromArea(Area area, List<AreaVO> ancestors) {
+    AreaVO areaVO = new AreaVO();
     areaVO.setId(area.getId());
     areaVO.setLevel(area.getLevel());
     areaVO.setParentCode(area.getParentCode());

@@ -11,6 +11,8 @@ public class AddressVO {
 
   private Integer areaId;
 
+  private Long areaCode;
+
   private String addressLine;
 
   private BigDecimal lng;
