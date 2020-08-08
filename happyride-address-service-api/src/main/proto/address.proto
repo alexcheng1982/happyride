@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.vividcode.happyride.addressservice.grpc";
+option java_outer_classname = "AddressServiceProto";
+
+message Area {
+  int32 id = 1;
+  int32 level = 2;
+  int64 parent_code = 3;
+  int64 area_code = 4;
+  string zip_code = 5;
+  string city_code = 6;
+  string name = 7;
+  string short_name = 8;
+  string merger_name = 9;
+  string pinyin = 10;
+  string lat = 11;
+  string lng = 12;
+  repeated Area ancestors = 13;
+}
+
+message Address {
+  string id = 1;
+  int32 area_id = 2;
+  string address_line = 3;
+  string lng = 4;
+  string lat = 5;
+  repeated Area areas = 6;
+}
+
+message GetAddressRequest {
+  string address_id = 1;
+  int32 area_level = 2;
+}
+
+message GetAddressResponse {
+  oneof optional_address {
+    Address address = 1;
+  }
+}
+
+message GetAreaRequest {
+  int64 area_code = 1;
+  int32 ancestor_level = 2;
+}
+
+message GetAreaResponse {
+  oneof optional_area {
+    Area area = 1;
+  }
+}
+
+message AddressSearchRequest {
+  int64 area_code = 1;
+  string query = 2;
+}
+
+message GetAddressesRequest {
+  repeated string ids = 1;
+}
+
+service AddressService {
+  rpc GetAddress(GetAddressRequest) returns (GetAddressResponse);
+
+  rpc GetArea(GetAreaRequest) returns (GetAreaResponse);
+
+  rpc Search(AddressSearchRequest) returns (stream Address);
+
+  rpc GetAddresses(GetAddressesRequest) returns (stream Address);
+}

@@ -73,8 +73,11 @@
     <opentracing-concurrent.version>0.4.0</opentracing-concurrent.version>
     <jib.version>2.4.0</jib.version>
     <git-commit-id-plugin.version>4.0.1</git-commit-id-plugin.version>
-    <protobuf-java.version>3.12.2</protobuf-java.version>
     <protoc-jar-maven-plugin.version>3.11.4</protoc-jar-maven-plugin.version>
+    <grpc.version>1.31.0</grpc.version>
+    <protobuf.version>3.12.0</protobuf.version>
+    <protoc.version>3.12.0</protoc.version>
+    <grpc-spring-boot-starter.version>3.5.6</grpc-spring-boot-starter.version>
   </properties>
 
   <dependencyManagement>
@@ -187,9 +190,19 @@
         <version>${opentracing-concurrent.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.google.protobuf</groupId>
-        <artifactId>protobuf-java</artifactId>
-        <version>${protobuf-java.version}</version>
+        <groupId>io.grpc</groupId>
+        <artifactId>grpc-protobuf</artifactId>
+        <version>${grpc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.grpc</groupId>
+        <artifactId>grpc-stub</artifactId>
+        <version>${grpc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.github.lognet</groupId>
+        <artifactId>grpc-spring-boot-starter</artifactId>
+        <version>${grpc-spring-boot-starter.version}</version>
       </dependency>
 
       <dependency>
@@ -279,6 +292,13 @@
 
 
   <build>
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.6.2</version>
+      </extension>
+    </extensions>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -356,23 +376,26 @@
           </configuration>
         </plugin>
         <plugin>
-          <groupId>com.github.os72</groupId>
-          <artifactId>protoc-jar-maven-plugin</artifactId>
-          <version>${protoc-jar-maven-plugin.version}</version>
+          <groupId>org.xolstice.maven.plugins</groupId>
+          <artifactId>protobuf-maven-plugin</artifactId>
+          <version>0.6.1</version>
+          <configuration>
+            <protocArtifact>
+              com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
+            </protocArtifact>
+            <pluginId>grpc-java</pluginId>
+            <pluginArtifact>
+              io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
+            </pluginArtifact>
+          </configuration>
           <executions>
             <execution>
-              <phase>generate-sources</phase>
               <goals>
-                <goal>run</goal>
+                <goal>compile</goal>
+                <goal>compile-custom</goal>
               </goals>
             </execution>
           </executions>
-          <configuration>
-            <addProtoSources>inputs</addProtoSources>
-            <inputDirectories>
-              <include>src/main/protobuf</include>
-            </inputDirectories>
-          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
