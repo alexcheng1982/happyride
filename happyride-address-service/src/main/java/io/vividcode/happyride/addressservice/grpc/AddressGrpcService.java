@@ -6,9 +6,10 @@ import io.vividcode.happyride.addressservice.api.AreaVO;
 import io.vividcode.happyride.addressservice.grpc.AddressServiceGrpc.AddressServiceImplBase;
 import io.vividcode.happyride.addressservice.service.AddressService;
 import io.vividcode.happyride.addressservice.service.AreaService;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.lognet.springboot.grpc.GRpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @GRpcService
@@ -19,6 +20,9 @@ public class AddressGrpcService extends AddressServiceImplBase {
 
   @Autowired
   AreaService areaService;
+
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(AddressGrpcService.class);
 
   @Override
   public void getAddress(GetAddressRequest request,
@@ -51,12 +55,28 @@ public class AddressGrpcService extends AddressServiceImplBase {
   }
 
   @Override
-  public void getAddresses(GetAddressesRequest request,
+  public StreamObserver<GetAddressRequest> getAddresses(
       StreamObserver<Address> responseObserver) {
-    this.addressService.getAddresses(new ArrayList<>(request.getIdsList()))
-        .forEach(
-            address -> responseObserver.onNext(this.buildAddress(address)));
-    responseObserver.onCompleted();
+    return new StreamObserver<GetAddressRequest>() {
+      @Override
+      public void onNext(GetAddressRequest request) {
+        AddressGrpcService.this.addressService
+            .getAddress(request.getAddressId(), request.getAreaLevel())
+            .ifPresent(
+                address -> responseObserver.onNext(
+                    AddressGrpcService.this.buildAddress(address)));
+      }
+
+      @Override
+      public void onError(Throwable t) {
+        AddressGrpcService.LOGGER.warn("Error", t);
+      }
+
+      @Override
+      public void onCompleted() {
+        responseObserver.onCompleted();
+      }
+    };
   }
 
   private Address buildAddress(AddressVO address) {

@@ -56,10 +56,6 @@ message AddressSearchRequest {
   string query = 2;
 }
 
-message GetAddressesRequest {
-  repeated string ids = 1;
-}
-
 service AddressService {
   rpc GetAddress(GetAddressRequest) returns (GetAddressResponse);
 
@@ -67,5 +63,5 @@ service AddressService {
 
   rpc Search(AddressSearchRequest) returns (stream Address);
 
-  rpc GetAddresses(GetAddressesRequest) returns (stream Address);
+  rpc GetAddresses(stream GetAddressRequest) returns (stream Address);
 }
