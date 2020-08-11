@@ -1,5 +1,6 @@
 package io.vividcode.happyride.addressservice.service;
 
+import io.quarkus.arc.profile.IfBuildProfile;
 import io.quarkus.runtime.StartupEvent;
 import io.vividcode.happyride.addressservice.model.Address;
 import io.vividcode.happyride.addressservice.model.Area;
@@ -12,6 +13,7 @@ import javax.enterprise.event.Observes;
 import javax.transaction.Transactional;
 
 @ApplicationScoped
+@IfBuildProfile("dev")
 public class AddressLoader {
 
   private final ThreadLocalRandom random = ThreadLocalRandom.current();

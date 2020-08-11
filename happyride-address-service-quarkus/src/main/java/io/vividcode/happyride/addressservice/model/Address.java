@@ -33,10 +33,12 @@ public class Address extends PanacheEntityBase {
   @Column(name = "lat")
   public BigDecimal lat;
 
-  public static List<Address> findByAreaCodeAndAddressLine(Long areaCode, String query) {
-    return list("area.areaCode = :areaCode and addressLine LIKE :query", ImmutableMap.of(
-        "areaCode", areaCode,
-        "query", "%" + query + "%"
-    ));
+  public static List<Address> findByAreaCodeAndAddressLine(Long areaCode,
+      String query) {
+    return list("area.areaCode = :areaCode and addressLine LIKE :query",
+        ImmutableMap.of(
+            "areaCode", areaCode,
+            "query", "%" + query + "%"
+        ));
   }
 }
