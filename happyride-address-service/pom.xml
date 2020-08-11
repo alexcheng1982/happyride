@@ -12,22 +12,16 @@
   <artifactId>happyride-address-service</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
-  <properties>
-    <happyride-common.version>1.0.0-SNAPSHOT</happyride-common.version>
-    <happyride-address-service-api.version>1.0.0-SNAPSHOT
-    </happyride-address-service-api.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>io.vividcode.happyride</groupId>
       <artifactId>happyride-common</artifactId>
-      <version>${happyride-common.version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.vividcode.happyride</groupId>
       <artifactId>happyride-address-service-api</artifactId>
-      <version>${happyride-address-service-api.version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -89,7 +83,7 @@
     <dependency>
       <groupId>io.vividcode.happyride</groupId>
       <artifactId>happyride-postgres-common</artifactId>
-      <version>${happyride-common.version}</version>
+      <version>${project.version}</version>
       <classifier>tests</classifier>
       <type>test-jar</type>
       <scope>test</scope>
