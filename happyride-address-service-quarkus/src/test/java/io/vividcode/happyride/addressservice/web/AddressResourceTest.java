@@ -13,19 +13,14 @@ import io.vividcode.happyride.addressservice.service.AreaService;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.UUID;
-import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 @QuarkusTest
+@DisplayName("Address resource")
 public class AddressResourceTest {
-
-  @Inject
-  AddressService addressService;
-
-  @Inject
-  AreaService areaService;
 
   @BeforeAll
   public static void setup() {
@@ -39,10 +34,13 @@ public class AddressResourceTest {
   }
 
   @Test
-  public void testHelloEndpoint() {
+  @DisplayName("search")
+  public void testSearch() {
     given()
-        .when().queryParam("areaCode", "1")
-        .queryParam("query", "test").get("/search")
+        .when()
+        .queryParam("areaCode", "1")
+        .queryParam("query", "test")
+        .get("/search")
         .then()
         .statusCode(200)
         .body("$", hasSize(1));
