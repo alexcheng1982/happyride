@@ -1,8 +1,18 @@
 # 快乐出行
 
-本应用是拉勾教育[《云原生微服务架构实战精讲》](https://kaiwu.lagou.com/course/courseInfo.htm?courseId=64)专栏的示例应用。本示例的内容会随着专栏不断更新。
+本应用是拉勾教育[《云原生微服务架构实战精讲》](https://kaiwu.lagou.com/course/courseInfo.htm?courseId=64)专栏的示例应用。目前该专栏的内容已经更新完毕。
 
 ![课程](cloud-native.jpg)
+
+在该课程之后，与云原生和微服务相关的内容，会更新在[我的B站](https://space.bilibili.com/1094957548)。
+
+除了B站之外，还可以关注：
+
+* 我的微博[@alexcheng1982](https://weibo.com/alexcheng1982)
+* 微信公众号『灵动代码』。
+* 个人网站[vividcode.cc](https://vividcode.cc)
+
+![公众号](gongzhonghao.jpg)
 
 # 本地开发
 
