@@ -1,5 +1,7 @@
 # 快乐出行
 
+![build status](https://github.com/alexcheng1982/happyride/workflows/maven/badge.svg)
+
 本应用是拉勾教育[《云原生微服务架构实战精讲》](https://kaiwu.lagou.com/course/courseInfo.htm?courseId=64)专栏的示例应用。目前该专栏的内容已经更新完毕。
 
 ![课程](cloud-native.jpg)
