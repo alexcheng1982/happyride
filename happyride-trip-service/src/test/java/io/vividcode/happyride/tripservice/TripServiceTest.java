@@ -1,5 +1,10 @@
 package io.vividcode.happyride.tripservice;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import com.playtika.test.common.spring.EmbeddedContainersShutdownAutoConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
@@ -17,6 +22,9 @@ import io.vividcode.happyride.tripservice.domain.TripDomainEventPublisher;
 import io.vividcode.happyride.tripservice.domain.TripFareService;
 import io.vividcode.happyride.tripservice.domain.TripService;
 import io.vividcode.happyride.tripservice.sagas.createtrip.CreateTripSaga;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,14 +42,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 @DataJpaTest
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses = TripRepository.class)
@@ -53,7 +53,8 @@ import static org.mockito.Mockito.verify;
 })
 @ImportAutoConfiguration(classes = {
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class
+    EmbeddedPostgreSQLBootstrapConfiguration.class,
+    EmbeddedContainersShutdownAutoConfiguration.class
 })
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
@@ -90,8 +91,9 @@ public class TripServiceTest {
   @Test
   @DisplayName("Cancel trip")
   public void testCancelTrip() {
-    final TripVO trip = this.tripService.createTrip(this.uuid(), this.position0(), this.position0());
-    final String tripId = trip.getId();
+    TripVO trip = this.tripService
+        .createTrip(this.uuid(), this.position0(), this.position0());
+    String tripId = trip.getId();
     this.tripService.shouldCancel(tripId, CancellationParty.PASSENGER);
     this.tripService.shouldCancel(tripId, CancellationParty.DRIVER);
 
@@ -107,8 +109,9 @@ public class TripServiceTest {
   @Test
   @DisplayName("Trip cancellation requires resolution")
   public void testCancelTripRequiresResolution() {
-    final TripVO trip = this.tripService.createTrip(this.uuid(), this.position0(), this.position0());
-    final String tripId = trip.getId();
+    TripVO trip = this.tripService
+        .createTrip(this.uuid(), this.position0(), this.position0());
+    String tripId = trip.getId();
     this.tripService.shouldCancel(tripId, CancellationParty.PASSENGER);
     this.tripService.shouldNotCancel(tripId, CancellationParty.DRIVER);
 

@@ -1,5 +1,9 @@
 package io.vividcode.happyride.bdd.stepdefs;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import com.playtika.test.common.spring.EmbeddedContainersShutdownAutoConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.cucumber.java.en.Given;
@@ -22,11 +26,9 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration(exclude = {TramConsumerJdbcAutoConfiguration.class, SecurityAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {TramConsumerJdbcAutoConfiguration.class,
+    SecurityAutoConfiguration.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(classes = {
     EmbeddedPostgresConfiguration.class,
@@ -35,7 +37,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 })
 @ImportAutoConfiguration(classes = {
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class
+    EmbeddedPostgreSQLBootstrapConfiguration.class,
+    EmbeddedContainersShutdownAutoConfiguration.class
 })
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
@@ -48,10 +51,10 @@ public class AddressStepdefs {
   private String passengerId;
 
   @Given("a passenger with {int} addresses")
-  public void passengerWithAddresses(final int numberOfAddresses) {
+  public void passengerWithAddresses(int numberOfAddresses) {
     try {
       this.passengerId = this.passengerClient.createPassenger(numberOfAddresses);
-    } catch (final ApiException e) {
+    } catch (ApiException e) {
       fail(e);
     }
   }
@@ -60,7 +63,7 @@ public class AddressStepdefs {
   public void passengerAddsAddress() {
     try {
       this.passengerClient.addAddress(this.passengerId);
-    } catch (final ApiException e) {
+    } catch (ApiException e) {
       fail(e);
     }
   }
@@ -69,17 +72,17 @@ public class AddressStepdefs {
   public void passengerDeletesAddress() {
     try {
       this.passengerClient.removeAddress(this.passengerId);
-    } catch (final ApiException e) {
+    } catch (ApiException e) {
       fail(e);
     }
   }
 
   @Then("the passenger has {int} addresses")
-  public void passengerHasAddresses(final int numberOfAddresses) {
+  public void passengerHasAddresses(int numberOfAddresses) {
     try {
-      final PassengerVO passenger = this.passengerClient.getPassenger(this.passengerId);
+      PassengerVO passenger = this.passengerClient.getPassenger(this.passengerId);
       assertThat(passenger.getUserAddresses()).hasSize(numberOfAddresses);
-    } catch (final ApiException e) {
+    } catch (ApiException e) {
       fail(e);
     }
   }

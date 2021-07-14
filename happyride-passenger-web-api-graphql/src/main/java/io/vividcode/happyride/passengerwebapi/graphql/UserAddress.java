@@ -8,6 +8,7 @@ import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.vividcode.happyride.addressservice.api.AddressVO;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import lombok.Data;
 
@@ -28,11 +29,9 @@ public class UserAddress {
         .withTag("addressId", this.addressId)
         .start();
     try (Scope ignored = tracer.activateSpan(span)) {
-      return context.getDataLoaderRegistry()
-          .map(
-              registry -> registry.
-                  <String, AddressVO>getDataLoader(USER_ADDRESS_DATA_LOADER)
-                  .load(this.addressId))
+      return Optional.ofNullable(context.getDataLoaderRegistry()
+          .<String, AddressVO>getDataLoader(USER_ADDRESS_DATA_LOADER))
+          .map(registry -> registry.load(this.addressId))
           .orElse(CompletableFuture
               .completedFuture(AddressVO.nullObject(this.addressId)))
           .whenComplete((addressVO, throwable) -> span.finish());

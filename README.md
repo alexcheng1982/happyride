@@ -16,6 +16,10 @@
 
 ![公众号](gongzhonghao.jpg)
 
+# 更新日志
+
+* 2021-07-14 更新至 Spring Boot `2.5.2`，相关的依赖也进行了更新
+
 # 本地开发
 
 项目使用Maven构建，推荐使用IntelliJ IDEA开发。
@@ -41,7 +45,6 @@
 | 行程验证服务  |  `happyride-payment-service`  | `8505`  |
 | 历史行程服务  |  `happyride-trip-history-service`  | `8506`  |
 | 乘客管理界面的GraphQL服务  |  `happyride-passenger-web-api-graphql`  | `8610`  |
-
 
 在Minikube中访问服务，首先显示乘客API服务的URL：
 

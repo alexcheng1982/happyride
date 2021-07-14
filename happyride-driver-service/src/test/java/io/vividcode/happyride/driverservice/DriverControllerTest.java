@@ -1,5 +1,6 @@
 package io.vividcode.happyride.driverservice;
 
+import com.playtika.test.common.spring.EmbeddedContainersShutdownAutoConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
@@ -23,7 +24,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @Import(EmbeddedPostgresConfiguration.class)
 @ImportAutoConfiguration(classes = {
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class
+    EmbeddedPostgreSQLBootstrapConfiguration.class,
+    EmbeddedContainersShutdownAutoConfiguration.class
 })
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"

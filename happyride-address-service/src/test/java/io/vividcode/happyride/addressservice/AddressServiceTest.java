@@ -3,6 +3,7 @@ package io.vividcode.happyride.addressservice;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.playtika.test.common.spring.EmbeddedContainersShutdownAutoConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.vividcode.happyride.addressservice.api.AddressVO;
@@ -31,7 +32,9 @@ import org.springframework.test.context.TestPropertySource;
 )
 @ImportAutoConfiguration(classes = {
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class})
+    EmbeddedPostgreSQLBootstrapConfiguration.class,
+    EmbeddedContainersShutdownAutoConfiguration.class
+})
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
 })
@@ -44,7 +47,7 @@ public class AddressServiceTest {
   @Test
   @DisplayName("Search address")
   public void testSearchAddress() {
-    final List<AddressVO> result = this.addressService.search(110101001015L, "王府井社区居委会");
+    List<AddressVO> result = this.addressService.search(110101001015L, "王府井社区居委会");
     assertTrue(result.size() > 0);
   }
 }

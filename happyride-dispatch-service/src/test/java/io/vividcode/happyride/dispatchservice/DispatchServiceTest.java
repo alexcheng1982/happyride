@@ -1,13 +1,29 @@
 package io.vividcode.happyride.dispatchservice;
 
+import static io.vividcode.happyride.dispatchservice.TestUtils.acceptanceForDriver;
+import static io.vividcode.happyride.dispatchservice.TestUtils.availableDriver0;
+import static io.vividcode.happyride.dispatchservice.TestUtils.availableDriver1;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.Sets;
+import com.playtika.test.common.spring.EmbeddedContainersShutdownAutoConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
-import io.vividcode.happyride.dispatchservice.api.events.*;
+import io.vividcode.happyride.dispatchservice.api.events.DispatchDomainEvent;
+import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceDeclinedEvent;
+import io.vividcode.happyride.dispatchservice.api.events.TripAcceptanceSelectedEvent;
+import io.vividcode.happyride.dispatchservice.api.events.TripDispatchFailedEvent;
+import io.vividcode.happyride.dispatchservice.api.events.TripDispatchedEvent;
 import io.vividcode.happyride.dispatchservice.dataaccess.DispatchRepository;
 import io.vividcode.happyride.dispatchservice.domain.Dispatch;
 import io.vividcode.happyride.dispatchservice.domain.DispatchDomainEventPublisher;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,14 +41,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
-
-import static io.vividcode.happyride.dispatchservice.TestUtils.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
 @DataJpaTest
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses = DispatchRepository.class)
@@ -43,7 +51,8 @@ import static org.mockito.Mockito.*;
 })
 @ImportAutoConfiguration(classes = {
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class
+    EmbeddedPostgreSQLBootstrapConfiguration.class,
+    EmbeddedContainersShutdownAutoConfiguration.class
 })
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
@@ -77,13 +86,13 @@ public class DispatchServiceTest {
   @Test
   @DisplayName("Successful dispatch")
   public void testSuccessfulDispatch() {
-    final Set<AvailableDriver> drivers = Sets.newHashSet(
+    Set<AvailableDriver> drivers = Sets.newHashSet(
         availableDriver0(),
         availableDriver1()
     );
     when(this.driverLocationService.findAvailableDrivers(BigDecimal.ZERO, BigDecimal.ZERO))
         .thenReturn(drivers);
-    final String tripId = TestUtils.uuid();
+    String tripId = TestUtils.uuid();
     this.dispatchService.dispatchTrip(tripId, TestUtils.tripDetails0());
     verify(this.eventPublisher).publish(this.dispatchCaptor.capture(), this.eventsCaptor.capture());
 
@@ -98,7 +107,7 @@ public class DispatchServiceTest {
   public void testFailedDispatch() {
     when(this.driverLocationService.findAvailableDrivers(BigDecimal.ZERO, BigDecimal.ZERO))
         .thenReturn(Sets.newHashSet());
-    final String tripId = TestUtils.uuid();
+    String tripId = TestUtils.uuid();
     this.dispatchService.dispatchTrip(tripId, TestUtils.tripDetails0());
     verify(this.eventPublisher).publish(this.dispatchCaptor.capture(), this.eventsCaptor.capture());
 
@@ -111,18 +120,19 @@ public class DispatchServiceTest {
   @Test
   @DisplayName("Driver accepts trip")
   public void testDriverAcceptance() {
-    final AvailableDriver driver1 = availableDriver0();
-    final AvailableDriver driver2 = availableDriver1();
-    final Set<AvailableDriver> drivers = Sets.newHashSet(driver1, driver2);
+    AvailableDriver driver1 = availableDriver0();
+    AvailableDriver driver2 = availableDriver1();
+    Set<AvailableDriver> drivers = Sets.newHashSet(driver1, driver2);
     when(this.driverLocationService.findAvailableDrivers(BigDecimal.ZERO, BigDecimal.ZERO))
         .thenReturn(drivers);
-    final String tripId = TestUtils.uuid();
+    String tripId = TestUtils.uuid();
     this.dispatchService.dispatchTrip(tripId, TestUtils.tripDetails0());
     this.dispatchService.submitTripAcceptance(tripId, acceptanceForDriver(driver1));
     this.dispatchService.submitTripAcceptance(tripId, acceptanceForDriver(driver2));
     this.dispatchService.selectTripAcceptance(tripId, driver1.getDriverId());
-    verify(this.eventPublisher, times(2)).publish(this.dispatchCaptor.capture(), this.eventsCaptor.capture());
-    final List<List<DispatchDomainEvent>> allValues = this.eventsCaptor.getAllValues();
+    verify(this.eventPublisher, times(2))
+        .publish(this.dispatchCaptor.capture(), this.eventsCaptor.capture());
+    List<List<DispatchDomainEvent>> allValues = this.eventsCaptor.getAllValues();
     assertThat(allValues).hasSize(2);
     assertThat(allValues).element(0).asList().hasSize(1)
         .hasOnlyElementsOfType(TripDispatchedEvent.class);

@@ -3,6 +3,7 @@ package io.vividcode.happyride.passengerservice;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.playtika.test.common.spring.EmbeddedContainersShutdownAutoConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.eventuate.tram.spring.consumer.jdbc.TramConsumerJdbcAutoConfiguration;
@@ -38,7 +39,8 @@ import org.springframework.test.context.TestPropertySource;
 })
 @ImportAutoConfiguration(classes = {
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class
+    EmbeddedPostgreSQLBootstrapConfiguration.class,
+    EmbeddedContainersShutdownAutoConfiguration.class
 })
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
@@ -48,8 +50,8 @@ public class PassengerControllerClientTest {
 
   private final PassengerApi passengerApi;
 
-  public PassengerControllerClientTest(@LocalServerPort final int serverPort) {
-    final ApiClient apiClient = Configuration.getDefaultApiClient();
+  public PassengerControllerClientTest(@LocalServerPort int serverPort) {
+    ApiClient apiClient = Configuration.getDefaultApiClient();
     apiClient.setBasePath("http://localhost:" + serverPort);
     this.passengerApi = new PassengerApi(apiClient);
   }
@@ -58,12 +60,12 @@ public class PassengerControllerClientTest {
   @DisplayName("Create a new passenger")
   void testCreatePassenger() {
     try {
-      final ApiResponse<Void> response = this.passengerApi
+      ApiResponse<Void> response = this.passengerApi
           .createPassengerWithHttpInfo(
               PassengerUtils.buildCreatePassengerRequest(1));
       assertThat(response.getStatusCode()).isEqualTo(201);
       assertThat(response.getHeaders()).containsKey("Location");
-    } catch (final ApiException e) {
+    } catch (ApiException e) {
       fail(e);
     }
   }
@@ -72,11 +74,11 @@ public class PassengerControllerClientTest {
   @DisplayName("Add a new address")
   public void testAddUserAddress() {
     try {
-      final String passengerId = this.createPassenger(1);
-      final PassengerVO passenger = this.passengerApi
+      String passengerId = this.createPassenger(1);
+      PassengerVO passenger = this.passengerApi
           .createAddress(passengerId, PassengerUtils.buildCreateUserAddressRequest());
       assertThat(passenger.getUserAddresses()).hasSize(2);
-    } catch (final ApiException e) {
+    } catch (ApiException e) {
       fail(e);
     }
   }
@@ -85,23 +87,23 @@ public class PassengerControllerClientTest {
   @DisplayName("Remove an address")
   public void testRemoveAddress() {
     try {
-      final String passengerId = this.createPassenger(3);
+      String passengerId = this.createPassenger(3);
       PassengerVO passenger = this.passengerApi.getPassenger(passengerId);
-      final String addressId = passenger.getUserAddresses().get(0).getId();
+      String addressId = passenger.getUserAddresses().get(0).getId();
       this.passengerApi.deleteAddress(passengerId, addressId);
       passenger = this.passengerApi.getPassenger(passengerId);
       assertThat(passenger.getUserAddresses()).hasSize(2);
-    } catch (final ApiException e) {
+    } catch (ApiException e) {
       fail(e);
     }
   }
 
-  private String createPassenger(final int numberOfAddresses) throws ApiException {
-    final ApiResponse<Void> response = this.passengerApi
+  private String createPassenger(int numberOfAddresses) throws ApiException {
+    ApiResponse<Void> response = this.passengerApi
         .createPassengerWithHttpInfo(
             PassengerUtils.buildCreatePassengerRequest(numberOfAddresses));
     assertThat(response.getHeaders()).containsKey("Location");
-    final String location = response.getHeaders().get("Location").get(0);
+    String location = response.getHeaders().get("Location").get(0);
     return StringUtils.substringAfterLast(location, "/");
   }
 }

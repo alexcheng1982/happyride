@@ -81,7 +81,10 @@
       <type>test-jar</type>
       <version>${project.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-bootstrap</artifactId>
+    </dependency>
     <dependency>
       <artifactId>embedded-postgresql</artifactId>
       <groupId>com.playtika.testcontainers</groupId>

@@ -10,4 +10,4 @@ spring:
     schemas:
       - happyride
   redis:
-    url: redis://user:${embedded.redis.password}@${embedded.redis.host}:${embedded.redis.port}
+    url: redis://${embedded.redis.password}@${embedded.redis.host}:${embedded.redis.port}

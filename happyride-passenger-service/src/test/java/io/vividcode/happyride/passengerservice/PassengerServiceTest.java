@@ -1,5 +1,8 @@
 package io.vividcode.happyride.passengerservice;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.playtika.test.common.spring.EmbeddedContainersShutdownAutoConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
 import io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest;
@@ -20,8 +23,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DataJpaTest
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -31,7 +32,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 })
 @ImportAutoConfiguration(classes = {
     EmbeddedPostgreSQLDependenciesAutoConfiguration.class,
-    EmbeddedPostgreSQLBootstrapConfiguration.class
+    EmbeddedPostgreSQLBootstrapConfiguration.class,
+    EmbeddedContainersShutdownAutoConfiguration.class
 })
 @TestPropertySource(properties = {
     "embedded.postgresql.docker-image=postgres:12-alpine"
@@ -45,8 +47,8 @@ public class PassengerServiceTest {
   @Test
   @DisplayName("Create a new passenger")
   public void testCreatePassenger() {
-    final CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(1);
-    final PassengerVO passenger = this.passengerService.createPassenger(request);
+    CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(1);
+    PassengerVO passenger = this.passengerService.createPassenger(request);
     assertThat(passenger.getId()).isNotNull();
     assertThat(passenger.getUserAddresses()).hasSize(1);
   }
@@ -54,7 +56,7 @@ public class PassengerServiceTest {
   @Test
   @DisplayName("Add a user address")
   public void testAddAddress() {
-    final CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(1);
+    CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(1);
     PassengerVO passenger = this.passengerService.createPassenger(request);
     passenger = this.passengerService
         .addAddress(passenger.getId(), PassengerUtils.buildCreateUserAddressRequest());
@@ -64,9 +66,9 @@ public class PassengerServiceTest {
   @Test
   @DisplayName("Delete a user address")
   public void testDeleteAddress() {
-    final CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(3);
+    CreatePassengerRequest request = PassengerUtils.buildCreatePassengerRequest(3);
     PassengerVO passenger = this.passengerService.createPassenger(request);
-    final String addressId = passenger.getUserAddresses().get(1).getId();
+    String addressId = passenger.getUserAddresses().get(1).getId();
     passenger = this.passengerService.deleteAddress(passenger.getId(), addressId);
     assertThat(passenger.getUserAddresses()).hasSize(2);
   }
