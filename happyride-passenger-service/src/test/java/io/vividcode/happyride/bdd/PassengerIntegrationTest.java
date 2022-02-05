@@ -6,7 +6,7 @@ import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(strict = true,
+@CucumberOptions(
     features = "src/test/resources/features",
     plugin = {"pretty", "html:target/cucumber"})
 public class PassengerIntegrationTest {
