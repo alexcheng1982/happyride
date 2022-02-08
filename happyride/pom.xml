@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <modules>
+    <module>lib/common</module>
+    <module>lib/postgres-common</module>
+    <module>api/trip-service-api</module>
+    <module>api/passenger-service-api</module>
+    <module>api/driver-service-api</module>
+    <module>api/dispatch-service-api</module>
+    <module>api/payment-service-api</module>
+    <module>api/passenger-web-api</module>
+    <module>api/trip-validation-service-api</module>
+    <module>api/address-service-api</module>
+    <module>api-client/trip-service-client</module>
+    <module>api-client/passenger-service-client</module>
+    <module>api-client/address-service-client</module>
+    <module>api-client/api-client-parent</module>
+    <module>service/trip-service</module>
+    <module>service/passenger-service</module>
+    <module>service/address-service</module>
+    <module>service/driver-service</module>
+    <module>service/dispatch-service</module>
+    <module>service/trip-validation-service</module>
+    <module>service/trip-history-service</module>
+    <module>service/payment-service</module>
+    <module>service/passenger-web-api-graphql</module>
+    <module>tools/driver-simulator</module>
+    <module>tools/driver-simulator-ui</module>
+  </modules>
+  <parent>
+    <groupId>io.vividcode.happyride</groupId>
+    <artifactId>build-parent</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <artifactId>happyride</artifactId>
+  <packaging>pom</packaging>
+  <version>2.0.0-SNAPSHOT</version>
+  <name>Parent</name>
+  <description>Happy Ride</description>
+
+  <profiles>
+    <profile>
+      <id>build-docker</id>
+      <activation>
+        <property>
+          <name>env.BUILD_DOCKER</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

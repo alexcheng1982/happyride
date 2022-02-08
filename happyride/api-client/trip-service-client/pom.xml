@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>api-client-parent</artifactId>
+    <groupId>io.vividcode.happyride</groupId>
+    <version>2.0.0-SNAPSHOT</version>
+    <relativePath>../api-client-parent/pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>trip-service-client</artifactId>
+  <name>API Client :: Trip Service</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>trip-service-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>api-client-parent</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/openapi.yml</inputSpec>
+              <apiPackage>io.vividcode.happyride.tripservice.client.api</apiPackage>
+              <importMappings>
+                <importMapping>
+                  CreateTripRequest=io.vividcode.happyride.tripservice.api.web.CreateTripRequest
+                </importMapping>
+                <importMapping>
+                  AcceptTripRequest=io.vividcode.happyride.tripservice.api.web.AcceptTripRequest
+                </importMapping>
+                <importMapping>PositionVO=io.vividcode.happyride.common.PositionVO</importMapping>
+                <importMapping>TripVO=io.vividcode.happyride.tripservice.api.web.TripVO
+                </importMapping>
+              </importMappings>
+              <configOptions>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
