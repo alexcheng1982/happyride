@@ -9,15 +9,12 @@ spring:
         default_schema: happyride
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:8431}/${DB_NAME:happyride-passenger}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:8435}/${DB_NAME:happyride-payment}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
   flyway:
     schemas:
       - happyride
-eventuate:
-  database:
-    schema: eventuate
 eventuatelocal:
   kafka:
     bootstrap:

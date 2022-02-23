@@ -8,23 +8,23 @@ spring:
         default_schema: happyride
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:8433/happyride-dispatch
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:8433}/${DB_NAME:happyride-dispatch}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
   redis:
-    url: redis://${DOCKER_HOST_IP:localhost}:6379
+    url: redis://${REDIS_HOST:localhost}:${REDIS_PORT:6379}
   flyway:
     schemas:
       - happyride
 axon:
   axonserver:
-    servers: ${DOCKER_HOST_IP:localhost}:8124
+    servers: ${AXON_HOST:localhost}:${AXON_PORT:8124}
   serializer:
     events: jackson
 eventuatelocal:
   kafka:
     bootstrap:
-      servers: ${DOCKER_HOST_IP:localhost}:29092
+      servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
   zookeeper:
     connection:
-      string: ${DOCKER_HOST_IP:localhost}:2181
+      string: ${ZOOKEEPER_HOST:localhost}:${ZOOKEEPER_PORT:2181}

@@ -1,7 +1,7 @@
-# 乘客管理服务
+# Passenger Management Service
 
-在IDE中运行时，需要添加如下的系统参数：
+Use the `dev` profile to develop locally
 
 ```
--Dserver.port=8500 -Dspring.datasource.username=postgres -Dspring.datasource.password=postgres
+-Dspring.profiles.active=dev
 ```

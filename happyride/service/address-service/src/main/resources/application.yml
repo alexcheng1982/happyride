@@ -10,12 +10,14 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:8430}/${DB_NAME:happyride-address}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
   flyway:
     schemas:
       - happyride
 grpc:
   server:
-    port: 6565
+    port: ${GRPC_PORT:6565}
 management:
   health:
     livenessState:
