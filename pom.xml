@@ -29,8 +29,8 @@
     <java.version>11</java.version>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
-    <eventuate-tram.version>0.24.0.RELEASE</eventuate-tram.version>
-    <eventuate-tram-sagas.version>0.13.0.RELEASE</eventuate-tram-sagas.version>
+    <eventuate-tram.version>0.29.0.RELEASE</eventuate-tram.version>
+    <eventuate-tram-sagas.version>0.18.0.RELEASE</eventuate-tram-sagas.version>
     <lombok.version>1.18.22</lombok.version>
     <testcontainers.version>2.0.10</testcontainers.version>
     <guava.version>31.0.1-jre</guava.version>
