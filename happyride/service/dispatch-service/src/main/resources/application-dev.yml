@@ -4,7 +4,7 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
         default_schema: happyride
   datasource:
     driver-class-name: org.postgresql.Driver

@@ -7,12 +7,12 @@ import io.vividcode.happyride.addressservice.grpc.AddressServiceGrpc.AddressServ
 import io.vividcode.happyride.addressservice.service.AddressService;
 import io.vividcode.happyride.addressservice.service.AreaService;
 import java.util.stream.Collectors;
-import org.lognet.springboot.grpc.GRpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@GRpcService
+@GrpcService
 public class AddressGrpcService extends AddressServiceImplBase {
 
   @Autowired
@@ -57,7 +57,7 @@ public class AddressGrpcService extends AddressServiceImplBase {
   @Override
   public StreamObserver<GetAddressRequest> getAddresses(
       StreamObserver<Address> responseObserver) {
-    return new StreamObserver<GetAddressRequest>() {
+    return new StreamObserver<>() {
       @Override
       public void onNext(GetAddressRequest request) {
         AddressGrpcService.this.addressService

@@ -5,7 +5,7 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
         default_schema: happyride
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -13,6 +13,9 @@ spring:
   flyway:
     schemas:
       - happyride
+grpc:
+  server:
+    port: 6565
 management:
   health:
     livenessState:

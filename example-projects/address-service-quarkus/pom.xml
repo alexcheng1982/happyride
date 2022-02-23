@@ -12,6 +12,24 @@
   </parent>
   <artifactId>address-service-quarkus</artifactId>
   <name>Example :: Address Service Quarkus</name>
+
+  <properties>
+    <quarkus-plugin.version>1.13.7.Final</quarkus-plugin.version>
+    <quarkus.platform.version>1.13.7.Final</quarkus.platform.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-bom</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>io.vividcode.happyride</groupId>
