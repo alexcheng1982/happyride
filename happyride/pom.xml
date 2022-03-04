@@ -14,10 +14,7 @@
     <module>api/passenger-web-api</module>
     <module>api/trip-validation-service-api</module>
     <module>api/address-service-api</module>
-    <module>api-client/trip-service-client</module>
-    <module>api-client/passenger-service-client</module>
-    <module>api-client/address-service-client</module>
-    <module>api-client/api-client-parent</module>
+    <module>api-client</module>
     <module>service</module>
     <module>tools/driver-simulator</module>
     <module>tools/driver-simulator-ui</module>
