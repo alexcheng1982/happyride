@@ -4,6 +4,8 @@
 
 Happyride is a microservice application written using Spring Boot.
 
+<a href="https://www.buymeacoffee.com/alexcheng1982" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ---
 
 本应用是拉勾教育[《云原生微服务架构实战精讲》](https://kaiwu.lagou.com/course/courseInfo.htm?courseId=64)专栏的示例应用。目前该专栏的内容已经更新完毕。
