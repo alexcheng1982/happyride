@@ -24,10 +24,11 @@ Happyride is a microservice application written using Spring Boot.
 
 # 更新日志
 
-* 2022-05-04 更新至 Sping Boot `2.6.7`
-* 2022-04-03 更新至 Sping Boot `2.6.6`
+* 2022-05-31 更新至 Spring Boot `2.7.0`
+* 2022-05-04 更新至 Spring Boot `2.6.7`
+* 2022-04-03 更新至 Spring Boot `2.6.6`
 * 2022-02-08 调整项目结构，版本设置为`2.0.0`
-* 2022-02-05 更新至 Sping Boot `2.6.3`
+* 2022-02-05 更新至 Spring Boot `2.6.3`
 * 2021-10-24 更新至 Spring Boot `2.5.6`
 * 2021-07-14 更新至 Spring Boot `2.5.2`，相关的依赖也进行了更新
 
