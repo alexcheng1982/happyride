@@ -1,0 +1,24 @@
+spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        default_schema: happyride
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:8435}/${DB_NAME:happyride-payment}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+  flyway:
+    schemas:
+      - happyride
+eventuatelocal:
+  kafka:
+    bootstrap:
+      servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
+  zookeeper:
+    connection:
+      string: ${ZOOKEEPER_HOST:localhost}:${ZOOKEEPER_PORT:2181}

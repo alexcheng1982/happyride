@@ -1,0 +1,6 @@
+server:
+  port: 8505
+app:
+  blockedPassengers:
+    - bad_passenger1
+    - bad_passenger2

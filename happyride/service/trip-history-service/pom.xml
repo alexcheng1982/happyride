@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>service-parent</artifactId>
+    <groupId>io.vividcode.happyride</groupId>
+    <version>2.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>trip-history-service</artifactId>
+  <name>Service :: Trip History</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>trip-service-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>dispatch-service-api</artifactId>
+      <groupId>io.vividcode.happyride</groupId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>passenger-service-api</artifactId>
+      <groupId>io.vividcode.happyride</groupId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.eventuate.tram.core</groupId>
+      <artifactId>eventuate-tram-aggregate-domain-events</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.eventuate.tram.core</groupId>
+      <artifactId>eventuate-tram-spring-jdbc-kafka</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>passenger-service</artifactId>
+  <name>Service :: Passenger</name>
+
+  <dependencies>
+    <dependency>
+      <artifactId>common</artifactId>
+      <groupId>io.vividcode.happyride</groupId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>passenger-service-api</artifactId>
+      <groupId>io.vividcode.happyride</groupId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>trip-service-api</artifactId>
+      <groupId>io.vividcode.happyride</groupId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>trip-service-client</artifactId>
+      <groupId>io.vividcode.happyride</groupId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.eventuate.tram.core</groupId>
+      <artifactId>eventuate-tram-spring-jdbc-kafka</artifactId>
+    </dependency>
+    <dependency>
+      <artifactId>guava</artifactId>
+      <groupId>com.google.guava</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>lombok</artifactId>
+      <groupId>org.projectlombok</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>flyway-core</artifactId>
+      <groupId>org.flywaydb</groupId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-spring</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>passenger-service-client</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>postgres-common</artifactId>
+      <classifier>tests</classifier>
+      <groupId>io.vividcode.happyride</groupId>
+      <scope>test</scope>
+      <type>test-jar</type>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-bootstrap</artifactId>
+    </dependency>
+    <dependency>
+      <artifactId>embedded-postgresql</artifactId>
+      <groupId>com.playtika.testcontainers</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>postgresql</artifactId>
+      <groupId>org.postgresql</groupId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <artifactId>spring-webflux</artifactId>
+      <groupId>org.springframework</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>reactor-netty</artifactId>
+      <groupId>io.projectreactor.netty</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>javafaker</artifactId>
+      <groupId>com.github.javafaker</groupId>
+      <scope>compile</scope>
+    </dependency>
+
+  </dependencies>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>service-parent</artifactId>
+    <groupId>io.vividcode.happyride</groupId>
+    <version>2.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+      <!-- <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>io.vividcode.happyride.passengerservice.PassengerServiceApplication</mainClass>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.gmaven</groupId>
+        <artifactId>groovy-maven-plugin</artifactId>
+      </plugin> -->
+    </plugins>
+  </build>
+
+</project>

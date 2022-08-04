@@ -1,0 +1,28 @@
+table {
+  width: 100%;
+}
+
+.button-row {
+  display: table-cell;
+
+  button {
+    display: table-cell;
+    margin-right: 8px;
+  }
+}
+
+.mat-column-id {
+  width: 20%;
+}
+
+.mat-column-state {
+  width: 20%;
+}
+
+.mat-column-position {
+  width: 30%;
+}
+
+.mat-column-actions {
+  width: 30%;
+}

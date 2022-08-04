@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>io.vividcode.happyride</groupId>
+    <artifactId>api-client-parent</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>passenger-service-client</artifactId>
+  <name>API Client :: Passenger Service</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.vividcode.happyride</groupId>
+      <artifactId>passenger-service-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <apiPackage>io.vividcode.happyride.passengerservice.client.api</apiPackage>
+              <importMappings>
+                <importMapping>
+                  CreatePassengerRequest=io.vividcode.happyride.passengerservice.api.web.CreatePassengerRequest
+                </importMapping>
+                <importMapping>
+                  CreateUserAddressRequest=io.vividcode.happyride.passengerservice.api.web.CreateUserAddressRequest
+                </importMapping>
+                <importMapping>
+                  PassengerVO=io.vividcode.happyride.passengerservice.api.web.PassengerVO
+                </importMapping>
+                <importMapping>
+                  UserAddressVO=io.vividcode.happyride.passengerservice.api.web.UserAddressVO
+                </importMapping>
+              </importMappings>
+              <configOptions>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

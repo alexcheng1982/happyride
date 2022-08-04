@@ -1,0 +1,174 @@
+version: '3'
+services:
+  zookeeper:
+    image: bitnami/zookeeper:3.6.0
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: bitnami/kafka:2.5.0
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_HEAP_OPTS=-Xmx192m -Xms192m
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://:9092,EXTERNAL://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,EXTERNAL://${DOCKER_HOST_IP:-localhost}:29092
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+  axon:
+    image: axoniq/axonserver:4.5.10
+    ports:
+      - "8024:8024"
+      - "8124:8124"
+  redis:
+    image: redis:5-alpine
+    ports:
+      - "6379:6379"
+  postgres-address:
+    image: eventuateio/eventuate-postgres:0.14.0.RELEASE
+    ports:
+      - "8430:5432"
+    environment:
+      POSTGRES_DB: happyride-address
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  postgres-passenger:
+    image: eventuateio/eventuate-postgres:0.14.0.RELEASE
+    ports:
+      - "8431:5432"
+    environment:
+      POSTGRES_DB: happyride-passenger
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  postgres-driver:
+    image: eventuateio/eventuate-postgres:0.14.0.RELEASE
+    ports:
+      - "8437:5432"
+    environment:
+      POSTGRES_DB: happyride-driver
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  postgres-trip:
+    image: eventuateio/eventuate-postgres:0.14.0.RELEASE
+    ports:
+      - "8432:5432"
+    environment:
+      POSTGRES_DB: happyride-trip
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  postgres-dispatch:
+    image: eventuateio/eventuate-postgres:0.14.0.RELEASE
+    ports:
+      - "8433:5432"
+    environment:
+      POSTGRES_DB: happyride-dispatch
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  postgres-trip-validation:
+    image: eventuateio/eventuate-postgres:0.14.0.RELEASE
+    ports:
+      - "8434:5432"
+    environment:
+      POSTGRES_DB: happyride-trip-validation
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  postgres-payment:
+    image: eventuateio/eventuate-postgres:0.14.0.RELEASE
+    ports:
+      - "8435:5432"
+    environment:
+      POSTGRES_DB: happyride-payment
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  postgres-trip-history:
+    image: eventuateio/eventuate-postgres:0.14.0.RELEASE
+    ports:
+      - "8436:5432"
+    environment:
+      POSTGRES_DB: happyride-trip-history
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  cdc-service:
+    image: eventuateio/eventuate-cdc-service:0.12.0.RELEASE
+    ports:
+      - "9090:8080"
+    depends_on:
+      - postgres-trip
+      - postgres-dispatch
+      - postgres-trip-validation
+      - postgres-payment
+      - kafka
+      - zookeeper
+    environment:
+      SPRING_PROFILES_ACTIVE: PostgresWal
+      LOGGING_LEVEL_IO_EVENTUATE: INFO
+
+      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+
+      EVENTUATE_CDC_PIPELINE_PIPELINE1_TYPE: eventuate-tram
+      EVENTUATE_CDC_PIPELINE_PIPELINE1_READER: Trip
+      EVENTUATE_CDC_PIPELINE_PIPELINE1_EVENTUATEDATABASESCHEMA: eventuate
+
+      EVENTUATE_CDC_READER_TRIP_TYPE: postgres-wal
+      EVENTUATE_CDC_READER_TRIP_DATASOURCEURL: jdbc:postgresql://postgres-trip/happyride-trip
+      EVENTUATE_CDC_READER_TRIP_DATASOURCEUSERNAME: postgres
+      EVENTUATE_CDC_READER_TRIP_DATASOURCEPASSWORD: postgres
+      EVENTUATE_CDC_READER_TRIP_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
+      EVENTUATE_CDC_READER_TRIP_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/trip
+      EVENTUATE_CDC_READER_TRIP_OUTBOXID: 1
+
+      EVENTUATE_CDC_PIPELINE_PIPELINE2_TYPE: eventuate-tram
+      EVENTUATE_CDC_PIPELINE_PIPELINE2_READER: Dispatch
+      EVENTUATE_CDC_PIPELINE_PIPELINE2_EVENTUATEDATABASESCHEMA: eventuate
+
+      EVENTUATE_CDC_READER_DISPATCH_TYPE: postgres-wal
+      EVENTUATE_CDC_READER_DISPATCH_DATASOURCEURL: jdbc:postgresql://postgres-dispatch/happyride-dispatch
+      EVENTUATE_CDC_READER_DISPATCH_DATASOURCEUSERNAME: postgres
+      EVENTUATE_CDC_READER_DISPATCH_DATASOURCEPASSWORD: postgres
+      EVENTUATE_CDC_READER_DISPATCH_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
+      EVENTUATE_CDC_READER_DISPATCH_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/dispatch
+      EVENTUATE_CDC_READER_DISPATCH_OUTBOXID: 100
+
+      EVENTUATE_CDC_PIPELINE_PIPELINE3_TYPE: eventuate-tram
+      EVENTUATE_CDC_PIPELINE_PIPELINE3_READER: TripValidation
+      EVENTUATE_CDC_PIPELINE_PIPELINE3_EVENTUATEDATABASESCHEMA: eventuate
+
+      EVENTUATE_CDC_READER_TRIPVALIDATION_TYPE: postgres-wal
+      EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEURL: jdbc:postgresql://postgres-trip-validation/happyride-trip-validation
+      EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEUSERNAME: postgres
+      EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEPASSWORD: postgres
+      EVENTUATE_CDC_READER_TRIPVALIDATION_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
+      EVENTUATE_CDC_READER_TRIPVALIDATION_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/trip_validation
+      EVENTUATE_CDC_READER_TRIPVALIDATION_OUTBOXID: 200
+
+      EVENTUATE_CDC_PIPELINE_PIPELINE4_TYPE: eventuate-tram
+      EVENTUATE_CDC_PIPELINE_PIPELINE4_READER: Payment
+      EVENTUATE_CDC_PIPELINE_PIPELINE4_EVENTUATEDATABASESCHEMA: eventuate
+
+      EVENTUATE_CDC_READER_PAYMENT_TYPE: postgres-wal
+      EVENTUATE_CDC_READER_PAYMENT_DATASOURCEURL: jdbc:postgresql://postgres-payment/happyride-payment
+      EVENTUATE_CDC_READER_PAYMENT_DATASOURCEUSERNAME: postgres
+      EVENTUATE_CDC_READER_PAYMENT_DATASOURCEPASSWORD: postgres
+      EVENTUATE_CDC_READER_PAYMENT_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
+      EVENTUATE_CDC_READER_PAYMENT_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/payment
+      EVENTUATE_CDC_READER_PAYMENT_OUTBOXID: 300
+
+      EVENTUATE_CDC_PIPELINE_PIPELINE5_TYPE: eventuate-tram
+      EVENTUATE_CDC_PIPELINE_PIPELINE5_READER: Passenger
+      EVENTUATE_CDC_PIPELINE_PIPELINE5_EVENTUATEDATABASESCHEMA: eventuate
+
+      EVENTUATE_CDC_READER_PASSENGER_TYPE: postgres-wal
+      EVENTUATE_CDC_READER_PASSENGER_DATASOURCEURL: jdbc:postgresql://postgres-passenger/happyride-passenger
+      EVENTUATE_CDC_READER_PASSENGER_DATASOURCEUSERNAME: postgres
+      EVENTUATE_CDC_READER_PASSENGER_DATASOURCEPASSWORD: postgres
+      EVENTUATE_CDC_READER_PASSENGER_DATASOURCEDRIVERCLASSNAME: org.postgresql.Driver
+      EVENTUATE_CDC_READER_PASSENGER_LEADERSHIPLOCKPATH: /eventuatelocal/cdc/leader/pipeline/passenger
+      EVENTUATE_CDC_READER_PASSENGER_OUTBOXID: 400
