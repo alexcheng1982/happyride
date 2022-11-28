@@ -8,7 +8,7 @@
     <module>example-projects/trip-service-cqrs-api</module>
     <module>example-projects/security-jwt</module>
     <module>example-projects/passenger-web-api-falcor</module>
-    <module>example-projects/address-service-quarkus</module>
+<!--    <module>example-projects/address-service-quarkus</module>address-service-quarkus-->
     <module>happyride</module>
   </modules>
   <parent>
@@ -26,14 +26,14 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <eventuate-tram.version>0.29.0.RELEASE</eventuate-tram.version>
     <eventuate-tram-sagas.version>0.18.0.RELEASE</eventuate-tram-sagas.version>
     <lombok.version>1.18.22</lombok.version>
     <testcontainers.version>2.1.0</testcontainers.version>
-    <guava.version>31.0.1-jre</guava.version>
+    <guava.version>31.1-jre</guava.version>
     <axon.version>4.5.8</axon.version>
     <javafaker.version>1.0.2</javafaker.version>
     <cucumber.version>7.2.3</cucumber.version>
@@ -41,7 +41,7 @@
     <spatial4j.version>0.7</spatial4j.version>
     <jjwt.version>0.11.2</jjwt.version>
     <openapi-generator.version>4.3.1</openapi-generator.version>
-    <spring-cloud.version>2021.0.0</spring-cloud.version>
+    <spring-cloud.version>2022.0.0-RC2</spring-cloud.version>
     <commons-lang3.version>3.12.0</commons-lang3.version>
     <micrometer.version>1.8.3</micrometer.version>
     <graphql-java-kickstart.version>11.1.0</graphql-java-kickstart.version>
@@ -230,7 +230,7 @@
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.5</version>
         <scope>test</scope>
       </dependency>
       <dependency>
