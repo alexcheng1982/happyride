@@ -35,6 +35,14 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.transaction</groupId>
+      <artifactId>jakarta.transaction-api</artifactId>
+    </dependency>
+    <dependency>
       <artifactId>payment-service-api</artifactId>
       <groupId>io.vividcode.happyride</groupId>
       <version>${project.version}</version>

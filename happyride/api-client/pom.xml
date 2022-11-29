@@ -77,7 +77,6 @@
     <dependency>
       <groupId>javax.annotation</groupId>
       <artifactId>javax.annotation-api</artifactId>
-      <version>${javax-annotation-version}</version>
     </dependency>
     <!-- test dependencies -->
     <dependency>
