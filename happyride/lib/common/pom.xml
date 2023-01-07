@@ -38,6 +38,14 @@
       <groupId>org.locationtech.spatial4j</groupId>
       <artifactId>spatial4j</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
   </dependencies>
 
 </project>
