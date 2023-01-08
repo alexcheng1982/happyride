@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.hasSize;
 import com.playtika.test.common.spring.EmbeddedContainersShutdownAutoConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLBootstrapConfiguration;
 import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfiguration;
-import io.eventuate.tram.spring.consumer.jdbc.TramConsumerJdbcAutoConfiguration;
 import io.vividcode.happyride.passengerservice.api.web.PassengerVO;
 import io.vividcode.happyride.passengerservice.domain.PassengerUtils;
 import io.vividcode.happyride.postgres.common.EmbeddedPostgresConfiguration;
@@ -29,8 +28,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration(exclude = {TramConsumerJdbcAutoConfiguration.class,
-    SecurityAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(classes = {
     EmbeddedPostgresConfiguration.class,

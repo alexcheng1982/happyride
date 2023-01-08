@@ -39,7 +39,7 @@ public class PassengerController {
         .orElse(ResponseEntity.notFound().build());
   }
 
-  @PostMapping
+  @PostMapping("/")
   public ResponseEntity<PassengerVO> createPassenger(
       @RequestBody final CreatePassengerRequest request) {
     final PassengerVO passenger = this.passengerService

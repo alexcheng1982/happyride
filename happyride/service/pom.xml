@@ -23,7 +23,7 @@
     <module>address-service</module>
     <module>dispatch-service</module>
     <module>driver-service</module>
-<!--    <module>passenger-web-api-graphql</module>-->
+    <!--    <module>passenger-web-api-graphql</module>-->
     <module>passenger-service</module>
     <module>payment-service</module>
     <module>trip-history-service</module>
@@ -51,5 +51,12 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+    </dependency>
+  </dependencies>
 
 </project>

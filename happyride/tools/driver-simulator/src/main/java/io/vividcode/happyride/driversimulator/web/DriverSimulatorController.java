@@ -76,7 +76,7 @@ public class DriverSimulatorController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  @PostMapping
+  @PostMapping("/")
   public ResponseEntity<Void> addDriver(
       @RequestBody final AddDriverRequest request,
       final ServerHttpRequest httpRequest) {
