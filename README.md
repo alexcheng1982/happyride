@@ -19,7 +19,9 @@ Happyride is a microservice application written using Spring Boot.
 
 # 更新日志
 
-* 2022-11-28 更新至 Spring Boot `2.7.6 `
+* 2023-01-08 更新至 Spring Boot `3.0.1`
+* 2022-11-30 更新至 Spring Boot `3.0.0`
+* 2022-11-28 更新至 Spring Boot `2.7.6`
 * 2022-05-31 更新至 Spring Boot `2.7.0`
 * 2022-05-04 更新至 Spring Boot `2.6.7`
 * 2022-04-03 更新至 Spring Boot `2.6.6`
@@ -42,17 +44,17 @@ Happyride is a microservice application written using Spring Boot.
 
 下表是应用的服务及其说明。
 
-| 服务名称  | Maven模块   |  API本地端口  |
-|---|---|---|
-| 乘客管理服务 |  `passenger-service`  |  `8500` |
-| 行程管理服务 |  `trip-service`  |  `8501` |
-| 地址管理服务  |  `address-service`  | `8502`  |
-| 司机管理服务 |  `driver-service`  |  `8503` |
-| 行程派发服务  |  `dispatch-service`  | 无  |
-| 支付服务  |  `payment-service`  | `8504`  |
-| 行程验证服务  |  `payment-service`  | `8505`  |
-| 历史行程服务  |  `trip-history-service`  | `8506`  |
-| 乘客管理界面的GraphQL服务  |  `passenger-web-api-graphql`  | `8610`  |
+| 服务名称             | Maven模块                     | API本地端口 |
+|------------------|-----------------------------|---------|
+| 乘客管理服务           | `passenger-service`         | `8500`  |
+| 行程管理服务           | `trip-service`              | `8501`  |
+| 地址管理服务           | `address-service`           | `8502`  |
+| 司机管理服务           | `driver-service`            | `8503`  |
+| 行程派发服务           | `dispatch-service`          | 无       |
+| 支付服务             | `payment-service`           | `8504`  |
+| 行程验证服务           | `payment-service`           | `8505`  |
+| 历史行程服务           | `trip-history-service`      | `8506`  |
+| 乘客管理界面的GraphQL服务 | `passenger-web-api-graphql` | `8610`  |
 
 在Minikube中访问服务，首先显示乘客API服务的URL：
 
