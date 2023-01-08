@@ -55,7 +55,9 @@ import org.springframework.test.context.TestPropertySource;
     EmbeddedContainersShutdownAutoConfiguration.class
 })
 @TestPropertySource(properties = {
-    "embedded.postgresql.docker-image=postgres:12-alpine"
+    "embedded.postgresql.docker-image=postgres:12-alpine",
+    "embedded.redis.port=${random.int[1024,65536]}",
+    "embedded.redis.requirepass=false"
 })
 @DisplayName("Dispatch service")
 public class DispatchServiceTest {
@@ -138,6 +140,6 @@ public class DispatchServiceTest {
         .hasOnlyElementsOfType(TripDispatchedEvent.class);
     assertThat(allValues)
         .element(1).asList().hasSize(2).hasOnlyElementsOfTypes(TripAcceptanceSelectedEvent.class,
-        TripAcceptanceDeclinedEvent.class);
+            TripAcceptanceDeclinedEvent.class);
   }
 }

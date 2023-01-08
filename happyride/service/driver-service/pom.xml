@@ -56,6 +56,11 @@
       <artifactId>flyway-core</artifactId>
       <groupId>org.flywaydb</groupId>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+    </dependency>
+
 
     <dependency>
       <groupId>io.vividcode.happyride</groupId>

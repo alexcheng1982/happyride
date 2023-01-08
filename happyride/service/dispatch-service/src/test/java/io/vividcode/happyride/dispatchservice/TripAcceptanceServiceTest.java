@@ -28,7 +28,9 @@ import org.springframework.test.context.TestPropertySource;
     TripAcceptanceService.class
 })
 @TestPropertySource(properties = {
-    "embedded.redis.dockerImage=redis:5-alpine"
+    "embedded.redis.dockerImage=redis:6.2-alpine",
+    "embedded.redis.port=${random.int[1024,65536]}",
+    "embedded.redis.requirepass=false"
 })
 @DisplayName("Trip acceptance service")
 public class TripAcceptanceServiceTest {
