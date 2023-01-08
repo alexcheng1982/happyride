@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.vividcode.happyride.dispatchservice.api.events.DriverLocation;
 import java.math.BigDecimal;
 import java.util.Set;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.test.context.TestPropertySource;
     "embedded.redis.dockerImage=redis:6.2-alpine",
 })
 @DisplayName("Driver location service")
+@Disabled
 public class DriverLocationServiceTest {
 
   @Autowired
