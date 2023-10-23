@@ -14,7 +14,7 @@
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.14",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "falcor": "^2.2.0",
     "falcor-express": "^0.1.4",
     "falcor-json-graph": "^3.2.1",
