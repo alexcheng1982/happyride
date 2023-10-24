@@ -6,7 +6,7 @@ import io.vividcode.happyride.tripservice.api.events.TripDetails;
 import io.vividcode.happyride.tripservice.cqrs.api.TripCancelledEvent;
 import io.vividcode.happyride.tripservice.cqrs.api.TripConfirmedEvent;
 import io.vividcode.happyride.tripservice.cqrs.api.TripCreatedEvent;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

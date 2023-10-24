@@ -9,7 +9,6 @@ import com.playtika.test.postgresql.EmbeddedPostgreSQLDependenciesAutoConfigurat
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.eventuate.tram.spring.consumer.jdbc.TramConsumerJdbcAutoConfiguration;
 import io.vividcode.happyride.bdd.BddTestApplication;
 import io.vividcode.happyride.bdd.common.PassengerClient;
 import io.vividcode.happyride.passengerservice.PassengerTestApplication;
@@ -27,7 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration(exclude = {TramConsumerJdbcAutoConfiguration.class,
+@EnableAutoConfiguration(exclude = {
     SecurityAutoConfiguration.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(classes = {

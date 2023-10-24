@@ -6,7 +6,7 @@ import io.vividcode.happyride.addressservice.domain.Address;
 import io.vividcode.happyride.addressservice.domain.Area;
 import java.math.BigDecimal;
 import java.util.concurrent.ThreadLocalRandom;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;

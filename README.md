@@ -4,15 +4,10 @@
 
 Happyride is a microservice application written using Spring Boot.
 
-<a href="https://www.buymeacoffee.com/alexcheng1982" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
-
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R5R3FD1UD)
 ---
 
-本应用是拉勾教育[《云原生微服务架构实战精讲》](https://kaiwu.lagou.com/course/courseInfo.htm?courseId=64)专栏的示例应用。目前该专栏的内容已经更新完毕。
-
-![课程](cloud-native.jpg)
-
-在该课程之后，与云原生和微服务相关的内容，会更新在[我的B站](https://space.bilibili.com/1094957548)。
+与云原生和微服务相关的内容，会更新在[我的B站](https://space.bilibili.com/1094957548)。
 
 除了B站之外，还可以关注：
 
@@ -24,6 +19,9 @@ Happyride is a microservice application written using Spring Boot.
 
 # 更新日志
 
+* 2023-01-08 更新至 Spring Boot `3.0.1`
+* 2022-11-30 更新至 Spring Boot `3.0.0`
+* 2022-11-28 更新至 Spring Boot `2.7.6`
 * 2022-05-31 更新至 Spring Boot `2.7.0`
 * 2022-05-04 更新至 Spring Boot `2.6.7`
 * 2022-04-03 更新至 Spring Boot `2.6.6`
@@ -46,17 +44,17 @@ Happyride is a microservice application written using Spring Boot.
 
 下表是应用的服务及其说明。
 
-| 服务名称  | Maven模块   |  API本地端口  |
-|---|---|---|
-| 乘客管理服务 |  `passenger-service`  |  `8500` |
-| 行程管理服务 |  `trip-service`  |  `8501` |
-| 地址管理服务  |  `address-service`  | `8502`  |
-| 司机管理服务 |  `driver-service`  |  `8503` |
-| 行程派发服务  |  `dispatch-service`  | 无  |
-| 支付服务  |  `payment-service`  | `8504`  |
-| 行程验证服务  |  `payment-service`  | `8505`  |
-| 历史行程服务  |  `trip-history-service`  | `8506`  |
-| 乘客管理界面的GraphQL服务  |  `passenger-web-api-graphql`  | `8610`  |
+| 服务名称             | Maven模块                     | API本地端口 |
+|------------------|-----------------------------|---------|
+| 乘客管理服务           | `passenger-service`         | `8500`  |
+| 行程管理服务           | `trip-service`              | `8501`  |
+| 地址管理服务           | `address-service`           | `8502`  |
+| 司机管理服务           | `driver-service`            | `8503`  |
+| 行程派发服务           | `dispatch-service`          | 无       |
+| 支付服务             | `payment-service`           | `8504`  |
+| 行程验证服务           | `payment-service`           | `8505`  |
+| 历史行程服务           | `trip-history-service`      | `8506`  |
+| 乘客管理界面的GraphQL服务 | `passenger-web-api-graphql` | `8610`  |
 
 在Minikube中访问服务，首先显示乘客API服务的URL：
 

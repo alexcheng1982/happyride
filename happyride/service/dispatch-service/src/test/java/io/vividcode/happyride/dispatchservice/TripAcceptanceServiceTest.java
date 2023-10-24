@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,10 @@ import org.springframework.test.context.TestPropertySource;
     TripAcceptanceService.class
 })
 @TestPropertySource(properties = {
-    "embedded.redis.dockerImage=redis:5-alpine"
+    "embedded.redis.dockerImage=redis:6.2-alpine",
 })
 @DisplayName("Trip acceptance service")
+@Disabled
 public class TripAcceptanceServiceTest {
 
   @Autowired

@@ -8,32 +8,32 @@
     <module>example-projects/trip-service-cqrs-api</module>
     <module>example-projects/security-jwt</module>
     <module>example-projects/passenger-web-api-falcor</module>
-    <module>example-projects/address-service-quarkus</module>
+<!--    <module>example-projects/address-service-quarkus</module>address-service-quarkus-->
     <module>happyride</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.0</version>
+    <version>3.0.1</version>
     <relativePath/>
   </parent>
   <groupId>io.vividcode.happyride</groupId>
   <artifactId>build-parent</artifactId>
   <packaging>pom</packaging>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <name>Build Parent</name>
   <description>Happy Ride</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <eventuate-tram.version>0.29.0.RELEASE</eventuate-tram.version>
     <eventuate-tram-sagas.version>0.18.0.RELEASE</eventuate-tram-sagas.version>
-    <lombok.version>1.18.22</lombok.version>
-    <testcontainers.version>2.1.0</testcontainers.version>
-    <guava.version>31.0.1-jre</guava.version>
+    <lombok.version>1.18.24</lombok.version>
+    <testcontainers.version>2.2.14</testcontainers.version>
+    <guava.version>31.1-jre</guava.version>
     <axon.version>4.5.8</axon.version>
     <javafaker.version>1.0.2</javafaker.version>
     <cucumber.version>7.2.3</cucumber.version>
@@ -41,10 +41,10 @@
     <spatial4j.version>0.7</spatial4j.version>
     <jjwt.version>0.11.2</jjwt.version>
     <openapi-generator.version>4.3.1</openapi-generator.version>
-    <spring-cloud.version>2021.0.0</spring-cloud.version>
+    <spring-cloud.version>2022.0.0-M4</spring-cloud.version>
     <commons-lang3.version>3.12.0</commons-lang3.version>
-    <micrometer.version>1.8.3</micrometer.version>
-    <graphql-java-kickstart.version>11.1.0</graphql-java-kickstart.version>
+    <micrometer.version>1.10.2</micrometer.version>
+    <graphql-java-kickstart.version>14.1.0</graphql-java-kickstart.version>
     <jaeger-client.version>1.3.2</jaeger-client.version>
     <opentracing-api.version>0.33.0</opentracing-api.version>
     <opentracing-web-servlet-filter.version>0.4.1
@@ -53,11 +53,12 @@
     <jib.version>2.4.0</jib.version>
     <git-commit-id-plugin.version>4.0.1</git-commit-id-plugin.version>
     <protoc-jar-maven-plugin.version>3.11.4</protoc-jar-maven-plugin.version>
-    <grpc.version>1.42.2</grpc.version>
-    <protobuf.version>3.19.4</protobuf.version>
-    <protoc.version>3.19.4</protoc.version>
+    <grpc.version>1.51.1</grpc.version>
+    <protobuf.version>3.21.12</protobuf.version>
+    <protoc.version>3.21.12</protoc.version>
     <grpc-spring-boot-starter.version>2.13.1.RELEASE</grpc-spring-boot-starter.version>
-    <netty.version>4.1.73.Final</netty.version>
+    <netty.version>4.1.84.Final</netty.version>
+    <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
   </properties>
 
   <dependencyManagement>
@@ -210,6 +211,11 @@
         <artifactId>micrometer-core</artifactId>
         <version>${micrometer.version}</version>
       </dependency>
+      <dependency>
+        <groupId>javax.annotation</groupId>
+        <artifactId>javax.annotation-api</artifactId>
+        <version>${javax.annotation-api.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>io.grpc</groupId>
@@ -230,14 +236,14 @@
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.5</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <artifactId>reactor-netty</artifactId>
         <groupId>io.projectreactor.netty</groupId>
         <scope>test</scope>
-        <version>0.9.21.RELEASE</version>
+        <version>1.1.0-M2</version>
       </dependency>
       <dependency>
         <groupId>com.playtika.testcontainers</groupId>
@@ -431,6 +437,10 @@
       <name>bintray</name>
       <url>https://dl.bintray.com/eventuateio-oss/eventuate-maven-rc</url>
     </repository>
+    <repository>
+      <id>spring-milestone</id>
+      <url>https://repo.spring.io/milestone</url>
+    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -456,6 +466,10 @@
       <id>bintray-eventuateio-oss-eventuate-maven-rc</id>
       <name>bintray-plugins</name>
       <url>https://dl.bintray.com/eventuateio-oss/eventuate-maven-rc</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>spring-milestone</id>
+      <url>https://repo.spring.io/milestone</url>
     </pluginRepository>
   </pluginRepositories>
 

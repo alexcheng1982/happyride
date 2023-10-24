@@ -2,7 +2,7 @@ package io.vividcode.happyride.paymentservice.domain;
 
 import io.vividcode.happyride.paymentservice.dataaccess.PaymentRepository;
 import java.math.BigDecimal;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
